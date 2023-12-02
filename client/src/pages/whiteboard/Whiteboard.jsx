@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { toast, ToastContainer } from "react-toastify";
 import io from "socket.io-client";
 import ClientRoom from "../../components/whiteboard_collaboration/ClientRoom";
 import JoinCreateRoom from "../../components/whiteboard_collaboration/JoinCreateRoom";
@@ -52,7 +51,6 @@ const Whiteboard = () => {
 
   return (
     <div className="home">
-      <ToastContainer />
       {roomJoined ? (
         <>
           <Sidebar users={users} user={user} socket={socket} />
