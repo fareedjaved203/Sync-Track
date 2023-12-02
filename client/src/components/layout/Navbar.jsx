@@ -1,8 +1,21 @@
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { SiSaltproject } from "react-icons/si";
 import { FaUserCircle } from "react-icons/fa";
+import { logoutUserApi } from "../../api/user/userApi";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUserDetails } from "../../redux/slices/userSlice";
 
 const Navbar = () => {
+  const dispatch = useDispatch();
+  const { user, loading, error } = useSelector((state) => state.user);
+  const handleLogout = () => {
+    logoutUserApi();
+  };
+
+  useEffect(() => {
+    dispatch(fetchUserDetails());
+  }, [dispatch]);
   return (
     <nav
       className="border-gray-200 dark:bg-gray-900"
@@ -43,10 +56,10 @@ const Navbar = () => {
           >
             <div className="px-4 py-3">
               <span className="block text-sm text-gray-900 dark:text-white">
-                Fareed Javed
+                {user.name}
               </span>
               <span className="block text-sm  text-gray-500 truncate dark:text-gray-400">
-                fareedjaved203@gmail.com
+                {user.email}
               </span>
             </div>
             <ul className="py-2" aria-labelledby="user-menu-button">
@@ -77,10 +90,11 @@ const Navbar = () => {
               </li>
               <li>
                 <Link
-                  to="#"
+                  to="/signin"
+                  onClick={handleLogout}
                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-red-300 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
                 >
-                  Sign out
+                  Logout
                 </Link>
               </li>
             </ul>
