@@ -2,33 +2,41 @@ import React, { useState } from "react";
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  LaptopOutlined,
-  UserOutlined,
-  NotificationOutlined,
+  CheckCircleOutlined,
+  MessageOutlined,
+  ProjectOutlined,
 } from "@ant-design/icons";
 import { Layout, Menu, Button, theme } from "antd";
+import Navbar from "./Navbar";
 
 const { Header, Sider, Content } = Layout;
 
-const items1 = ["1", "2", "3", "4"].map((key) => ({
-  key,
-  label: `nav ${key}`,
-}));
-
-const items2 = [UserOutlined, LaptopOutlined, NotificationOutlined].map(
+const items2 = [CheckCircleOutlined, MessageOutlined, ProjectOutlined].map(
   (icon, index) => {
     const key = String(index + 1);
-    return {
-      key: `sub${key}`,
-      icon: React.createElement(icon),
-      label: `subnav ${key}`,
-      children: new Array(4).fill(null).map((_, j) => {
+    let label = "";
+    let children = [];
+
+    if (index === 0) {
+      label = "My Tasks";
+    } else if (index === 1) {
+      label = "Inbox";
+    } else if (index === 2) {
+      label = "My Projects";
+      children = new Array(4).fill(null).map((_, j) => {
         const subKey = index * 4 + j + 1;
         return {
           key: subKey,
           label: `option${subKey}`,
         };
-      }),
+      });
+    }
+
+    return {
+      key: `sub${key}`,
+      icon: React.createElement(icon),
+      label: label,
+      children: children,
     };
   }
 );
@@ -41,24 +49,14 @@ const Structure = () => {
 
   return (
     <>
-      <Header
-        style={{
-          display: "flex",
-          alignItems: "center",
-          maxHeight: "45px",
-          overflow: "hidden",
-        }}
-      >
-        <div className="demo-logo" />
-        <Menu
-          theme="dark"
-          mode="horizontal"
-          defaultSelectedKeys={["2"]}
-          items={items1}
-        />
-      </Header>
+      <Navbar />
       <Layout className="h-screen w-screen">
-        <Sider trigger={null} collapsible collapsed={collapsed}>
+        <Sider
+          trigger={null}
+          collapsible
+          collapsed={collapsed}
+          style={{ borderTop: "1px solid grey" }}
+        >
           <div className="demo-logo-vertical" />
           <Menu
             theme="dark"
@@ -72,21 +70,18 @@ const Structure = () => {
           />
         </Sider>
         <Layout>
-          <Header style={{ padding: 0, background: colorBgContainer }}>
-            <Button
-              type="text"
-              icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-              onClick={() => setCollapsed(!collapsed)}
-              style={{
-                fontSize: "16px",
-                width: 64,
-                height: 64,
-              }}
-            />
-          </Header>
+          <Button
+            type="text"
+            icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+            onClick={() => setCollapsed(!collapsed)}
+            style={{
+              width: 40,
+              height: 40,
+            }}
+          />
           <Content
             style={{
-              margin: "24px 16px",
+              margin: "2px 8px",
               padding: 24,
               minHeight: 280,
               background: colorBgContainer,
