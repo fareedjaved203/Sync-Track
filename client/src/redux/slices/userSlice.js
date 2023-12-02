@@ -19,6 +19,7 @@ const userSlice = createSlice({
     user: {},
     loading: "idle",
     error: null,
+    isAuthenticated: false,
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -29,6 +30,7 @@ const userSlice = createSlice({
       .addCase(fetchUserDetails.fulfilled, (state, action) => {
         state.loading = "idle";
         state.user = action.payload;
+        state.isAuthenticated = true;
       })
       .addCase(fetchUserDetails.rejected, (state, action) => {
         state.loading = "idle";
