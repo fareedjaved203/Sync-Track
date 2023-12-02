@@ -5,12 +5,15 @@ import { FaUserCircle } from "react-icons/fa";
 import { logoutUserApi } from "../../api/user/userApi";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUserDetails } from "../../redux/slices/userSlice";
+import { useCookies } from "react-cookie";
 
 const Navbar = () => {
+  const [cookies, setCookie, removeCookie] = useCookies(["cookieName"]);
   const dispatch = useDispatch();
   const { user, loading, error } = useSelector((state) => state.user);
   const handleLogout = () => {
     logoutUserApi();
+    removeCookie("token");
   };
 
   useEffect(() => {
@@ -56,10 +59,10 @@ const Navbar = () => {
           >
             <div className="px-4 py-3">
               <span className="block text-sm text-gray-900 dark:text-white">
-                {user.name}
+                {user.data?.user?.name}
               </span>
               <span className="block text-sm  text-gray-500 truncate dark:text-gray-400">
-                {user.email}
+                {user.data?.user?.email}
               </span>
             </div>
             <ul className="py-2" aria-labelledby="user-menu-button">

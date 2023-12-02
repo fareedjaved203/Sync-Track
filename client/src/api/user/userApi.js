@@ -3,6 +3,7 @@ import apiService from "../apiService";
 export const registerUserApi = async (userData) => {
   try {
     const data = await apiService.post("/register", userData);
+    document.cookie = `token=${data.token};max-age=31536000;path=/`;
     return data;
   } catch (error) {
     console.log(error);
@@ -12,6 +13,7 @@ export const registerUserApi = async (userData) => {
 export const loginUserApi = async (userData) => {
   try {
     const data = await apiService.post(`/login`, userData);
+    document.cookie = `token=${data.data.token};max-age=31536000;path=/`;
     return data;
   } catch (error) {
     console.log(error);
