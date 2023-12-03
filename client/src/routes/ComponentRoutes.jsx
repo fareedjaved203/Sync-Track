@@ -2,8 +2,10 @@ import { Route, Routes } from "react-router-dom";
 
 import Login from "../pages/userProfile/Login";
 import Signup from "../pages/userProfile/Signup";
+import Profile from "../pages/userProfile/Profile";
 import Structure from "../components/layout/Structure";
 import Whiteboard from "../pages/whiteboard/Whiteboard";
+import Contact from "../pages/Contact";
 import PrivateRoute from "./PrivateRoute";
 
 import { useSelector } from "react-redux";
@@ -15,17 +17,12 @@ const ComponentRoutes = () => {
   return (
     <>
       <Routes>
-        <Route
-          path="/"
-          element={
-            // <PrivateRoute isAuthenticated={isAuthenticated}>
-            <Structure />
-            // </PrivateRoute>
-          }
-        />
+        <Route path="/" element={<Structure />} />
         <Route index path="/signin" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="/whiteboard" element={<Whiteboard />} />
+        <Route path="/contact" element={<Contact />} />
         <Route path="*" element={<Error />} />
       </Routes>
     </>

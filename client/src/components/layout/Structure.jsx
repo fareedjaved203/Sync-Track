@@ -2,46 +2,50 @@ import React, { useState } from "react";
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  CheckCircleOutlined,
+  DesktopOutlined,
+  FileOutlined,
+  VideoCameraOutlined,
   MessageOutlined,
   ProjectOutlined,
+  CheckCircleOutlined,
 } from "@ant-design/icons";
 import { Layout, Menu, Button, theme } from "antd";
 import Navbar from "./Navbar";
+import { useNavigate } from "react-router-dom";
 
 const { Header, Sider, Content } = Layout;
 
-const items2 = [CheckCircleOutlined, MessageOutlined, ProjectOutlined].map(
-  (icon, index) => {
-    const key = String(index + 1);
-    let label = "";
-    let children = [];
+const Structure = () => {
+  const navigate = useNavigate();
 
-    if (index === 0) {
-      label = "My Tasks";
-    } else if (index === 1) {
-      label = "Inbox";
-    } else if (index === 2) {
-      label = "My Projects";
-      children = new Array(4).fill(null).map((_, j) => {
-        const subKey = index * 4 + j + 1;
-        return {
-          key: subKey,
-          label: `option${subKey}`,
-        };
-      });
-    }
-
+  function getItem(label, key, icon, children, onClick) {
     return {
-      key: `sub${key}`,
-      icon: React.createElement(icon),
-      label: label,
-      children: children,
+      key,
+      icon,
+      children,
+      label,
+      onClick: onClick || (() => {}),
     };
   }
-);
 
-const Structure = () => {
+  const items = [
+    getItem("Inbox", "1", <MessageOutlined />),
+    getItem("Whiteboard", "2", <DesktopOutlined />, null, () => {
+      navigate("/whiteboard");
+    }),
+    getItem("Video Conference", "3", <VideoCameraOutlined />),
+    getItem("My Tasks", "sub1", <CheckCircleOutlined />, [
+      getItem("Figma Design", "4"),
+      getItem("Frontend", "5"),
+      getItem("Backend", "6"),
+    ]),
+    getItem("My Projects", "sub2", <ProjectOutlined />, [
+      getItem("Devsinc", "7"),
+      getItem("Cowlar", "8"),
+    ]),
+    getItem("Files", "9", <FileOutlined />),
+  ];
+
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer },
@@ -59,14 +63,20 @@ const Structure = () => {
         >
           <div className="demo-logo-vertical" />
           <Menu
-            theme="dark"
             mode="inline"
             defaultSelectedKeys={["1"]}
             defaultOpenKeys={["sub1"]}
             style={{
               height: "100%",
+              backgroundColor: "#2E2E30",
+              color: "white",
+              transition: "background-color 0.3s, color 0.3s",
+              "&:active": {
+                backgroundColor: "lightgray",
+                color: "white",
+              },
             }}
-            items={items2}
+            items={items}
           />
         </Sider>
         <Layout>

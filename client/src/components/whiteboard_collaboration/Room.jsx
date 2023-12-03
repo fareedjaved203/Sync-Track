@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { toast } from "react-toastify";
 import Canvas from "./Canvas";
 
 const Room = ({ userNo, socket, setUsers, setUserNo }) => {
@@ -10,7 +11,9 @@ const Room = ({ userNo, socket, setUsers, setUserNo }) => {
   const [tool, setTool] = useState("pencil");
 
   useEffect(() => {
-    socket.on("message", (data) => {});
+    socket.on("message", (data) => {
+      toast.info(data.message);
+    });
   }, []);
   useEffect(() => {
     socket.on("users", (data) => {
@@ -46,13 +49,11 @@ const Room = ({ userNo, socket, setUsers, setUserNo }) => {
     );
   };
   return (
-    <div className="container mx-auto">
+    <div className="container-fluid">
       <div className="row">
-        <div className="col">
-          <h1 className="text-3xl font-bold pt-4 pb-3 text-center">
-            React Drawing App - users online:{userNo}
-          </h1>
-        </div>
+        <h1 className="display-5 pt-4 pb-3 text-center">
+          React Drawing App - users online:{userNo}
+        </h1>
       </div>
       <div className="row justify-content-center align-items-center text-center py-2">
         <div className="col-md-2">
@@ -112,6 +113,7 @@ const Room = ({ userNo, socket, setUsers, setUserNo }) => {
             </label>
           </div>
         </div>
+
         <div className="col-md-2">
           <button
             type="button"

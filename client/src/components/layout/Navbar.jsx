@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { SiSaltproject } from "react-icons/si";
 import { FaUserCircle } from "react-icons/fa";
@@ -7,26 +7,57 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchUserDetails } from "../../redux/slices/userSlice";
 import { useCookies } from "react-cookie";
 
+const searchItems = [
+  "Item 1",
+  "Item 2",
+  "Item 3",
+  "Another Item",
+  "One More Item",
+];
+
 const Navbar = () => {
-  const [cookies, setCookie, removeCookie] = useCookies(["cookieName"]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredItems, setFilteredItems] = useState(searchItems);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [cookies, setCookie, removeCookie] = useCookies(["token"]);
+
   const dispatch = useDispatch();
-  const { user, loading, error } = useSelector((state) => state.user);
+
+  const { user } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    dispatch(fetchUserDetails());
+  }, [dispatch]);
+
+  const handleItemClick = (item) => {
+    setSearchQuery(item);
+    setFilteredItems(searchItems);
+    setShowDropdown(false);
+  };
+
+  const handleSearch = (e) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+    const filtered = searchItems.filter((item) =>
+      item.toLowerCase().includes(query.toLowerCase())
+    );
+    setFilteredItems(filtered);
+    setShowDropdown(!!query);
+  };
+
   const handleLogout = () => {
     logoutUserApi();
     removeCookie("token");
   };
 
-  useEffect(() => {
-    dispatch(fetchUserDetails());
-  }, [dispatch]);
   return (
     <nav
       className="border-gray-200 dark:bg-gray-900"
-      style={{ backgroundColor: "#161d40" }}
+      style={{ backgroundColor: "#2E2E30" }}
     >
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-2">
         <Link
-          to="https://flowbite.com/"
+          to="/"
           className="flex items-center space-x-3 rtl:space-x-reverse"
         >
           <SiSaltproject
@@ -59,10 +90,10 @@ const Navbar = () => {
           >
             <div className="px-4 py-3">
               <span className="block text-sm text-gray-900 dark:text-white">
-                {user.data?.user?.name}
+                {user && user?.data?.user?.name}
               </span>
               <span className="block text-sm  text-gray-500 truncate dark:text-gray-400">
-                {user.data?.user?.email}
+                {user && user?.data?.user?.email}
               </span>
             </div>
             <ul className="py-2" aria-labelledby="user-menu-button">
@@ -76,7 +107,7 @@ const Navbar = () => {
               </li>
               <li>
                 <Link
-                  to="#"
+                  to="/profile"
                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
                 >
                   Profile
@@ -85,7 +116,7 @@ const Navbar = () => {
 
               <li>
                 <Link
-                  to="#"
+                  to="/contact"
                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
                 >
                   Contact
@@ -110,30 +141,30 @@ const Navbar = () => {
         >
           <div className="flex">
             <div className="relative hidden md:block">
-              <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                <svg
-                  className="w-4 h-4 text-gray-500 dark:text-gray-400"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-                  />
-                </svg>
-                <span className="sr-only">Search icon</span>
+              <div className="relative">
+                <input
+                  type="text"
+                  className="w-[200%] px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:border-blue-500"
+                  placeholder="Search..."
+                  value={searchQuery}
+                  onChange={handleSearch}
+                />
+                {showDropdown && (
+                  <div className="absolute w-full top-10 left-0 bg-white border border-gray-300 rounded-lg shadow-lg mt-2 z-50">
+                    <ul className="py-1">
+                      {filteredItems.map((item, index) => (
+                        <li
+                          key={index}
+                          className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                          onClick={() => handleItemClick(item)}
+                        >
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </div>
-              <input
-                type="text"
-                id="search-navbar"
-                className="block w-full md:w-[200%] p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Search..."
-              />
             </div>
           </div>
           <div
@@ -141,29 +172,30 @@ const Navbar = () => {
             id="navbar-search"
           >
             <div className="relative mt-3 md:hidden">
-              <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                <svg
-                  className="w-4 h-4 text-gray-500 dark:text-gray-400"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-                  />
-                </svg>
+              <div className="relative">
+                <input
+                  type="text"
+                  className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:border-blue-500"
+                  placeholder="Search..."
+                  value={searchQuery}
+                  onChange={handleSearch}
+                />
+                {showDropdown && (
+                  <div className="absolute w-full top-10 left-0 bg-white border border-gray-300 rounded-lg shadow-lg mt-2 z-50">
+                    <ul className="py-1">
+                      {filteredItems.map((item, index) => (
+                        <li
+                          key={index}
+                          className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                          onClick={() => handleItemClick(item)}
+                        >
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </div>
-              <input
-                type="text"
-                id="search-navbar"
-                className="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Search..."
-              />
             </div>
           </div>
         </div>

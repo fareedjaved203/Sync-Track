@@ -1,6 +1,6 @@
 import { Navigate } from "react-router-dom";
 
-const PrivateRoute = ({ isAuthenticated, children }) => {
+const ProtectedRoute = ({ isAuthenticated, children }) => {
   if (isAuthenticated) {
     return children;
   } else {
@@ -8,4 +8,4 @@ const PrivateRoute = ({ isAuthenticated, children }) => {
   }
 };
 
-export default PrivateRoute;
+export default ProtectedRoute;

@@ -1,11 +1,12 @@
+import "bootstrap/dist/css/bootstrap.min.css";
+import "react-toastify/dist/ReactToastify.css";
 import React, { useEffect, useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
 import io from "socket.io-client";
 import ClientRoom from "../../components/whiteboard_collaboration/ClientRoom";
 import JoinCreateRoom from "../../components/whiteboard_collaboration/JoinCreateRoom";
 import Room from "../../components/whiteboard_collaboration/Room";
 import Sidebar from "../../components/whiteboard_collaboration/Sidebar";
-
-// import "./style.css";
 
 const server = "http://localhost:5173";
 const connectionOptions = {
@@ -17,7 +18,7 @@ const connectionOptions = {
 
 const socket = io(server, connectionOptions);
 
-const Whiteboard = () => {
+const App = () => {
   const [userNo, setUserNo] = useState(0);
   const [roomJoined, setRoomJoined] = useState(false);
   const [user, setUser] = useState({});
@@ -51,6 +52,7 @@ const Whiteboard = () => {
 
   return (
     <div className="home">
+      <ToastContainer />
       {roomJoined ? (
         <>
           <Sidebar users={users} user={user} socket={socket} />
@@ -82,4 +84,4 @@ const Whiteboard = () => {
     </div>
   );
 };
-export default Whiteboard;
+export default App;
