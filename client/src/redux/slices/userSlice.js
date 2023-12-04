@@ -17,7 +17,7 @@ const userSlice = createSlice({
   name: "user",
   initialState: {
     user: {},
-    loading: "idle",
+    loading: false,
     error: null,
     isAuthenticated: false,
   },
@@ -25,15 +25,15 @@ const userSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchUserDetails.pending, (state) => {
-        state.loading = "pending";
+        state.loading = true;
       })
       .addCase(fetchUserDetails.fulfilled, (state, action) => {
-        state.loading = "idle";
+        state.loading = false;
         state.user = action.payload;
-        state.isAuthenticated = true;
+        state.isAuthenticated = !!action.payload;
       })
       .addCase(fetchUserDetails.rejected, (state, action) => {
-        state.loading = "idle";
+        state.loading = false;
         state.error = action.payload;
       });
   },

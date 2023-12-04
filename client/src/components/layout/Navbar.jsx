@@ -4,7 +4,6 @@ import { SiSaltproject } from "react-icons/si";
 import { FaUserCircle } from "react-icons/fa";
 import { logoutUserApi } from "../../api/user/userApi";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUserDetails } from "../../redux/slices/userSlice";
 import { useCookies } from "react-cookie";
 
 const searchItems = [
@@ -21,13 +20,7 @@ const Navbar = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [cookies, setCookie, removeCookie] = useCookies(["token"]);
 
-  const dispatch = useDispatch();
-
   const { user } = useSelector((state) => state.user);
-
-  useEffect(() => {
-    dispatch(fetchUserDetails());
-  }, [dispatch]);
 
   const handleItemClick = (item) => {
     setSearchQuery(item);
@@ -99,7 +92,7 @@ const Navbar = () => {
             <ul className="py-2" aria-labelledby="user-menu-button">
               <li>
                 <Link
-                  to="/profile"
+                  to={`/profile/${user?.data?.user?.email}`}
                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
                 >
                   Profile
