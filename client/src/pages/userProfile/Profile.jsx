@@ -2,6 +2,11 @@ import { useState } from "react";
 import Table from "../../components/userProfile/Table";
 import Testimonials from "../../components/userProfile/Testimonials";
 import { useSelector } from "react-redux";
+import UpdateProfileModal from "../../components/layout/UpdateProfileModal";
+import ChangePasswordModal from "../../components/layout/ChangePasswordModal";
+import Navbar from "../../components/layout/Navbar";
+import Footer from "../../components/layout/Footer";
+import BackButton from "../../components/layout/BackButton";
 
 const Profile = () => {
   const [showMore, setShowMore] = useState(false);
@@ -13,6 +18,7 @@ const Profile = () => {
   };
   return (
     <>
+      <Navbar />
       <section className="relative block h-500-px py-40">
         <div
           className="absolute top-0 w-full h-full bg-center bg-cover"
@@ -65,26 +71,8 @@ const Profile = () => {
                     {user?.data ? (
                       <>
                         <div className="flex flex-col items-center sm:flex-row sm:justify-end sm:gap-4 sm:relative sm:left-10">
-                          <button
-                            className="w-40 btn-style mb-2 sm:mb-0 rounded p-1"
-                            style={{
-                              backgroundColor: "#2E2E30",
-                              color: "white",
-                              fontSize: "15px",
-                            }}
-                          >
-                            Update Profile
-                          </button>
-                          <button
-                            className="w-40 btn-style mb-2 sm:mb-0 rounded p-1"
-                            style={{
-                              backgroundColor: "#2E2E30",
-                              color: "white",
-                              fontSize: "15px",
-                            }}
-                          >
-                            Change Password
-                          </button>
+                          <UpdateProfileModal />
+                          <ChangePasswordModal />
                         </div>
                       </>
                     ) : (
@@ -175,6 +163,7 @@ const Profile = () => {
           </div>
         </div>
       </section>
+      <Footer />
     </>
   );
 };

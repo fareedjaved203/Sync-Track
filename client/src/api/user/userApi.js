@@ -83,12 +83,12 @@ export const resetPasswordApi = async (token, passwords, alert) => {
   }
 };
 
-export const getAllUsersApi = async (alert) => {
+export const getAllUsersApi = async () => {
   try {
-    const { data } = await apiService.get(`/admin/users?role=admin`);
+    const { data } = await apiService.get(`/allusers`);
     return { data };
   } catch (error) {
-    alert.error(error);
+    console.log(error);
   }
 };
 

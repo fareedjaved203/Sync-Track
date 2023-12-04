@@ -1,5 +1,5 @@
 import { SiSaltproject } from "react-icons/si";
-import { Carousel } from "antd";
+import { Carousel, Alert, Space } from "antd";
 import { Link } from "react-router-dom";
 import one from "../../images/1.png";
 import two from "../../images/2.jpg";
@@ -9,6 +9,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { loginUserApi } from "../../api/user/userApi";
 import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
+import { useState } from "react";
 
 const schema = yup.object().shape({
   email: yup.string().email().required(),
@@ -16,6 +17,7 @@ const schema = yup.object().shape({
 });
 
 const Login = () => {
+  const [isValid, setIsValid] = useState(true);
   const navigate = useNavigate();
   const {
     register,
@@ -26,9 +28,10 @@ const Login = () => {
   const onSubmit = async (data) => {
     const loginSuccess = await loginUserApi(data);
     if (loginSuccess) {
+      setIsValid(true);
       navigate("/");
     } else {
-      navigate("/signin");
+      setIsValid(false);
     }
   };
   return (
@@ -84,9 +87,24 @@ const Login = () => {
           </div>
 
           <div className="right-class lg:w-2/6 md:w-1/2 bg-gray-100 rounded-lg p-8 flex flex-col md:ml-auto w-full mt-10 md:mt-0">
-            <h2 className="text-gray-900 text-lg font-medium title-font mb-5">
+            <h2 className="text-gray-900 text-lg font-medium title-font mb-3">
               Sign In
             </h2>
+            {!isValid && (
+              <Space
+                direction="vertical"
+                style={{
+                  width: "100%",
+                }}
+              >
+                <Alert
+                  message="Incorrect Email/Password"
+                  type="error"
+                  showIcon
+                  closable
+                />
+              </Space>
+            )}
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="relative mb-4">
                 <label className="leading-7 text-sm text-gray-600">Email</label>

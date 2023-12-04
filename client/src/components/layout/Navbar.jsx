@@ -1,20 +1,15 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { SiSaltproject } from "react-icons/si";
 import { FaUserCircle } from "react-icons/fa";
-import { logoutUserApi } from "../../api/user/userApi";
+import { getAllUsersApi, logoutUserApi } from "../../api/user/userApi";
 import { useDispatch, useSelector } from "react-redux";
 import { useCookies } from "react-cookie";
 
-const searchItems = [
-  "Item 1",
-  "Item 2",
-  "Item 3",
-  "Another Item",
-  "One More Item",
-];
+let searchItems = [];
 
 const Navbar = () => {
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredItems, setFilteredItems] = useState(searchItems);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -22,10 +17,22 @@ const Navbar = () => {
 
   const { user } = useSelector((state) => state.user);
 
+  useEffect(() => {
+    getAllUsersApi().then((data) => {
+      const store = data?.data?.users;
+      if (Array.isArray(store)) {
+        const emails = store.map((user) => user.email);
+        searchItems = [...emails];
+      }
+    });
+  }, []);
+
   const handleItemClick = (item) => {
     setSearchQuery(item);
     setFilteredItems(searchItems);
     setShowDropdown(false);
+    console.log(item);
+    navigate(`/profile/${item}`);
   };
 
   const handleSearch = (e) => {

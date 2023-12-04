@@ -14,6 +14,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchUserDetails } from "../redux/slices/userSlice";
 import Error from "../pages/Error";
 import Testimonials from "../components/userProfile/Testimonials";
+import ResetPassword from "../pages/userProfile/ResetPassword";
 
 const ComponentRoutes = () => {
   const dispatch = useDispatch();
@@ -46,7 +47,7 @@ const ComponentRoutes = () => {
           <Route path="/profile/:user" element={<Profile />} />
           <Route path="/whiteboard" element={<Whiteboard />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/t" element={<Testimonials />} />
+          <Route path="/forgot-password" element={<ResetPassword />} />
           <Route path="*" element={<Error />} />
         </Routes>
       )}
