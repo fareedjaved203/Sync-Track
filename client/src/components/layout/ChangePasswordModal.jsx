@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Modal, message } from "antd";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import { updatePasswordApi } from "../../api/user/userApi";
 
 const schema = Yup.object().shape({
   password: Yup.string().required("Old Password is required"),
@@ -21,17 +22,30 @@ const ChangePasswordModal = () => {
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
 
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
   const showModal = () => {
     setOpen(true);
   };
 
   const handleOk = () => {
     setConfirmLoading(true);
-    setTimeout(() => {
-      setOpen(false);
-      setConfirmLoading(false);
-      info();
-    }, 2000);
+    const myForm = new FormData();
+
+    myForm.set("oldPassword", oldPassword);
+    myForm.set("newPassword", newPassword);
+    myForm.set("confirmPassword", confirmPassword);
+    updatePasswordApi(myForm)
+      .then(() => {
+        setOpen(false);
+        setConfirmLoading(false);
+        info();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
   const handleCancel = () => {
     setOpen(false);
@@ -75,6 +89,9 @@ const ChangePasswordModal = () => {
                 type="password"
                 id="password"
                 name="password"
+                required
+                value={oldPassword}
+                onChange={(e) => setOldPassword(e.target.value)}
                 className="w-full border border-gray-300 rounded py-2 px-3"
               />
               <ErrorMessage
@@ -88,6 +105,9 @@ const ChangePasswordModal = () => {
                 type="password"
                 id="newPassword"
                 name="newPassword"
+                required
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
                 className="w-full border border-gray-300 rounded py-2 px-3"
               />
               <ErrorMessage
@@ -106,6 +126,9 @@ const ChangePasswordModal = () => {
                 type="password"
                 id="confirmPassword"
                 name="confirmPassword"
+                required
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
                 className="w-full border border-gray-300 rounded py-2 px-3"
               />
               <ErrorMessage

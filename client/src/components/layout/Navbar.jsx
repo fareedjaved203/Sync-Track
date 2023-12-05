@@ -49,8 +49,8 @@ const Navbar = () => {
     setShowDropdown(!!query);
   };
 
-  const handleLogout = () => {
-    logoutUserApi();
+  const handleLogout = async () => {
+    await logoutUserApi();
     removeCookie("token");
   };
 

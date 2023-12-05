@@ -48,13 +48,12 @@ export const updateProfileApi = async (userData) => {
   }
 };
 
-export const updatePasswordApi = async (passwords, alert) => {
+export const updatePasswordApi = async (passwords) => {
   try {
     const { data } = await apiService.put(`/password/update`, passwords);
-    alert.success("Password Updated Successfully");
     return { data };
   } catch (error) {
-    alert.error("User Not Found");
+    console.log(error);
   }
 };
 
