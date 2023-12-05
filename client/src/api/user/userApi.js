@@ -38,13 +38,13 @@ export const logoutUserApi = async () => {
   }
 };
 
-export const updateProfileApi = async (userData, alert) => {
+export const updateProfileApi = async (userData) => {
   try {
+    console.log(userData);
     const { data } = await apiService.put(`/me/update`, userData);
-    alert.success("Profile Updated Successfully");
     return { data };
   } catch (error) {
-    alert.error(error.message);
+    console.log(error);
   }
 };
 
@@ -92,16 +92,16 @@ export const getAllUsersApi = async () => {
   }
 };
 
-export const getUserDetailsApi = async (id, alert) => {
+export const getUserDetailsApi = async (email) => {
   try {
-    const { data } = await apiService.get(`/admin/user/${id}?role=admin`);
+    const { data } = await apiService.get(`/user/${email}`);
     return { data };
   } catch (error) {
-    alert.error(error.message);
+    console.log(error);
   }
 };
 
-export const updateUserApi = async (id, userData, alert) => {
+export const updateUserApi = async (id, userData) => {
   try {
     const { data } = await apiService.put(
       `/admin/user/${id}?role=admin`,
@@ -113,7 +113,6 @@ export const updateUserApi = async (id, userData, alert) => {
     return { data };
   } catch (error) {
     console.log(error.message);
-    alert.error(error);
   }
 };
 

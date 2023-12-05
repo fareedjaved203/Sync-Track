@@ -112,13 +112,13 @@ const getAllUsers = async (req, res, next) => {
   }
 };
 
-//get a single user (for admin)
+//get a single user
 const getSingleUser = async (req, res, next) => {
   try {
-    const user = await User.findById(req.params.id);
+    const user = await User.findOne({ email: req.params.id });
     if (!user) {
       return next(
-        new ErrorHandler(`User Doesn't Exist with Id: ${req.params.id}`, 404)
+        new ErrorHandler(`User Doesn't Exist with Email: ${req.params.id}`, 404)
       );
     }
     res.status(200).json({

@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import Table from "../../components/userProfile/Table";
 import Testimonials from "../../components/userProfile/Testimonials";
 import { useSelector } from "react-redux";
@@ -6,12 +7,36 @@ import UpdateProfileModal from "../../components/layout/UpdateProfileModal";
 import ChangePasswordModal from "../../components/layout/ChangePasswordModal";
 import Navbar from "../../components/layout/Navbar";
 import Footer from "../../components/layout/Footer";
-import BackButton from "../../components/layout/BackButton";
+import { getUserDetailsApi } from "../../api/user/userApi";
+import { message } from "antd";
 
 const Profile = () => {
-  const [showMore, setShowMore] = useState(false);
-
+  const params = useParams();
   const { user } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    fetchUserDetails();
+  }, [params.user]);
+
+  const info = () => {
+    message.error("User Not Found");
+  };
+
+  const fetchUserDetails = async () => {
+    const data = await getUserDetailsApi(params.user);
+    if (data) {
+      setName(data?.data?.user?.name);
+      setEmail(data?.data?.user?.email);
+      setImagePreview(data?.data?.user?.avatar?.url);
+    } else {
+      info();
+    }
+  };
+
+  const [showMore, setShowMore] = useState(false);
+  const [name, setName] = useState("N/A");
+  const [email, setEmail] = useState("N/A");
+  const [imagePreview, setImagePreview] = useState("");
 
   const handleShowMore = () => {
     setShowMore(true);
@@ -61,8 +86,8 @@ const Profile = () => {
                   <div className="relative flex justify-center lg:w-100 w-75 lg:h-100 h-75">
                     <img
                       alt="..."
-                      src="https://demos.creative-tim.com/notus-js/assets/img/team-2-800x800.jpg"
-                      className="shadow-xl rounded-full h-auto align-middle border-none absolute -m-16 -ml-20 lg:-ml-16 max-w-150-px"
+                      src={`${imagePreview}`}
+                      className="shadow-xl rounded-full h-32 w-32 object-cover  align-middle border-none absolute -m-16 -ml-20 lg:-ml-16"
                     />
                   </div>
                 </div>
@@ -71,8 +96,8 @@ const Profile = () => {
                     {user?.data ? (
                       <>
                         <div className="flex flex-col items-center sm:flex-row sm:justify-end sm:gap-4 sm:relative sm:left-10">
-                          <UpdateProfileModal />
-                          <ChangePasswordModal />
+                          <UpdateProfileModal user={user?.data?.user} />
+                          <ChangePasswordModal user={user?.data?.user} />
                         </div>
                       </>
                     ) : (
@@ -115,11 +140,11 @@ const Profile = () => {
               </div>
               <div className="text-center">
                 <h3 className="text-4xl font-semibold leading-normal mb-2 text-blueGray-700 mb-2">
-                  Jenna Stones
+                  {name}
                 </h3>
                 <div className="text-sm leading-normal mt-0 mb-2 text-blueGray-400 font-bold uppercase">
                   <i className="fas fa-map-marker-alt mr-2 text-lg text-blueGray-400"></i>
-                  Los Angeles, California
+                  {email}
                 </div>
                 <div className="mb-2 text-blueGray-600 mt-10">
                   <i className="fas fa-briefcase mr-2 text-lg text-blueGray-400"></i>

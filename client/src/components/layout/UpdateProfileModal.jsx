@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Modal, message } from "antd";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import { updateProfileApi } from "../../api/user/userApi";
 
 const schema = Yup.object().shape({
   name: Yup.string()
@@ -12,27 +13,47 @@ const schema = Yup.object().shape({
     .min(8, "Password must be at least 8 characters")
     .required("Password is required"),
 });
-const UpdateProfileModal = () => {
+const UpdateProfileModal = ({ user }) => {
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const [image, setImage] = useState(null); // Add this line
+  const [image, setImage] = useState(null);
+  const [avatar, setAvatar] = useState(null);
+  const [name, setName] = useState(user?.name);
+  const [email, setEmail] = useState(user?.email);
 
   const showModal = () => {
     setOpen(true);
   };
 
   const handleImageChange = (e) => {
-    setImage(e.target.files[0]); // Add this line
+    setImage(e.target.files[0]);
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (reader.readyState === 2) {
+        setAvatar(reader.result);
+      }
+    };
+
+    reader.readAsDataURL(e.target.files[0]);
   };
 
   const handleOk = () => {
     setConfirmLoading(true);
-    setTimeout(() => {
-      setOpen(false);
-      setConfirmLoading(false);
-      info();
-    }, 2000);
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("email", email);
+    formData.append("avatar", avatar);
+    updateProfileApi(formData)
+      .then(() => {
+        setOpen(false);
+        setConfirmLoading(false);
+        info();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
+
   const handleCancel = () => {
     setOpen(false);
   };
@@ -66,7 +87,7 @@ const UpdateProfileModal = () => {
         cancelButtonProps={{ style: { background: "#CF4433", color: "white" } }} // Change background and text color of Cancel button
       >
         <Formik
-          initialValues={{ name: "", email: "", password: "" }}
+          initialValues={{ name: user?.name, email: user?.email }}
           validationSchema={schema}
           onSubmit={handleOk}
         >
@@ -126,7 +147,9 @@ const UpdateProfileModal = () => {
                 type="text"
                 id="name"
                 name="name"
+                value={name}
                 className="w-full border border-gray-300 rounded py-2 px-3"
+                onChange={(e) => setName(e.target.value)}
               />
               <ErrorMessage name="name" className="text-red-500" />
             </div>
@@ -136,19 +159,11 @@ const UpdateProfileModal = () => {
                 type="email"
                 id="email"
                 name="email"
+                value={email}
                 className="w-full border border-gray-300 rounded py-2 px-3"
+                onChange={(e) => setEmail(e.target.value)}
               />
               <ErrorMessage name="email" className="text-red-500" />
-            </div>
-            <div>
-              <label htmlFor="password">Password</label>
-              <Field
-                type="password"
-                id="password"
-                name="password"
-                className="w-full border border-gray-300 rounded py-2 px-3"
-              />
-              <ErrorMessage name="password" className="text-red-500" />
             </div>
           </Form>
         </Formik>
