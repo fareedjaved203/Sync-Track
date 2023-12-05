@@ -3,8 +3,8 @@ const users = [];
 // Join user to chat
 const userJoin = (id, username, room, host, presenter) => {
   const user = { id, username, room, host, presenter };
-
   users.push(user);
+  console.log(`users: ${users}`);
   return user;
 };
 // User leaves chat
@@ -14,6 +14,7 @@ const userLeave = (id) => {
   if (index !== -1) {
     return users.splice(index, 1)[0];
   }
+  console.log(`users after chat leave: ${users}`);
 };
 
 //get users

@@ -52,6 +52,7 @@ const Navbar = () => {
   const handleLogout = async () => {
     await logoutUserApi();
     removeCookie("token");
+    location.reload();
   };
 
   return (

@@ -43,7 +43,7 @@ const Structure = () => {
       getItem("Devsinc", "7"),
       getItem("Cowlar", "8"),
     ]),
-    getItem("Files", "9", <FileOutlined />),
+    getItem("Project Ads", "9", <FileOutlined />),
   ];
 
   const [collapsed, setCollapsed] = useState(false);
@@ -64,15 +64,15 @@ const Structure = () => {
           <div className="demo-logo-vertical" />
           <Menu
             mode="inline"
-            defaultSelectedKeys={["1"]}
-            defaultOpenKeys={["sub1"]}
+            // defaultSelectedKeys={["1"]}
+            // defaultOpenKeys={["sub1"]}
             style={{
               height: "100%",
               backgroundColor: "#2E2E30",
               color: "white",
               transition: "background-color 0.3s, color 0.3s",
               "&:active": {
-                backgroundColor: "lightgray",
+                backgroundColor: "black",
                 color: "white",
               },
             }}

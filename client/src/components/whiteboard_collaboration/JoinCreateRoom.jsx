@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
+import { message } from "antd";
 import { toast } from "react-toastify";
 
 const JoinCreateRoom = ({ uuid, setUser, setRoomJoined }) => {
@@ -8,9 +9,19 @@ const JoinCreateRoom = ({ uuid, setUser, setRoomJoined }) => {
   const [joinName, setJoinName] = useState("");
   const [joinRoomId, setJoinRoomId] = useState("");
 
+  const [messageApi, contextHolder] = message.useMessage();
+
+  const messageAlert = (msg) => {
+    messageApi.error(msg);
+  };
+
+  const successMessageAlert = (msg) => {
+    messageApi.success(msg);
+  };
+
   const handleCreateSubmit = (e) => {
     e.preventDefault();
-    if (!name) return toast.dark("Please enter your name!");
+    if (!name) return messageAlert("Enter Your Name");
 
     setUser({
       roomId,
@@ -23,7 +34,7 @@ const JoinCreateRoom = ({ uuid, setUser, setRoomJoined }) => {
   };
   const handleJoinSubmit = (e) => {
     e.preventDefault();
-    if (!joinName) return toast.dark("Please enter your name!");
+    if (!joinName) return messageAlert("Enter Your Name");
 
     setUser({
       roomId: joinRoomId,
@@ -37,6 +48,7 @@ const JoinCreateRoom = ({ uuid, setUser, setRoomJoined }) => {
 
   return (
     <div className="container">
+      {contextHolder}
       <div className="row">
         <div className="col-md-12">
           <h1 className="text-center my-5">
@@ -45,7 +57,7 @@ const JoinCreateRoom = ({ uuid, setUser, setRoomJoined }) => {
         </div>
       </div>
       <div className="row mx-5 mt-5">
-        <div className="col-md-5 p-5 border mx-auto">
+        <div className="col-md-5 p-5 border mx-auto bg-white">
           <h1 className="text-center text-primary mb-5">Create Room</h1>
           <form onSubmit={handleCreateSubmit}>
             <div className="form-group my-2">
@@ -71,7 +83,7 @@ const JoinCreateRoom = ({ uuid, setUser, setRoomJoined }) => {
               />
               <div className="input-group-append">
                 <button
-                  className="btn btn-outline-primary  border-0 btn-sm"
+                  className="btn btn-outline-primary border-0 btn-sm"
                   type="button"
                   onClick={() => setRoomId(uuid())}
                 >
@@ -80,7 +92,9 @@ const JoinCreateRoom = ({ uuid, setUser, setRoomJoined }) => {
                 &nbsp;&nbsp;
                 <CopyToClipboard
                   text={roomId}
-                  onCopy={() => toast.success("Room Id Copied To Clipboard!")}
+                  onCopy={() =>
+                    successMessageAlert("Room Id Copied To Clipboard!")
+                  }
                 >
                   <button
                     className="btn btn-outline-dark border-0 btn-sm"
@@ -98,7 +112,7 @@ const JoinCreateRoom = ({ uuid, setUser, setRoomJoined }) => {
             </div>
           </form>
         </div>
-        <div className="col-md-5 p-5 border mx-auto">
+        <div className="col-md-5 p-5 border mx-auto bg-white">
           <h1 className="text-center text-primary mb-5">Join Room</h1>
           <form onSubmit={handleJoinSubmit}>
             <div className="form-group my-2">

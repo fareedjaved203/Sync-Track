@@ -32,6 +32,7 @@ const Login = () => {
     if (loginSuccess) {
       setIsValid(true);
       navigate("/");
+      location.reload();
     } else {
       setIsValid(false);
     }
