@@ -1,9 +1,12 @@
 import { SiSaltproject } from "react-icons/si";
-import { Carousel } from "antd";
+import { useState } from "react";
+import { Carousel, Alert, Space } from "antd";
+import {
+  FundTwoTone,
+  PieChartTwoTone,
+  ProjectTwoTone,
+} from "@ant-design/icons";
 import { Link } from "react-router-dom";
-import one from "../../images/1.png";
-import two from "../../images/2.jpg";
-import three from "../../images/3.jpg";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { registerUserApi } from "../../api/user/userApi";
@@ -17,6 +20,8 @@ const schema = yup.object().shape({
 });
 
 const Signup = () => {
+  const [emailAlreadyPresent, setEmailAlreadyPresent] = useState(false);
+
   const navigate = useNavigate();
   const {
     register,
@@ -27,9 +32,10 @@ const Signup = () => {
   const onSubmit = async (data) => {
     const registerSuccess = await registerUserApi(data);
     if (registerSuccess) {
+      setEmailAlreadyPresent(false);
       navigate("/");
     } else {
-      navigate("/signup");
+      setEmailAlreadyPresent(true);
     }
   };
 
@@ -50,31 +56,25 @@ const Signup = () => {
               </h3>
               <Carousel autoplay className="bg-white-500 mt-10">
                 <div>
-                  <img
-                    className="w-60 h-50 object-cover"
-                    src={one}
-                    alt="Project Management"
-                  />
+                  <FundTwoTone style={{ fontSize: "230px" }} />
+
                   <h3 className="text-black-500 text-2xl text-left">
                     Track less, work more. Manage your projects your way!
                   </h3>
                 </div>
                 <div>
-                  <img
-                    className="w-80 h-70 object-cover"
-                    src={two}
-                    alt="Project Management"
-                  />
+                  <ProjectTwoTone style={{ fontSize: "230px" }} />
+
                   <h3 className="text-black-500 text-2xl text-left">
                     Streamline your workflow, collaborate effectively, and
                     achieve your goals.
                   </h3>
                 </div>
                 <div>
-                  <img
-                    className="w-80 h-70 object-cover"
-                    src={three}
-                    alt="Project Management"
+                  <PieChartTwoTone
+                    style={{
+                      fontSize: "230px",
+                    }}
                   />
                   <h3 className="text-black-500 text-2xl text-left">
                     Unleash your team potential, deliver exceptional results,
@@ -86,9 +86,24 @@ const Signup = () => {
           </div>
 
           <div className="right-class lg:w-2/6 md:w-1/2 bg-gray-100 rounded-lg p-8 flex flex-col md:ml-auto w-full mt-10 md:mt-0">
-            <h2 className="text-gray-900 text-lg font-medium title-font mb-5">
+            <h2 className="text-gray-900 text-lg font-medium title-font mb-2">
               Sign Up
             </h2>
+            {emailAlreadyPresent && (
+              <Space
+                direction="vertical"
+                style={{
+                  width: "100%",
+                }}
+              >
+                <Alert
+                  message="Email Already exists"
+                  type="error"
+                  showIcon
+                  closable
+                />
+              </Space>
+            )}
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="relative mb-4">
                 <label className="leading-7 text-sm text-gray-600">
@@ -121,7 +136,7 @@ const Signup = () => {
               </div>
               <button
                 type="submit"
-                className="inline-flex w-full items-center justify-center space-x-2 rounded-lg border border-indigo-700 bg-indigo-700 px-6 py-3 font-semibold leading-6 text-white hover:border-indigo-600 hover:bg-indigo-600 hover:text-white focus:ring focus:ring-indigo-400 focus:ring-opacity-50 active:border-indigo-700 active:bg-indigo-700 dark:focus:ring-indigo-400 dark:focus:ring-opacity-90"
+                className="inline-flex w-full items-center justify-center space-x-2 rounded-lg border border-indigo-700 bg-indigo-700 px-6 py-2 font-semibold leading-6 text-white hover:border-indigo-600 hover:bg-indigo-600 hover:text-white focus:ring focus:ring-indigo-400 focus:ring-opacity-50 active:border-indigo-700 active:bg-indigo-700 dark:focus:ring-indigo-400 dark:focus:ring-opacity-90"
               >
                 <svg
                   className="hi-mini hi-arrow-uturn-right inline-block h-5 w-5 opacity-50"

@@ -42,8 +42,18 @@ const ComponentRoutes = () => {
               )
             }
           />
-          <Route path="/signin" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
+          <Route
+            path="/signin"
+            element={
+              isAuthenticated ? <Navigate to="/" replace={true} /> : <Login />
+            }
+          />
+          <Route
+            path="/signup"
+            element={
+              isAuthenticated ? <Navigate to="/" replace={true} /> : <Signup />
+            }
+          />
           <Route path="/profile/:user" element={<Profile />} />
           <Route path="/whiteboard" element={<Whiteboard />} />
           <Route path="/contact" element={<Contact />} />

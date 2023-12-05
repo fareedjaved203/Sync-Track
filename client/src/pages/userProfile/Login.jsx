@@ -1,9 +1,11 @@
 import { SiSaltproject } from "react-icons/si";
 import { Carousel, Alert, Space } from "antd";
 import { Link } from "react-router-dom";
-import one from "../../images/1.png";
-import two from "../../images/2.jpg";
-import three from "../../images/3.jpg";
+import {
+  FundTwoTone,
+  PieChartTwoTone,
+  ProjectTwoTone,
+} from "@ant-design/icons";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { loginUserApi } from "../../api/user/userApi";
@@ -51,31 +53,25 @@ const Login = () => {
               </h3>
               <Carousel autoplay className="bg-white-500 mt-10">
                 <div>
-                  <img
-                    className="w-60 h-50 object-cover"
-                    src={one}
-                    alt="Project Management"
-                  />
+                  <FundTwoTone style={{ fontSize: "230px" }} />
+
                   <h3 className="text-black-500 text-2xl text-left">
                     Track less, work more. Manage your projects your way!
                   </h3>
                 </div>
                 <div>
-                  <img
-                    className="w-80 h-70 object-cover"
-                    src={two}
-                    alt="Project Management"
-                  />
+                  <ProjectTwoTone style={{ fontSize: "230px" }} />
+
                   <h3 className="text-black-500 text-2xl text-left">
                     Streamline your workflow, collaborate effectively, and
                     achieve your goals.
                   </h3>
                 </div>
                 <div>
-                  <img
-                    className="w-80 h-70 object-cover"
-                    src={three}
-                    alt="Project Management"
+                  <PieChartTwoTone
+                    style={{
+                      fontSize: "230px",
+                    }}
                   />
                   <h3 className="text-black-500 text-2xl text-left">
                     Unleash your team potential, deliver exceptional results,
@@ -126,7 +122,7 @@ const Login = () => {
               </div>
               <button
                 type="submit"
-                className="inline-flex w-full items-center justify-center space-x-2 rounded-lg border border-indigo-700 bg-indigo-700 px-6 py-3 font-semibold leading-6 text-white hover:border-indigo-600 hover:bg-indigo-600 hover:text-white focus:ring focus:ring-indigo-400 focus:ring-opacity-50 active:border-indigo-700 active:bg-indigo-700 dark:focus:ring-indigo-400 dark:focus:ring-opacity-90"
+                className="inline-flex w-full items-center justify-center space-x-2 rounded-lg border border-indigo-700 bg-indigo-700 px-6 py-2 font-semibold leading-6 text-white hover:border-indigo-600 hover:bg-indigo-600 hover:text-white focus:ring focus:ring-indigo-400 focus:ring-opacity-50 active:border-indigo-700 active:bg-indigo-700 dark:focus:ring-indigo-400 dark:focus:ring-opacity-90"
               >
                 <svg
                   className="hi-mini hi-arrow-uturn-right inline-block h-5 w-5 opacity-50"

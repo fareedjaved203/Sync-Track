@@ -21,26 +21,30 @@ const Navbar = () => {
     getAllUsersApi().then((data) => {
       const store = data?.data?.users;
       if (Array.isArray(store)) {
-        const emails = store.map((user) => user.email);
-        searchItems = [...emails];
+        const filteredUsers = store.filter(
+          (user) => user.email !== "admin@gmail.com"
+        );
+        searchItems = [...filteredUsers];
+        console.log(searchItems);
       }
     });
   }, []);
 
   const handleItemClick = (item) => {
-    setSearchQuery(item);
-    setFilteredItems(searchItems);
+    setSearchQuery(item.email);
+    setFilteredItems([item]);
     setShowDropdown(false);
     console.log(item);
-    navigate(`/profile/${item}`);
+    navigate(`/profile/${item.email}`);
   };
 
   const handleSearch = (e) => {
     const query = e.target.value;
     setSearchQuery(query);
     const filtered = searchItems.filter((item) =>
-      item.toLowerCase().includes(query.toLowerCase())
+      item.email.toLowerCase().includes(query.toLowerCase())
     );
+    console.log(filtered);
     setFilteredItems(filtered);
     setShowDropdown(!!query);
   };
@@ -143,16 +147,29 @@ const Navbar = () => {
                 />
                 {showDropdown && (
                   <div className="absolute w-full top-10 left-0 bg-white border border-gray-300 rounded-lg shadow-lg mt-2 z-50">
-                    <ul className="py-1">
-                      {filteredItems.map((item, index) => (
-                        <li
-                          key={index}
-                          className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                          onClick={() => handleItemClick(item)}
-                        >
-                          {item}
-                        </li>
-                      ))}
+                    <ul className="py-1 w-100">
+                      {Array.isArray(filteredItems) &&
+                        filteredItems.map((user) => (
+                          <li
+                            key={user._id}
+                            className="px-4 py-2 w-100 hover:bg-gray-100 cursor-pointer"
+                            onClick={() => handleItemClick(user)}
+                          >
+                            <div className="flex items-center">
+                              <img
+                                src={user.avatar.url}
+                                alt={user.name}
+                                className="w-8 h-8 rounded-full mr-2"
+                              />
+                              <div>
+                                <div className="font-semibold">{user.name}</div>
+                                <div className="text-gray-600">
+                                  {user.email}
+                                </div>
+                              </div>
+                            </div>
+                          </li>
+                        ))}
                     </ul>
                   </div>
                 )}
@@ -175,15 +192,28 @@ const Navbar = () => {
                 {showDropdown && (
                   <div className="absolute w-full top-10 left-0 bg-white border border-gray-300 rounded-lg shadow-lg mt-2 z-50">
                     <ul className="py-1">
-                      {filteredItems.map((item, index) => (
-                        <li
-                          key={index}
-                          className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                          onClick={() => handleItemClick(item)}
-                        >
-                          {item}
-                        </li>
-                      ))}
+                      {Array.isArray(filteredItems) &&
+                        filteredItems.map((user) => (
+                          <li
+                            key={user._id}
+                            className="px-4 w-100 py-2 hover:bg-gray-100 cursor-pointer"
+                            onClick={() => handleItemClick(user)}
+                          >
+                            <div className="flex items-center">
+                              <img
+                                src={user.avatar.url}
+                                alt={user.name}
+                                className="w-8 h-8 rounded-full mr-2"
+                              />
+                              <div>
+                                <div className="font-semibold">{user.name}</div>
+                                <div className="text-gray-600">
+                                  {user.email}
+                                </div>
+                              </div>
+                            </div>
+                          </li>
+                        ))}
                     </ul>
                   </div>
                 )}
