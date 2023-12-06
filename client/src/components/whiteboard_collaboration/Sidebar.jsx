@@ -1,5 +1,7 @@
 import React, { useRef } from "react";
 import { Socket } from "socket.io-client";
+import { FiUsers } from "react-icons/fi";
+import { FaRegWindowClose } from "react-icons/fa";
 
 const Sidebar = ({ users, user, socket }) => {
   const sideBarRef = useRef(null);
@@ -15,16 +17,22 @@ const Sidebar = ({ users, user, socket }) => {
       <button
         className="btn btn-dark btn-sm"
         onClick={openSideBar}
-        style={{ position: "absolute", top: "5%", left: "5%" }}
+        style={{
+          position: "relative",
+          top: "15%",
+          left: "2%",
+          marginTop: "10px",
+        }}
       >
-        Users
+        Active Users
       </button>
       <div
-        className="position-fixed pt-2 h-100 bg-dark"
+        className="position-fixed pt-2 bg-dark"
         ref={sideBarRef}
         style={{
           width: "150px",
           left: "-100%",
+          height: "100vh",
           transition: "0.3s linear",
           zIndex: "9999",
         }}
@@ -33,7 +41,7 @@ const Sidebar = ({ users, user, socket }) => {
           className="btn btn-block border-0 form-control rounded-0 btn-light"
           onClick={closeSideBar}
         >
-          Close
+          <FaRegWindowClose />
         </button>
         <div className="w-100 mt-5">
           {users.map((usr, index) => (

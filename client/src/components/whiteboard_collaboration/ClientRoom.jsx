@@ -1,11 +1,18 @@
-import React, { useEffect, useRef } from "react";
-import { toast } from "react-toastify";
+import { useEffect, useRef } from "react";
+import { message } from "antd";
 
 const ClientRoom = ({ userNo, socket, setUsers, setUserNo }) => {
   const imgRef = useRef(null);
+
+  const [messageApi, contextHolder] = message.useMessage();
+
+  const messageAlert = (msg) => {
+    messageApi.info(msg);
+  };
+
   useEffect(() => {
     socket.on("message", (data) => {
-      toast.info(data.message);
+      messageAlert(data.message);
     });
   }, []);
   useEffect(() => {

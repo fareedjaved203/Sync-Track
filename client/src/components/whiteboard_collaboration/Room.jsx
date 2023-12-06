@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
-import { toast } from "react-toastify";
+import { message } from "antd";
 import Canvas from "./Canvas";
+import { SiSaltproject } from "react-icons/si";
 
 const Room = ({ userNo, socket, setUsers, setUserNo }) => {
   const canvasRef = useRef(null);
@@ -10,11 +11,18 @@ const Room = ({ userNo, socket, setUsers, setUserNo }) => {
   const [history, setHistory] = useState([]);
   const [tool, setTool] = useState("pencil");
 
+  const [messageApi, contextHolder] = message.useMessage();
+
+  const messageAlert = (msg) => {
+    messageApi.info(msg);
+  };
+
   useEffect(() => {
     socket.on("message", (data) => {
-      toast.info(data.message);
+      messageAlert(data?.message);
     });
   }, []);
+
   useEffect(() => {
     socket.on("users", (data) => {
       setUsers(data);
@@ -52,7 +60,7 @@ const Room = ({ userNo, socket, setUsers, setUserNo }) => {
     <div className="container-fluid">
       <div className="row">
         <h1 className="display-5 pt-4 pb-3 text-center">
-          React Drawing App - users online:{userNo}
+          Sync Track - users online:{userNo}
         </h1>
       </div>
       <div className="row justify-content-center align-items-center text-center py-2">
@@ -114,7 +122,7 @@ const Room = ({ userNo, socket, setUsers, setUserNo }) => {
           </div>
         </div>
 
-        <div className="col-md-2">
+        <div className="col-md-2 p-2">
           <button
             type="button"
             className="btn btn-outline-primary"
@@ -133,13 +141,14 @@ const Room = ({ userNo, socket, setUsers, setUserNo }) => {
             Redo
           </button>
         </div>
-        <div className="col-md-1">
+        <div className="col-md-1 p-2">
           <div className="color-picker d-flex align-items-center justify-content-center">
             <input
               type="button"
               className="btn btn-danger"
               value="clear canvas"
               onClick={clearCanvas}
+              style={{ backgroundColor: "#DC4422", color: "white" }}
             />
           </div>
         </div>

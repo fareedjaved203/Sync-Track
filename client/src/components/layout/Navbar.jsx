@@ -75,7 +75,7 @@ const Navbar = () => {
         <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse relative">
           <button
             type="button"
-            className="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+            className="flex text-sm bg-gray-800 rounded-full"
             id="user-menu-button"
             aria-expanded="false"
             onClick={() => {
@@ -85,7 +85,12 @@ const Navbar = () => {
             }}
           >
             <span className="sr-only">Open user menu</span>
-            <FaUserCircle style={{ fontSize: "30px", color: "white" }} />
+            {/* <FaUserCircle style={{ fontSize: "30px", color: "white" }} /> */}
+            <img
+              src={user?.data?.user?.avatar?.url}
+              alt={user.name}
+              className="w-8 h-8 rounded-full mr-2"
+            />
           </button>
           {/* <!-- Dropdown menu --> */}
           <div

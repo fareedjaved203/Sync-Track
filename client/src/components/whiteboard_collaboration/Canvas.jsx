@@ -58,16 +58,16 @@ const Canvas = ({
   };
 
   useLayoutEffect(() => {
-    const roughCanvas = rough.canvas(canvasRef.current);
+    const roughCanvas = rough.canvas(canvasRef?.current);
     if (elements.length > 0) {
       ctx.current.clearRect(
         0,
         0,
-        canvasRef.current.width,
-        canvasRef.current.height
+        canvasRef?.current?.width,
+        canvasRef?.current?.height
       );
     }
-    elements.forEach((ele, i) => {
+    elements?.forEach((ele, i) => {
       if (ele.element === "rect") {
         roughCanvas.draw(
           generator.rectangle(ele.offsetX, ele.offsetY, ele.width, ele.height, {
@@ -92,7 +92,7 @@ const Canvas = ({
         });
       }
     });
-    const canvasImage = canvasRef.current.toDataURL();
+    const canvasImage = canvasRef?.current?.toDataURL();
     socket.emit("drawing", canvasImage);
   }, [elements]);
 
@@ -105,7 +105,7 @@ const Canvas = ({
     if (tool === "rect") {
       setElements((prevElements) =>
         prevElements.map((ele, index) =>
-          index === elements.length - 1
+          index === elements?.length - 1
             ? {
                 offsetX: ele.offsetX,
                 offsetY: ele.offsetY,
@@ -120,7 +120,7 @@ const Canvas = ({
     } else if (tool === "line") {
       setElements((prevElements) =>
         prevElements.map((ele, index) =>
-          index === elements.length - 1
+          index === elements?.length - 1
             ? {
                 offsetX: ele.offsetX,
                 offsetY: ele.offsetY,
@@ -135,7 +135,7 @@ const Canvas = ({
     } else if (tool === "pencil") {
       setElements((prevElements) =>
         prevElements.map((ele, index) =>
-          index === elements.length - 1
+          index === elements?.length - 1
             ? {
                 offsetX: ele.offsetX,
                 offsetY: ele.offsetY,
@@ -154,7 +154,7 @@ const Canvas = ({
 
   return (
     <div
-      className="col-md-8 overflow-hidden border border-dark px-0 mx-auto mt-3"
+      className="col-md-8 overflow-hidden border border-dark px-0 mx-auto mt-3 mb-4"
       style={{ height: "500px" }}
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
