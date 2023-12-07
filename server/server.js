@@ -12,6 +12,8 @@ const {
 
 require("./config/database");
 
+const { saveMessage } = require("./controllers/chatController");
+
 const server = http.createServer(app);
 const socketIO = require("socket.io");
 const io = socketIO(server);
@@ -49,6 +51,12 @@ io.on("connection", (socket) => {
   socket.on("drawing", (data) => {
     imageUrl = data;
     socket.broadcast.to(userRoom).emit("canvasImage", imageUrl);
+  });
+
+  socket.on("sendMessage", (message) => {
+    console.log(message);
+    io.emit("message", message);
+    // saveMessage(message, message.sender);
   });
 
   socket.on("disconnect", () => {

@@ -124,3 +124,12 @@ export const deleteUserApi = async (id, alert) => {
     alert.error(error);
   }
 };
+
+export const userWithChatHistoryApi = async (id) => {
+  try {
+    const { data } = await apiService.get(`/user-chat/${id}`);
+    return { data };
+  } catch (error) {
+    console.log(error);
+  }
+};

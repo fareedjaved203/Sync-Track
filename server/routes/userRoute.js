@@ -14,6 +14,7 @@ const {
   updatePassword,
 } = require("../controllers/userController");
 const { isAuthenticatedUser, authorizeRoles } = require("../middlewares/auth");
+const { getUserWithChatHistory } = require("../controllers/chatController");
 const router = express.Router();
 
 router.post("/register", registerUser);
@@ -26,6 +27,7 @@ router.put("/me/update", isAuthenticatedUser, updateProfile);
 router.put("/password/update", isAuthenticatedUser, updatePassword);
 router.get("/allusers", getAllUsers);
 router.get("/user/:id", getSingleUser);
+router.get("/user-chat/:id", isAuthenticatedUser, getUserWithChatHistory);
 router.put(
   "/admin/user/:id",
   isAuthenticatedUser,

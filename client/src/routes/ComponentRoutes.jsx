@@ -15,6 +15,7 @@ import { fetchUserDetails } from "../redux/slices/userSlice";
 import Error from "../pages/Error";
 import Testimonials from "../components/userProfile/Testimonials";
 import ResetPassword from "../pages/userProfile/ResetPassword";
+import Chat from "../pages/Chat";
 
 const ComponentRoutes = () => {
   const dispatch = useDispatch();
@@ -55,6 +56,7 @@ const ComponentRoutes = () => {
             }
           />
           <Route path="/profile/:user" element={<Profile />} />
+          <Route path="/chat" element={<Chat />} />
           <Route path="/whiteboard" element={<Whiteboard />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/forgot-password" element={<ResetPassword />} />
