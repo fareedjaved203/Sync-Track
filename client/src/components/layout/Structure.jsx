@@ -12,6 +12,7 @@ import {
 import { Layout, Menu, Button, theme } from "antd";
 import Navbar from "./Navbar";
 import { useNavigate } from "react-router-dom";
+import Chat from "../../pages/Chat";
 
 const { Header, Sider, Content } = Layout;
 
@@ -30,7 +31,7 @@ const Structure = () => {
 
   const items = [
     getItem("Inbox", "1", <MessageOutlined />, null, () => {
-      navigate("/chat");
+      setShowChat(true);
     }),
     getItem("Whiteboard", "2", <DesktopOutlined />, null, () => {
       navigate("/whiteboard");
@@ -49,6 +50,8 @@ const Structure = () => {
   ];
 
   const [collapsed, setCollapsed] = useState(false);
+  const [showChat, setShowChat] = useState(false);
+
   const {
     token: { colorBgContainer },
   } = theme.useToken();
@@ -93,13 +96,12 @@ const Structure = () => {
           />
           <Content
             style={{
-              margin: "2px 8px",
-              padding: 24,
               minHeight: 280,
               background: colorBgContainer,
             }}
+            className="p-4" // Override padding for large screens
           >
-            Content
+            {showChat ? <Chat /> : null}
           </Content>
         </Layout>
       </Layout>

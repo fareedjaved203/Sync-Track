@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import io from "socket.io-client";
 import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { getAllUsersApi } from "../api/user/userApi";
 import { Tag } from "antd";
-import { CheckCircleOutlined } from "@ant-design/icons";
+import { CheckCircleOutlined, MenuOutlined } from "@ant-design/icons";
 import { fetchChatHistoryApi } from "../api/chat/chatApi";
+import { Button, Drawer } from "antd";
+import Navbar from "../components/layout/Navbar";
 
 const server = "http://localhost:3000";
 const connectionOptions = {
@@ -24,13 +26,34 @@ const Chat = () => {
   const [sender, setSender] = useState(user?.data?.user?._id);
   const [allUsers, setAllUsers] = useState([]);
   const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState([]);
   const [displayUserInfo, setDisplayUserInfo] = useState([]);
   const [activeUser, setActiveUser] = useState(null);
   const [chatHistory, setChatHistory] = useState([]);
+  const [onlineUsers, setOnlineUsers] = useState([]);
+  const [onlineStatus, setOnlineStatus] = useState(false);
 
-  //chatHistory.receiver === activeUser._id
-  //chatHistory.sender === sender
+  useEffect(() => {
+    socket.emit("online-users", user?.data?.user?.name);
+    setOnlineStatus(!onlineStatus);
+  }, []);
+
+  useEffect(() => {
+    socket.on("online-users-updated", (users) => {
+      const uniqueUsernames = new Set(users.map((user) => user.username));
+      const usernamesArray = Array.from(uniqueUsernames);
+      console.log(usernamesArray);
+      console.log("hello");
+      setOnlineUsers(usernamesArray);
+    });
+  }, [onlineStatus]);
+
+  const [open, setOpen] = useState(false);
+  const showDrawer = () => {
+    setOpen(true);
+  };
+  const onClose = () => {
+    setOpen(false);
+  };
 
   const activeUserStatus = (receiver) => {
     setActiveUser(receiver);
@@ -44,8 +67,9 @@ const Chat = () => {
   };
 
   useEffect(() => {
+    socket.emit("user-joined", user);
+
     socket.on("message", (message) => {
-      setMessages((messages) => [...messages, message]);
       setChatHistory((messages) => {
         message.content = message.message;
         return [...messages, message];
@@ -83,73 +107,104 @@ const Chat = () => {
 
   return (
     <>
-      <div className="flex h-screen antialiased text-gray-800">
+      <div className="flex h-screen antialiased text-gray-800" style={{}}>
         <div className="flex flex-row h-full w-full overflow-x-hidden">
-          <div className="flex flex-col py-8 pl-6 pr-2 w-64 bg-white flex-shrink-0">
-            {displayUserInfo && (
-              <>
-                <div className="flex flex-col items-center bg-indigo-100 border border-gray-200 mt-4 w-full py-6 px-4 rounded-lg">
-                  <div className="h-20 w-20 rounded-full border overflow-hidden">
-                    <img
-                      src={displayUserInfo?.avatar?.url}
-                      alt="Avatar"
-                      className="h-full w-full"
-                    />
-                  </div>
-                  <div className="text-sm font-semibold mt-2">
-                    {displayUserInfo?.name}
-                  </div>
-                  <div className="text-xs text-gray-500">
-                    Lead UI/UX Designer
-                  </div>
-                  <Tag color="green" icon={<CheckCircleOutlined />}>
-                    Online
-                  </Tag>
-                </div>
-              </>
-            )}
+          <Button
+            type="dark"
+            onClick={showDrawer}
+            className="absolute right-[12%] top-[-1.5%] md:right-[5%] md:top-[-1%]"
+            style={{
+              color: "white",
+              padding: "8px",
+              fontSize: "25px",
+            }}
+          >
+            <MenuOutlined />
+          </Button>
+          <Drawer title="" placement="right" onClose={onClose} open={open}>
+            <div className="flex flex-col pl-6 pr-2 w-64 bg-white flex-shrink-0">
+              {displayUserInfo?.avatar && (
+                <>
+                  <div className="flex flex-col items-center bg-indigo-100 border border-gray-200 mt-4 w-full py-6 px-4 rounded-lg">
+                    <div className="h-20 w-20 rounded-full border overflow-hidden">
+                      <img
+                        src={displayUserInfo?.avatar?.url}
+                        alt="Avatar"
+                        className="h-full w-full"
+                      />
+                    </div>
+                    <Link to={`/profile/${displayUserInfo?.email}`}>
+                      <div className="text-sm font-semibold mt-2 text-center">
+                        {displayUserInfo?.name}
+                      </div>
 
-            <div className="flex flex-col mt-8">
-              <div className="flex flex-row items-center justify-between text-xs">
-                <span className="font-bold">Active Conversations</span>
-                <span className="flex items-center justify-center bg-gray-300 h-4 w-4 rounded-full">
-                  {allUsers.length}
-                </span>
-              </div>
-              <div className="flex flex-col space-y-1 mt-4 -mx-2 h-48 overflow-y-auto">
-                <ul>
-                  {allUsers &&
-                    allUsers.map((user) => (
-                      <li key={user._id} onClick={() => activeUserStatus(user)}>
-                        <button
-                          className={`flex flex-row items-center w-full rounded-xl p-2 ${
-                            activeUser?._id === user._id
-                              ? "bg-blue-200"
-                              : "hover:bg-gray-100"
-                          }`}
+                      <div className="text-xs text-gray-500 m-1">
+                        {displayUserInfo?.email}
+                      </div>
+                    </Link>
+
+                    {onlineUsers.includes(displayUserInfo?.name) ? (
+                      <>
+                        <Tag color="green" icon={<CheckCircleOutlined />}>
+                          Online
+                        </Tag>
+                      </>
+                    ) : (
+                      <>
+                        <Tag color="red" icon={<CheckCircleOutlined />}>
+                          Offline
+                        </Tag>
+                      </>
+                    )}
+                  </div>
+                </>
+              )}
+
+              <div className="flex flex-col mt-8">
+                <div className="flex flex-row items-center justify-between text-xs">
+                  <span className="font-bold">Active Conversations</span>
+                  <span className="flex items-center justify-center bg-gray-300 h-4 w-4 rounded-full">
+                    {allUsers.length}
+                  </span>
+                </div>
+                <div className="flex flex-col space-y-1 mt-4 -mx-2 h-48 overflow-y-auto">
+                  <ul>
+                    {allUsers &&
+                      allUsers.map((user) => (
+                        <li
+                          key={user._id}
+                          onClick={() => activeUserStatus(user)}
                         >
-                          <div className="h-10 w-10 rounded-full border overflow-hidden">
-                            <img
-                              src={user?.avatar?.url}
-                              alt="Avatar"
-                              className="h-full w-full"
-                            />
-                          </div>
-                          <div className="ml-2 text-sm font-semibold">
-                            {user?.name}
-                          </div>
-                        </button>
-                      </li>
-                    ))}
-                </ul>
+                          <button
+                            className={`flex flex-row items-center w-full rounded-xl p-2 ${
+                              activeUser?._id === user._id
+                                ? "bg-gray-300"
+                                : "hover:bg-gray-100"
+                            }`}
+                          >
+                            <div className="h-10 w-10 rounded-full border overflow-hidden">
+                              <img
+                                src={user?.avatar?.url}
+                                alt="Avatar"
+                                className="h-full w-full"
+                              />
+                            </div>
+                            <div className="ml-2 text-sm font-semibold">
+                              {user?.name}
+                            </div>
+                          </button>
+                        </li>
+                      ))}
+                  </ul>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="flex flex-col flex-auto h-full p-6">
-            <div className="flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-gray-100 h-full p-4">
-              <div className="flex flex-col h-full overflow-x-auto mb-4">
-                <div className="flex flex-col h-full">
-                  <div className="grid grid-cols-12 gap-y-2">
+          </Drawer>
+          <div className="flex flex-col flex-auto h-full">
+            <div className="flex flex-col flex-auto flex-shrink-0 rounded-2xl h-full">
+              <div className="flex flex-col h-[65%] overflow-x-auto">
+                <div className="flex flex-col h-50">
+                  <div className="grid grid-cols-12 gap-y-1">
                     {chatHistory?.map((message, index) => {
                       if (message?.sender === activeUser?._id) {
                         return (
@@ -171,10 +226,16 @@ const Chat = () => {
                         return (
                           <div
                             key={index}
-                            className="col-start-6 col-end-13 p-1 rounded-lg"
+                            className="col-start-6 col-end-13 p-1 rounded-lg flex flex-col items-end sm:items-end"
                           >
                             <div className="flex items-center justify-start flex-row-reverse">
-                              <div className="relative mr-3 text-sm bg-indigo-100 py-2 px-4 shadow rounded-xl">
+                              <div
+                                className="relative mr-3 text-sm bg-gray-200 py-2 px-4 shadow rounded-xl"
+                                // style={{
+                                //   backgroundColor: "#2E2E2E",
+                                //   color: "white",
+                                // }}
+                              >
                                 <div>{message?.content}</div>
                               </div>
                             </div>
@@ -186,58 +247,30 @@ const Chat = () => {
                   </div>
                 </div>
               </div>
-              <div className="flex flex-row items-center h-16 rounded-xl bg-white w-full px-4">
-                <div>
-                  <button className="flex items-center justify-center text-gray-400 hover:text-gray-600">
-                    <svg
-                      className="w-5 h-5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"
-                      ></path>
-                    </svg>
-                  </button>
-                </div>
+              <div className="flex flex-row items-center h-16 rounded-xl bg-white w-full">
                 <div className="flex-grow ml-4">
                   <div className="relative w-full">
                     <input
                       type="text"
-                      className="flex w-full border rounded-xl focus:outline-none focus:border-indigo-300 pl-4 h-10"
+                      className={`flex w-full border rounded-xl focus:outline-none focus:border-indigo-300 pl-4 h-10 ${
+                        // Apply max-width on small screens
+                        "sm:max-w-full"
+                      }`}
                       value={message}
                       placeholder="Your message"
                       onChange={(event) => sendMessage(event)}
                     />
-                    <button className="absolute flex items-center justify-center h-full w-12 right-0 top-0 text-gray-400 hover:text-gray-600">
-                      <svg
-                        className="w-6 h-6"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                        ></path>
-                      </svg>
-                    </button>
                   </div>
                 </div>
                 <div className="ml-4">
+                  {/* Conditionally render the button text based on screen size */}
                   <button
-                    className="flex items-center justify-center bg-indigo-500 hover:bg-indigo-600 rounded-xl text-white px-4 py-1 flex-shrink-0"
+                    className="flex items-center justify-center bg-indigo-500 hover:bg-indigo-600 rounded-xl text-white px-4 py-2 flex-shrink-0"
                     onClick={handleSubmit}
+                    style={{ backgroundColor: "#2E2E2E" }}
                   >
-                    <span>Send</span>
+                    {/* Conditionally render the button text based on screen size */}
+                    <span className={"hidden sm:flex"}>Send</span>
                     <span className="ml-2">
                       <svg
                         className="w-4 h-4 transform rotate-45 -mt-px"

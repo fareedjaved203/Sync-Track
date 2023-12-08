@@ -19,6 +19,7 @@ const socketIO = require("socket.io");
 const io = socketIO(server);
 
 const cloudinary = require("cloudinary");
+const { userOnline, getOnlineUsers } = require("./utils/chat/user");
 
 const port = process.env.PORT || 8000;
 
@@ -28,24 +29,28 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_SECRET,
 });
 
+const onlineUsers = [];
+
 // socket.io
 let imageUrl, userRoom;
 io.on("connection", (socket) => {
   socket.on("user-joined", (data) => {
-    const { roomId, userId, userName, host, presenter } = data;
-    userRoom = roomId;
-    const user = userJoin(socket.id, userName, roomId, host, presenter);
-    const roomUsers = getUsers(user.room);
-    socket.join(user.room);
-    socket.emit("message", {
-      message: "Welcome to ChatRoom",
-    });
-    socket.broadcast.to(user.room).emit("message", {
-      message: `${user.username} has joined`,
-    });
+    if (data) {
+      const { roomId, userId, userName, host, presenter } = data;
+      userRoom = roomId;
+      const user = userJoin(socket.id, userName, roomId, host, presenter);
+      const roomUsers = getUsers(user.room);
+      socket.join(user.room);
+      socket.emit("message", {
+        message: "Welcome to ChatRoom",
+      });
+      socket.broadcast.to(user.room).emit("message", {
+        message: `${user.username} has joined`,
+      });
 
-    io.to(user.room).emit("users", roomUsers);
-    io.to(user.room).emit("canvasImage", imageUrl);
+      io.to(user.room).emit("users", roomUsers);
+      io.to(user.room).emit("canvasImage", imageUrl);
+    }
   });
 
   socket.on("drawing", (data) => {
@@ -53,8 +58,12 @@ io.on("connection", (socket) => {
     socket.broadcast.to(userRoom).emit("canvasImage", imageUrl);
   });
 
+  socket.on("online-users", (name) => {
+    const user = userOnline(socket.id, name);
+    socket.broadcast.emit("online-users-updated", getOnlineUsers());
+  });
+
   socket.on("sendMessage", async (message) => {
-    console.log(message);
     io.emit("message", message);
     await saveMessage(message.message, message.sender, message.receiver);
   });
@@ -69,6 +78,13 @@ io.on("connection", (socket) => {
       });
       io.to(userLeaves.room).emit("users", roomUsers);
     }
+
+    // Remove user from online list
+    const index = onlineUsers.findIndex((user) => user.id === socket.id);
+    onlineUsers.splice(index, 1);
+
+    // Emit offline event to all users
+    io.emit("online-users", onlineUsers);
   });
 });
 

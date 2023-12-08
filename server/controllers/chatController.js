@@ -4,7 +4,6 @@ const Conversation = require("../models/chat/conversationModel");
 const mongoose = require("mongoose");
 
 const saveMessage = async (message, senderId, receiverId) => {
-  console.log(message, senderId, receiverId);
   try {
     const newMessage = new Chat({
       sender: new mongoose.Types.ObjectId(senderId),
@@ -22,7 +21,6 @@ const saveMessage = async (message, senderId, receiverId) => {
 const getUserWithChatHistory = async (req, res) => {
   try {
     const { senderId, receiverId } = req.params;
-    console.log(req.params);
     const chatHistory = await Chat.find({
       $or: [
         { sender: senderId, receiver: receiverId },
