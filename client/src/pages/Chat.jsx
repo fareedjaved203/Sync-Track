@@ -41,14 +41,15 @@ const Chat = () => {
   const getUserDetails = async (sender, receiver) => {
     const data = await fetchChatHistoryApi(sender, receiver);
     setChatHistory(data?.data?.chatHistory);
-    console.log(chatHistory);
   };
 
   useEffect(() => {
     socket.on("message", (message) => {
-      console.log(`message: ${message}`);
       setMessages((messages) => [...messages, message]);
-      setChatHistory((messages) => [...messages, JSON.stringify(message)]);
+      setChatHistory((messages) => {
+        message.content = message.message;
+        return [...messages, message];
+      });
     });
   }, []);
 
@@ -64,10 +65,15 @@ const Chat = () => {
     });
   }, []);
 
+  const updateChatHistory = (message) => {
+    setChatHistory((chatHistory) => [...chatHistory, message]);
+  };
+
   const handleSubmit = () => {
     if (message) {
       socket.emit("sendMessage", { message, sender, receiver: activeUser._id });
       setMessage("");
+      updateChatHistory(message);
     }
   };
 
@@ -144,32 +150,32 @@ const Chat = () => {
               <div className="flex flex-col h-full overflow-x-auto mb-4">
                 <div className="flex flex-col h-full">
                   <div className="grid grid-cols-12 gap-y-2">
-                    {chatHistory.map((message, index) => {
-                      if (message.sender === activeUser._id) {
+                    {chatHistory?.map((message, index) => {
+                      if (message?.sender === activeUser?._id) {
                         return (
                           <div
                             key={index}
-                            className="col-start-1 col-end-8 p-3 rounded-lg"
+                            className="col-start-1 col-end-8 p-1 rounded-lg"
                           >
                             <div className="flex flex-row items-center">
-                              <div className="flex items-center justify-center h-10 w-10 rounded-full bg-indigo-500 flex-shrink-0">
-                                {activeUser.name.charAt(0)}
-                              </div>
+                              {/* <div className="flex items-center justify-center h-10 w-10 rounded-full bg-indigo-500 flex-shrink-0">
+                                {activeUser?.name?.charAt(0)}
+                              </div> */}
                               <div className="relative ml-3 text-sm bg-white py-2 px-4 shadow rounded-xl">
-                                <div>{message.content}</div>
+                                <div>{message?.content}</div>
                               </div>
                             </div>
                           </div>
                         );
-                      } else if (message.sender === sender) {
+                      } else if (message?.sender === sender) {
                         return (
                           <div
                             key={index}
-                            className="col-start-6 col-end-13 p-3 rounded-lg"
+                            className="col-start-6 col-end-13 p-1 rounded-lg"
                           >
                             <div className="flex items-center justify-start flex-row-reverse">
-                              <div className="relative m-3 text-sm bg-indigo-100 py-2 px-4 shadow rounded-xl">
-                                <div>{message.content}</div>
+                              <div className="relative mr-3 text-sm bg-indigo-100 py-2 px-4 shadow rounded-xl">
+                                <div>{message?.content}</div>
                               </div>
                             </div>
                           </div>
