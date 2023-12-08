@@ -27,7 +27,11 @@ router.put("/me/update", isAuthenticatedUser, updateProfile);
 router.put("/password/update", isAuthenticatedUser, updatePassword);
 router.get("/allusers", getAllUsers);
 router.get("/user/:id", getSingleUser);
-router.get("/user-chat/:id", isAuthenticatedUser, getUserWithChatHistory);
+router.get(
+  "/chat-history/:senderId/:receiverId",
+  isAuthenticatedUser,
+  getUserWithChatHistory
+);
 router.put(
   "/admin/user/:id",
   isAuthenticatedUser,

@@ -3,6 +3,9 @@ import io from "socket.io-client";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { getAllUsersApi } from "../api/user/userApi";
+import { Tag } from "antd";
+import { CheckCircleOutlined } from "@ant-design/icons";
+import { fetchChatHistoryApi } from "../api/chat/chatApi";
 
 const server = "http://localhost:3000";
 const connectionOptions = {
@@ -17,20 +20,35 @@ const socket = io(server, connectionOptions);
 
 const Chat = () => {
   const { user } = useSelector((state) => state.user);
-  const params = useParams();
-  const receiverId = params.user;
 
   const [sender, setSender] = useState(user?.data?.user?._id);
-  const [receiver, setReceiver] = useState(receiverId);
   const [allUsers, setAllUsers] = useState([]);
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [displayUserInfo, setDisplayUserInfo] = useState([]);
+  const [activeUser, setActiveUser] = useState(null);
+  const [chatHistory, setChatHistory] = useState([]);
+
+  //chatHistory.receiver === activeUser._id
+  //chatHistory.sender === sender
+
+  const activeUserStatus = (receiver) => {
+    setActiveUser(receiver);
+    setDisplayUserInfo(receiver);
+    getUserDetails(sender, receiver._id);
+  };
+
+  const getUserDetails = async (sender, receiver) => {
+    const data = await fetchChatHistoryApi(sender, receiver);
+    setChatHistory(data?.data?.chatHistory);
+    console.log(chatHistory);
+  };
 
   useEffect(() => {
     socket.on("message", (message) => {
       console.log(`message: ${message}`);
       setMessages((messages) => [...messages, message]);
+      setChatHistory((messages) => [...messages, JSON.stringify(message)]);
     });
   }, []);
 
@@ -48,9 +66,13 @@ const Chat = () => {
 
   const handleSubmit = () => {
     if (message) {
-      socket.emit("sendMessage", { message, sender, receiver });
+      socket.emit("sendMessage", { message, sender, receiver: activeUser._id });
       setMessage("");
     }
+  };
+
+  const sendMessage = (event) => {
+    setMessage(event.target.value);
   };
 
   return (
@@ -74,12 +96,9 @@ const Chat = () => {
                   <div className="text-xs text-gray-500">
                     Lead UI/UX Designer
                   </div>
-                  <div className="flex flex-row items-center mt-3">
-                    <div className="flex flex-col justify-center h-4 w-8 bg-indigo-500 rounded-full">
-                      <div className="h-3 w-3 bg-white rounded-full self-end mr-1"></div>
-                    </div>
-                    <div className="leading-none ml-1 text-xs">Active</div>
-                  </div>
+                  <Tag color="green" icon={<CheckCircleOutlined />}>
+                    Online
+                  </Tag>
                 </div>
               </>
             )}
@@ -95,11 +114,14 @@ const Chat = () => {
                 <ul>
                   {allUsers &&
                     allUsers.map((user) => (
-                      <li
-                        key={user._id}
-                        onClick={() => setDisplayUserInfo(user)}
-                      >
-                        <button className="flex flex-row items-center hover:bg-gray-100 w-full rounded-xl p-2">
+                      <li key={user._id} onClick={() => activeUserStatus(user)}>
+                        <button
+                          className={`flex flex-row items-center w-full rounded-xl p-2 ${
+                            activeUser?._id === user._id
+                              ? "bg-blue-200"
+                              : "hover:bg-gray-100"
+                          }`}
+                        >
                           <div className="h-10 w-10 rounded-full border overflow-hidden">
                             <img
                               src={user?.avatar?.url}
@@ -110,7 +132,6 @@ const Chat = () => {
                           <div className="ml-2 text-sm font-semibold">
                             {user?.name}
                           </div>
-                          {/* ... */}
                         </button>
                       </li>
                     ))}
@@ -123,29 +144,39 @@ const Chat = () => {
               <div className="flex flex-col h-full overflow-x-auto mb-4">
                 <div className="flex flex-col h-full">
                   <div className="grid grid-cols-12 gap-y-2">
-                    <div className="col-start-1 col-end-8 p-3 rounded-lg">
-                      <div className="flex flex-row items-center">
-                        <div className="flex items-center justify-center h-10 w-10 rounded-full bg-indigo-500 flex-shrink-0">
-                          A
-                        </div>
-                        <div className="relative ml-3 text-sm bg-white py-2 px-4 shadow rounded-xl">
-                          <div>Hey How are you today?</div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-start-6 col-end-13 p-3 rounded-lg">
-                      <div className="flex items-center justify-start flex-row-reverse">
-                        <ul>
-                          {messages.map((message, index) => (
-                            <li key={index}>
-                              <div className="relative m-3 text-sm bg-indigo-100 py-2 px-4 shadow rounded-xl">
-                                <div>{message.message}</div>
+                    {chatHistory.map((message, index) => {
+                      if (message.sender === activeUser._id) {
+                        return (
+                          <div
+                            key={index}
+                            className="col-start-1 col-end-8 p-3 rounded-lg"
+                          >
+                            <div className="flex flex-row items-center">
+                              <div className="flex items-center justify-center h-10 w-10 rounded-full bg-indigo-500 flex-shrink-0">
+                                {activeUser.name.charAt(0)}
                               </div>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
+                              <div className="relative ml-3 text-sm bg-white py-2 px-4 shadow rounded-xl">
+                                <div>{message.content}</div>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      } else if (message.sender === sender) {
+                        return (
+                          <div
+                            key={index}
+                            className="col-start-6 col-end-13 p-3 rounded-lg"
+                          >
+                            <div className="flex items-center justify-start flex-row-reverse">
+                              <div className="relative m-3 text-sm bg-indigo-100 py-2 px-4 shadow rounded-xl">
+                                <div>{message.content}</div>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      }
+                      return null;
+                    })}
                   </div>
                 </div>
               </div>
@@ -175,7 +206,7 @@ const Chat = () => {
                       className="flex w-full border rounded-xl focus:outline-none focus:border-indigo-300 pl-4 h-10"
                       value={message}
                       placeholder="Your message"
-                      onChange={(event) => setMessage(event.target.value)}
+                      onChange={(event) => sendMessage(event)}
                     />
                     <button className="absolute flex items-center justify-center h-full w-12 right-0 top-0 text-gray-400 hover:text-gray-600">
                       <svg

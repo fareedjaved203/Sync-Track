@@ -29,7 +29,9 @@ const Structure = () => {
   }
 
   const items = [
-    getItem("Inbox", "1", <MessageOutlined />),
+    getItem("Inbox", "1", <MessageOutlined />, null, () => {
+      navigate("/chat");
+    }),
     getItem("Whiteboard", "2", <DesktopOutlined />, null, () => {
       navigate("/whiteboard");
     }),

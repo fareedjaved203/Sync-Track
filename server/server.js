@@ -53,10 +53,10 @@ io.on("connection", (socket) => {
     socket.broadcast.to(userRoom).emit("canvasImage", imageUrl);
   });
 
-  socket.on("sendMessage", (message) => {
+  socket.on("sendMessage", async (message) => {
     console.log(message);
     io.emit("message", message);
-    // saveMessage(message, message.sender);
+    await saveMessage(message.message, message.sender, message.receiver);
   });
 
   socket.on("disconnect", () => {

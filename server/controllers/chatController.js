@@ -1,13 +1,15 @@
 const Chat = require("../models/chat/chatModel");
 const User = require("../models/userModel");
 const Conversation = require("../models/chat/conversationModel");
+const mongoose = require("mongoose");
 
 const saveMessage = async (message, senderId, receiverId) => {
+  console.log(message, senderId, receiverId);
   try {
     const newMessage = new Chat({
       sender: new mongoose.Types.ObjectId(senderId),
       receiver: new mongoose.Types.ObjectId(receiverId),
-      content: message.content,
+      content: message,
       timestamp: new Date(),
     });
 
@@ -17,25 +19,23 @@ const saveMessage = async (message, senderId, receiverId) => {
   }
 };
 
-const getUserWithChatHistory = async (userId) => {
+const getUserWithChatHistory = async (req, res) => {
   try {
-    const user = await User.findById(userId);
-    const conversation = await Conversation.findOne({ participants: userId })
-      .populate({
-        path: "participants",
-        select: "name email avatar", // Replace with the fields you want to select
-      })
-      .populate({
-        path: "messages",
-        select: "content timestamp",
-        populate: {
-          path: "sender receiver",
-          select: "name email avatar", // Replace with the fields you want to select
-        },
-      });
+    const { senderId, receiverId } = req.params;
+    console.log(req.params);
+    const chatHistory = await Chat.find({
+      $or: [
+        { sender: senderId, receiver: receiverId },
+        { sender: receiverId, receiver: senderId },
+      ],
+    }).sort({ timestamp: 1 });
 
-    return { user, conversation };
+    res.status(200).json({
+      success: true,
+      chatHistory,
+    });
   } catch (error) {
+    console.log(error);
     throw new Error("Error fetching user and chat history: " + error.message);
   }
 };
