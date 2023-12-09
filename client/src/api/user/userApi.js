@@ -106,21 +106,18 @@ export const updateUserApi = async (id, userData) => {
       `/admin/user/${id}?role=admin`,
       userData
     );
-    if (data.success) {
-      alert.success("User Updated Successfully");
-    }
+
     return { data };
   } catch (error) {
     console.log(error.message);
   }
 };
 
-export const deleteUserApi = async (id, alert) => {
+export const deleteUserApi = async (id) => {
   try {
     const { data } = await apiService.delete(`/admin/user/${id}?role=admin`);
-    alert.success("User Deleted Successfully");
     return { data };
   } catch (error) {
-    alert.error(error);
+    console.log(error);
   }
 };

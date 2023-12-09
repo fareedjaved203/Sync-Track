@@ -60,6 +60,7 @@ const loginUser = async (req, res, next) => {
     const isPasswordMatched = await user.comparePassword(password);
 
     if (!isPasswordMatched) {
+      console.log("wrong pass");
       return next(new ErrorHandler("Invalid Email or Password", 401));
     }
 

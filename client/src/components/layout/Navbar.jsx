@@ -61,17 +61,36 @@ const Navbar = () => {
       style={{ backgroundColor: "#2E2E30" }}
     >
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-2">
-        <Link
-          to="/"
-          className="flex items-center space-x-3 rtl:space-x-reverse"
-        >
-          <SiSaltproject
-            style={{ fontSize: "30px", color: "white", marginLeft: "20px" }}
-          />
-          <span className="self-center text-1xl font-semibold whitespace-nowrap text-white">
-            Sync Track
-          </span>
-        </Link>
+        {user?.data?.user?.role === "admin" ? (
+          <>
+            <Link
+              to="/admin/dashboard"
+              className="flex items-center space-x-3 rtl:space-x-reverse"
+            >
+              <SiSaltproject
+                style={{ fontSize: "30px", color: "white", marginLeft: "20px" }}
+              />
+              <span className="self-center text-1xl font-semibold whitespace-nowrap text-white">
+                Sync Track
+              </span>
+            </Link>
+          </>
+        ) : (
+          <>
+            <Link
+              to="/"
+              className="flex items-center space-x-3 rtl:space-x-reverse"
+            >
+              <SiSaltproject
+                style={{ fontSize: "30px", color: "white", marginLeft: "20px" }}
+              />
+              <span className="self-center text-1xl font-semibold whitespace-nowrap text-white">
+                Sync Track
+              </span>
+            </Link>
+          </>
+        )}
+
         <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse relative">
           <button
             type="button"

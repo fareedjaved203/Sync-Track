@@ -16,6 +16,7 @@ import Error from "../pages/Error";
 import Testimonials from "../components/userProfile/Testimonials";
 import ResetPassword from "../pages/userProfile/ResetPassword";
 import Chat from "../pages/Chat";
+import AdminDashboard from "../pages/AdminDashboard";
 
 const ComponentRoutes = () => {
   const dispatch = useDispatch();
@@ -60,6 +61,7 @@ const ComponentRoutes = () => {
           <Route path="/whiteboard" element={<Whiteboard />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/forgot-password" element={<ResetPassword />} />
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="*" element={<Error />} />
         </Routes>
       )}

@@ -29,9 +29,13 @@ const Login = () => {
 
   const onSubmit = async (data) => {
     const loginSuccess = await loginUserApi(data);
-    if (loginSuccess) {
+    if (loginSuccess?.data?.user?.role === "user") {
       setIsValid(true);
       navigate("/");
+      location.reload();
+    } else if (loginSuccess?.data?.user?.role === "admin") {
+      setIsValid(true);
+      navigate("/admin/dashboard");
       location.reload();
     } else {
       setIsValid(false);

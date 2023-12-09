@@ -121,7 +121,7 @@ const Chat = () => {
           >
             <MenuOutlined />
           </Button>
-          <Drawer title="" placement="right" onClose={onClose} open={open}>
+          <Drawer title="" placement="left" onClose={onClose} open={open}>
             <div className="flex flex-col pl-6 pr-2 w-64 bg-white flex-shrink-0">
               {displayUserInfo?.avatar && (
                 <>
