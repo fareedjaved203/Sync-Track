@@ -234,7 +234,7 @@ const Chat = () => {
 
               <div className="flex flex-col mt-8 mt-72 bg-white">
                 <div className="flex flex-row items-center justify-between text-xs bg-white p-1">
-                  <span className="font-bold">Active Conversations</span>
+                  <span className="font-bold">Users</span>
                   <span className="flex items-center justify-center bg-gray-300 h-4 w-4 rounded-full">
                     {allUsers.length}
                   </span>
