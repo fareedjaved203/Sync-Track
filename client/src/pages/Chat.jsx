@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import io from "socket.io-client";
 import { useSelector } from "react-redux";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { getAllUsersApi } from "../api/user/userApi";
 import { Tag } from "antd";
 import { CheckCircleOutlined, MenuOutlined } from "@ant-design/icons";
 import { fetchChatHistoryApi } from "../api/chat/chatApi";
 import { Button, Drawer } from "antd";
-import Navbar from "../components/layout/Navbar";
 
 const server = "http://localhost:3000";
 const connectionOptions = {
@@ -31,6 +30,9 @@ const Chat = () => {
   const [chatHistory, setChatHistory] = useState([]);
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [onlineStatus, setOnlineStatus] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredItems, setFilteredItems] = useState([]);
+  const [showDropdown, setShowDropdown] = useState(false);
 
   useEffect(() => {
     socket.emit("online-users", user?.data?.user?.name);
@@ -85,6 +87,7 @@ const Chat = () => {
           (user) => user.email !== "admin@gmail.com"
         );
         setAllUsers([...filteredUsers]);
+        setFilteredItems([...filteredUsers]);
       }
     });
   }, []);
@@ -103,6 +106,24 @@ const Chat = () => {
 
   const sendMessage = (event) => {
     setMessage(event.target.value);
+  };
+
+  const handleItemClick = (item) => {
+    setSearchQuery(item.email);
+    setFilteredItems([item]);
+    setShowDropdown(false);
+    setSearchQuery("");
+    activeUserStatus(item);
+  };
+
+  const handleSearch = (e) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+    const filtered = allUsers?.filter((item) =>
+      item.email.toLowerCase().includes(query.toLowerCase())
+    );
+    setFilteredItems(filtered);
+    setShowDropdown(!!query);
   };
 
   return (
@@ -128,46 +149,91 @@ const Chat = () => {
             open={open}
             width={300}
           >
-            <div className="flex flex-col pl-6 pr-2 w-64 bg-white flex-shrink-0">
-              {displayUserInfo?.avatar && (
-                <>
-                  <div className="flex flex-col items-center bg-indigo-100 border border-gray-200 mt-4 w-full py-6 px-4 rounded-lg">
-                    <div className="h-20 w-20 rounded-full border overflow-hidden">
-                      <img
-                        src={displayUserInfo?.avatar?.url}
-                        alt="Avatar"
-                        className="h-full w-full"
-                      />
+            <div className="flex flex-col w-64 bg-white flex-shrink-0">
+              <div className="fixed z-50 top-12 w-[300px] p-4 bg-white left-0">
+                {displayUserInfo?.avatar && (
+                  <>
+                    <div className="flex flex-col items-center bg-indigo-100 border border-gray-200 mt-4 w-full py-6 px-4 rounded-lg">
+                      <div className="h-20 w-20 rounded-full border overflow-hidden">
+                        <img
+                          src={displayUserInfo?.avatar?.url}
+                          alt="Avatar"
+                          className="h-full w-full"
+                        />
+                      </div>
+                      <Link to={`/profile/${displayUserInfo?.email}`}>
+                        <div className="text-sm font-semibold mt-2 text-center">
+                          {displayUserInfo?.name}
+                        </div>
+
+                        <div className="text-xs text-gray-500 m-1">
+                          {displayUserInfo?.email}
+                        </div>
+                      </Link>
+
+                      {onlineUsers.includes(displayUserInfo?.name) ? (
+                        <>
+                          <Tag color="green" icon={<CheckCircleOutlined />}>
+                            Online
+                          </Tag>
+                        </>
+                      ) : (
+                        <>
+                          <Tag color="red" icon={<CheckCircleOutlined />}>
+                            Offline
+                          </Tag>
+                        </>
+                      )}
                     </div>
-                    <Link to={`/profile/${displayUserInfo?.email}`}>
-                      <div className="text-sm font-semibold mt-2 text-center">
-                        {displayUserInfo?.name}
-                      </div>
-
-                      <div className="text-xs text-gray-500 m-1">
-                        {displayUserInfo?.email}
-                      </div>
-                    </Link>
-
-                    {onlineUsers.includes(displayUserInfo?.name) ? (
-                      <>
-                        <Tag color="green" icon={<CheckCircleOutlined />}>
-                          Online
-                        </Tag>
-                      </>
-                    ) : (
-                      <>
-                        <Tag color="red" icon={<CheckCircleOutlined />}>
-                          Offline
-                        </Tag>
-                      </>
-                    )}
+                  </>
+                )}
+                <div className="flex mt-2">
+                  <div className="relative block">
+                    <div className="relative">
+                      <input
+                        type="text"
+                        className="w-[255px] px-4 py-2 rounded-lg border border-2 border-gray-700 focus:outline-none focus:border-blue-500"
+                        placeholder="search user..."
+                        value={searchQuery}
+                        onChange={handleSearch}
+                      />
+                      {showDropdown && (
+                        <div className="absolute w-full top-10 left-0 bg-white border border-gray-300 rounded-lg shadow-lg mt-2 z-50">
+                          <ul className="py-1 w-100">
+                            {Array.isArray(filteredItems) &&
+                              filteredItems.map((user) => (
+                                <li
+                                  key={user._id}
+                                  className="px-4 py-2 w-100 hover:bg-gray-100 cursor-pointer"
+                                  onClick={() => handleItemClick(user)}
+                                >
+                                  <div className="flex items-center">
+                                    <img
+                                      src={user.avatar.url}
+                                      alt={user.name}
+                                      className="w-8 h-8 rounded-full mr-2"
+                                    />
+                                    <div>
+                                      <div className="font-semibold">
+                                        {user.name}
+                                      </div>
+                                      <div className="text-gray-600">
+                                        {user.email}
+                                      </div>
+                                    </div>
+                                  </div>
+                                </li>
+                              ))}
+                          </ul>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </>
-              )}
+                </div>
+              </div>
 
-              <div className="flex flex-col mt-8">
-                <div className="flex flex-row items-center justify-between text-xs">
+              <div className="flex flex-col mt-8 mt-72 bg-white">
+                <div className="flex flex-row items-center justify-between text-xs bg-white p-1">
                   <span className="font-bold">Active Conversations</span>
                   <span className="flex items-center justify-center bg-gray-300 h-4 w-4 rounded-full">
                     {allUsers.length}
