@@ -107,7 +107,7 @@ const Chat = () => {
 
   return (
     <>
-      <div className="flex h-screen antialiased text-gray-800" style={{}}>
+      <div className="flex h-full w-full antialiased text-gray-800">
         <div className="flex flex-row h-full w-full overflow-x-hidden">
           <Button
             type="dark"
@@ -121,7 +121,13 @@ const Chat = () => {
           >
             <MenuOutlined />
           </Button>
-          <Drawer title="" placement="left" onClose={onClose} open={open}>
+          <Drawer
+            title="Sync Track"
+            placement="left"
+            onClose={onClose}
+            open={open}
+            width={300}
+          >
             <div className="flex flex-col pl-6 pr-2 w-64 bg-white flex-shrink-0">
               {displayUserInfo?.avatar && (
                 <>
@@ -202,8 +208,18 @@ const Chat = () => {
           </Drawer>
           <div className="flex flex-col flex-auto h-full">
             <div className="flex flex-col flex-auto flex-shrink-0 rounded-2xl h-full">
-              <div className="flex flex-col h-[65%] overflow-x-auto">
-                <div className="flex flex-col h-50">
+              {displayUserInfo?.avatar?.url && (
+                <div className="flex items-center w-full bg-gray-50 p-2 mb-2">
+                  <img
+                    src={displayUserInfo?.avatar?.url}
+                    className="mr-2 rounded-full w-10 h-10"
+                  />
+                  <h1 className="text-lg">{displayUserInfo?.name}</h1>
+                </div>
+              )}
+
+              <div className="flex flex-col h-[60%] overflow-x-auto">
+                <div className="flex flex-col h-full">
                   <div className="grid grid-cols-12 gap-y-1">
                     {chatHistory?.map((message, index) => {
                       if (message?.sender === activeUser?._id) {
@@ -247,7 +263,7 @@ const Chat = () => {
                   </div>
                 </div>
               </div>
-              <div className="flex flex-row items-center h-16 rounded-xl bg-white w-full">
+              <div className="flex flex-row items-center h-10 rounded-xl bg-white w-full mt-4">
                 <div className="flex-grow ml-4">
                   <div className="relative w-full">
                     <input
@@ -263,13 +279,11 @@ const Chat = () => {
                   </div>
                 </div>
                 <div className="ml-4">
-                  {/* Conditionally render the button text based on screen size */}
                   <button
-                    className="flex items-center justify-center bg-indigo-500 hover:bg-indigo-600 rounded-xl text-white px-4 py-2 flex-shrink-0"
+                    className="flex items-center justify-center mr-2 sm:mr-10 bg-indigo-500 hover:bg-indigo-600 rounded-xl text-white px-4 py-2 flex-shrink-0"
                     onClick={handleSubmit}
                     style={{ backgroundColor: "#2E2E2E" }}
                   >
-                    {/* Conditionally render the button text based on screen size */}
                     <span className={"hidden sm:flex"}>Send</span>
                     <span className="ml-2">
                       <svg

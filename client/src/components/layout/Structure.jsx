@@ -99,7 +99,7 @@ const Structure = () => {
               minHeight: 280,
               background: colorBgContainer,
             }}
-            className="p-4" // Override padding for large screens
+            className="" // Override padding for large screens
           >
             {showChat ? <Chat /> : null}
           </Content>
