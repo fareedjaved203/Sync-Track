@@ -14,9 +14,15 @@ import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
 
 const schema = yup.object().shape({
-  name: yup.string().required(),
+  name: yup
+    .string()
+    .min(2, "Name must be at least 2 characters long")
+    .required(),
   email: yup.string().email().required(),
-  password: yup.string().min(8).required(),
+  password: yup
+    .string()
+    .min(8, "Password must have at least 8 characters")
+    .required(),
 });
 
 const Signup = () => {
@@ -34,6 +40,7 @@ const Signup = () => {
     if (registerSuccess) {
       setEmailAlreadyPresent(false);
       navigate("/");
+      location.reload();
     } else {
       setEmailAlreadyPresent(true);
     }
@@ -113,7 +120,11 @@ const Signup = () => {
                   {...register("name")}
                   className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
                 />
-                {errors.name && <p>{errors.name.message}</p>}
+                {errors.name && (
+                  <p className="text-sm" style={{ color: "red" }}>
+                    {errors.name.message}
+                  </p>
+                )}
               </div>
               <div className="relative mb-4">
                 <label className="leading-7 text-sm text-gray-600">Email</label>
@@ -121,7 +132,11 @@ const Signup = () => {
                   {...register("email")}
                   className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
                 />
-                {errors.email && <p>{errors.email.message}</p>}
+                {errors.email && (
+                  <p className="text-sm" style={{ color: "red" }}>
+                    {errors.email.message}
+                  </p>
+                )}
               </div>
               <div className="relative mb-4">
                 <label className="leading-7 text-sm text-gray-600">
@@ -132,7 +147,11 @@ const Signup = () => {
                   type="password"
                   className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
                 />
-                {errors.password && <p>{errors.password.message}</p>}
+                {errors.password && (
+                  <p className="text-sm" style={{ color: "red" }}>
+                    {errors.password.message}
+                  </p>
+                )}
               </div>
               <button
                 type="submit"
@@ -147,7 +166,7 @@ const Signup = () => {
                 >
                   <path
                     fillRule="evenodd"
-                    d="M12.207 2.232a.75.75 0 00.025 1.06l4.146 3.958H6.375a5.375 5.375 0 000 10.75H9.25a.75.75 0 000-1.5H6.375a3.875 3.875 0 010-7.75h10.003l-4.146 3.957a.75.75 0 001.036 1.085l5.5-5.25a.75.75 0 000-1.085l-5.5-5.25a.75.75 0 00-1.06.025z"
+                    d="M12.207 2.232a.75.75 0 00.025 1.06l4.146 3.958H6.375a5.375 5.375 0 00010.75H9.25a.75.75 0 000-1.5H6.375a3.875 3.875 0 010-7.75h10.003l-4.146 3.957a.75.75 0 01.036 1.085l5.5-5.25a.75.75 0 00-1.085l-5.5-5.25a.75.75 0 00-1.06.025z"
                     clipRule="evenodd"
                   />
                 </svg>

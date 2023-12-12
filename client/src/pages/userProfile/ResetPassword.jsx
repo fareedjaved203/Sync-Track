@@ -7,22 +7,25 @@ import {
 } from "@ant-design/icons";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { forgotPasswordApi } from "../../api/user/userApi";
+import { resetPasswordApi } from "../../api/user/userApi";
 import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import BackButton from "../../components/layout/BackButton";
+import { useParams } from "react-router-dom";
 
 const schema = yup.object().shape({
-  password: yup.string().min(8).required(),
-  newPassword: yup.string().min(8).required(),
+  password: yup.string().required("Old Password is required"),
+  newPassword: yup.string().required("New Password is required"),
   confirmPassword: yup
     .string()
-    .oneOf([yup.ref("newPassword")], "Passwords must match")
-    .required(),
+    .oneOf([yup.ref("newPassword"), null], "Passwords must match")
+    .required("Confirm Password is required"),
 });
 
 const ResetPassword = () => {
   const navigate = useNavigate();
+  const params = useParams();
+
   const {
     register,
     handleSubmit,
@@ -30,7 +33,8 @@ const ResetPassword = () => {
   } = useForm({ resolver: yupResolver(schema) });
 
   const onSubmit = async (data) => {
-    const resetSuccess = await forgotPasswordApi(data);
+    console.log(data);
+    const resetSuccess = await resetPasswordApi(params.token, data);
     if (resetSuccess) {
       navigate("/signin");
     }
@@ -87,6 +91,7 @@ const ResetPassword = () => {
               Reset Password
             </h2>
             <form onSubmit={handleSubmit(onSubmit)}>
+              {/* Old Password Field */}
               <div className="relative mb-4">
                 <label className="leading-7 text-sm text-gray-600">
                   Old Password
@@ -96,7 +101,14 @@ const ResetPassword = () => {
                   type="password"
                   className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
                 />
+                {errors.password && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.password.message}
+                  </p>
+                )}
               </div>
+
+              {/* New Password Field */}
               <div className="relative mb-4">
                 <label className="leading-7 text-sm text-gray-600">
                   New Password
@@ -106,7 +118,14 @@ const ResetPassword = () => {
                   type="password"
                   className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
                 />
+                {errors.newPassword && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.newPassword.message}
+                  </p>
+                )}
               </div>
+
+              {/* Confirm Password Field */}
               <div className="relative mb-4">
                 <label className="leading-7 text-sm text-gray-600">
                   Confirm Password
@@ -116,7 +135,14 @@ const ResetPassword = () => {
                   type="password"
                   className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
                 />
+                {errors.confirmPassword && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.confirmPassword.message}
+                  </p>
+                )}
               </div>
+
+              {/* Submit Button */}
               <button
                 type="submit"
                 className="inline-flex w-full items-center justify-center space-x-2 rounded-lg border border-indigo-700 bg-indigo-700 px-6 py-2 font-semibold leading-6 text-white hover:border-indigo-600 hover:bg-indigo-600 hover:text-white focus:ring focus:ring-indigo-400 focus:ring-opacity-50 active:border-indigo-700 active:bg-indigo-700 dark:focus:ring-indigo-400 dark:focus:ring-opacity-90"

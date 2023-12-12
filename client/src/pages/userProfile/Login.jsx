@@ -12,6 +12,7 @@ import { loginUserApi } from "../../api/user/userApi";
 import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import { useState } from "react";
+import ForgotPasswordModal from "../../components/userProfile/ForgotPasswordModal";
 
 const schema = yup.object().shape({
   email: yup.string().email().required(),
@@ -145,6 +146,8 @@ const Login = () => {
                 <span>Sign In</span>
               </button>
             </form>
+            <ForgotPasswordModal />
+
             <div className="grow bg-gray-50 p-2 pb-2 text-center text-sm dark:bg-gray-700/50 md:px-12 bg:transparent w-[100%]">
               Dont have an account? &nbsp;
               <Link

@@ -6,7 +6,7 @@ import { getAllUsersApi } from "../api/user/userApi";
 import { Tag } from "antd";
 import { CheckCircleOutlined, MenuOutlined } from "@ant-design/icons";
 import { fetchChatHistoryApi } from "../api/chat/chatApi";
-import { Button, Drawer } from "antd";
+import { Button, Drawer, notification } from "antd";
 
 const server = "http://localhost:3000";
 const connectionOptions = {
@@ -21,6 +21,35 @@ const socket = io(server, connectionOptions);
 
 const Chat = () => {
   const { user } = useSelector((state) => state.user);
+
+  const [api, contextHolder] = notification.useNotification();
+
+  const UserAvatar = ({ url, alt }) => (
+    <img
+      src={url}
+      alt={alt}
+      className="w-8 h-8 rounded-full object-cover mr-2"
+    />
+  );
+
+  const UserName = ({ name }) => (
+    <span className="font-bold text-gray-700">{name}</span>
+  );
+
+  const openNotification = (placement, message, sender) => {
+    api.info({
+      description: (
+        <div className="flex items-center rounded-md ">
+          <UserAvatar url={sender?.avatar?.url} alt={sender?.name} />
+          <div className="flex flex-col">
+            <UserName name={sender?.name} />
+            <span className="text-sm text-gray-500">{message?.message}</span>
+          </div>
+        </div>
+      ),
+      placement,
+    });
+  };
 
   const [sender, setSender] = useState(user?.data?.user?._id);
   const [allUsers, setAllUsers] = useState([]);
@@ -60,7 +89,7 @@ const Chat = () => {
   const activeUserStatus = (receiver) => {
     setActiveUser(receiver);
     setDisplayUserInfo(receiver);
-    getUserDetails(sender, receiver._id);
+    getUserDetails(sender, receiver?._id);
   };
 
   const getUserDetails = async (sender, receiver) => {
@@ -76,6 +105,16 @@ const Chat = () => {
         message.content = message.message;
         return [...messages, message];
       });
+    });
+
+    socket.on("notification", (message) => {
+      let senderName = undefined;
+      if (message?.receiver === user?.data.user?._id) {
+        senderName = allUsers.find((user) => {
+          return user?._id === message?.sender;
+        });
+        openNotification("bottomRight", message, senderName);
+      }
     });
   }, []);
 
@@ -128,6 +167,7 @@ const Chat = () => {
 
   return (
     <>
+      {contextHolder}
       <div className="flex h-full w-full antialiased text-gray-800">
         <div className="flex flex-row h-full w-full overflow-x-hidden">
           <Button
@@ -334,14 +374,18 @@ const Chat = () => {
                   <div className="relative w-full">
                     <input
                       type="text"
-                      className={`flex w-full border rounded-xl focus:outline-none focus:border-indigo-300 pl-4 h-10 ${
-                        // Apply max-width on small screens
-                        "sm:max-w-full"
-                      }`}
+                      className={`flex w-full border rounded-xl focus:outline-none focus:border-indigo-300 pl-4 h-10 ${"sm:max-w-full"}`}
                       value={message}
                       placeholder="Your message"
                       onChange={(event) => sendMessage(event)}
                     />
+                  </div>
+                  <div>
+                    {chosenEmoji ? (
+                      <span>{chosenEmoji}</span>
+                    ) : (
+                      <Picker onSelect={handleEmojiClick} />
+                    )}
                   </div>
                 </div>
                 <div className="ml-4">

@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { SiSaltproject } from "react-icons/si";
-import { FaUserCircle } from "react-icons/fa";
 import { getAllUsersApi, logoutUserApi } from "../../api/user/userApi";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useCookies } from "react-cookie";
 
 let searchItems = [];

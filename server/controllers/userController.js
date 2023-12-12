@@ -180,8 +180,9 @@ const deleteUser = async (req, res, next) => {
 
 const forgotPassword = async (req, res, next) => {
   try {
-    console.log(req.body.email);
-    const user = await User.findOne({ email: req.body.email });
+    const [key, value] = Object.entries(req.body)[0];
+    console.log(key);
+    const user = await User.findOne({ email: key });
     if (!user) {
       return next(new ErrorHandler("User Not Found", 404));
     }
@@ -230,23 +231,30 @@ const forgotPassword = async (req, res, next) => {
 
 const resetPassword = async (req, res, next) => {
   try {
+    console.log(req.body);
+    console.log(req.params.token);
     const resetPasswordToken = crypto
       .createHash("sha256")
       .update(req.params.token)
       .digest("hex");
+
+    console.log("hello");
 
     const user = await User.findOne({
       resetPasswordToken,
       resetPasswordExpire: { $gt: Date.now() },
     });
 
+    console.log("hello2");
+    console.log(user);
+
     if (!user) {
       return next(new ErrorHandler("Token expired or invalid", 400));
     }
-    if (req.body.password !== req.body.confirmPassword) {
+    if (req.body.newPassword !== req.body.confirmPassword) {
       return next(new ErrorHandler("Password Does not Match", 400));
     }
-    user.password = req.body.password;
+    user.password = req.body.newPassword;
     user.resetPasswordToken = undefined;
     user.resetPasswordExpire = undefined;
 
@@ -303,13 +311,7 @@ const updatePassword = async (req, res, next) => {
   try {
     const user = await User.findById(req.user.id).select("+password");
 
-    const isPasswordMatched = await user.comparePassword(req.body.oldPassword);
-
-    if (!isPasswordMatched) {
-      return next(new ErrorHandler("Old password is incorrect", 400));
-    } else if (req.body.newPassword === req.body.oldPassword) {
-      return next(new ErrorHandler("New Password Can't be Old Password", 409));
-    } else if (req.body.newPassword !== req.body.confirmPassword) {
+    if (req.body.newPassword !== req.body.confirmPassword) {
       return next(new ErrorHandler("password does not match", 400));
     }
 

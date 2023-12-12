@@ -3,16 +3,13 @@ import { Modal, message } from "antd";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { updateProfileApi } from "../../api/user/userApi";
+import validator from "validator";
 
 const schema = Yup.object().shape({
-  name: Yup.string()
-    .min(4, "Name must be at least 4 characters")
-    .required("Name is required"),
+  name: Yup.string().required("Name is required"),
   email: Yup.string().email("Invalid email").required("Email is required"),
-  password: Yup.string()
-    .min(8, "Password must be at least 8 characters")
-    .required("Password is required"),
 });
+
 const UpdateProfileModal = ({ user }) => {
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
@@ -151,7 +148,12 @@ const UpdateProfileModal = ({ user }) => {
                 className="w-full border border-gray-300 rounded py-2 px-3"
                 onChange={(e) => setName(e.target.value)}
               />
-              <ErrorMessage name="name" className="text-red-500" />
+              {name.length < 4 && (
+                <div style={{ color: "red" }}>
+                  {" "}
+                  Name must be minimum 4 characters{" "}
+                </div>
+              )}
             </div>
             <div>
               <label htmlFor="email">Email</label>
@@ -163,7 +165,9 @@ const UpdateProfileModal = ({ user }) => {
                 className="w-full border border-gray-300 rounded py-2 px-3"
                 onChange={(e) => setEmail(e.target.value)}
               />
-              <ErrorMessage name="email" className="text-red-500" />
+              {!validator.isEmail(email) && (
+                <div style={{ color: "red" }}>Provide Valid Email</div>
+              )}
             </div>
           </Form>
         </Formik>

@@ -65,6 +65,7 @@ io.on("connection", (socket) => {
 
   socket.on("sendMessage", async (message) => {
     io.emit("message", message);
+    io.emit("notification", message);
     await saveMessage(message.message, message.sender, message.receiver);
   });
 

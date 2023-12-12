@@ -22,19 +22,23 @@ const ChangePasswordModal = () => {
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
 
-  const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordMistmatch, setPasswordMismatch] = useState(false);
 
   const showModal = () => {
     setOpen(true);
   };
 
   const handleOk = () => {
+    if (newPassword !== confirmPassword) {
+      setPasswordMismatch(true);
+      return;
+    }
     setConfirmLoading(true);
+
     const myForm = new FormData();
 
-    myForm.set("oldPassword", oldPassword);
     myForm.set("newPassword", newPassword);
     myForm.set("confirmPassword", confirmPassword);
     updatePasswordApi(myForm)
@@ -84,22 +88,6 @@ const ChangePasswordModal = () => {
         >
           <Form>
             <div>
-              <label htmlFor="password">Old Password</label>
-              <Field
-                type="password"
-                id="password"
-                name="password"
-                required
-                value={oldPassword}
-                onChange={(e) => setOldPassword(e.target.value)}
-                className="w-full border border-gray-300 rounded py-2 px-3"
-              />
-              <ErrorMessage
-                name="password"
-                className="text-red-500 text-xs italic"
-              />
-            </div>
-            <div>
               <label htmlFor="password">New Password</label>
               <Field
                 type="password"
@@ -110,10 +98,13 @@ const ChangePasswordModal = () => {
                 onChange={(e) => setNewPassword(e.target.value)}
                 className="w-full border border-gray-300 rounded py-2 px-3"
               />
-              <ErrorMessage
-                name="newPassword"
-                className="text-red-500 text-xs italic"
-              />
+              {newPassword.length < 8 && (
+                <>
+                  <div style={{ color: "red" }}>
+                    Password must be minimum 8 characters
+                  </div>
+                </>
+              )}
             </div>
             <div className="mb-4">
               <label
@@ -131,10 +122,11 @@ const ChangePasswordModal = () => {
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 className="w-full border border-gray-300 rounded py-2 px-3"
               />
-              <ErrorMessage
-                name="confirmPassword"
-                className="text-red-500 text-xs italic block"
-              />
+              {passwordMistmatch && (
+                <>
+                  <div style={{ color: "red" }}>Passwords do not match</div>
+                </>
+              )}
             </div>
           </Form>
         </Formik>

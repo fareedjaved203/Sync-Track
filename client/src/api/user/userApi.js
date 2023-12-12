@@ -57,28 +57,25 @@ export const updatePasswordApi = async (passwords) => {
   }
 };
 
-export const forgotPasswordApi = async (email, alert) => {
+export const forgotPasswordApi = async (email) => {
   try {
     console.log(email);
     const { data } = await apiService.post(`/password/forgot`, email);
-    alert.info(`Please Check Your Email`);
     return { data };
   } catch (error) {
     console.log(error.message);
-    alert.error(error);
   }
 };
 
-export const resetPasswordApi = async (token, passwords, alert) => {
+export const resetPasswordApi = async (token, passwords) => {
   try {
     const { data } = await apiService.put(
       `/password/reset/${token}`,
       passwords
     );
-    alert.success("Password Reset Successfully");
     return { data };
   } catch (error) {
-    alert.error(error);
+    console.log(error);
   }
 };
 

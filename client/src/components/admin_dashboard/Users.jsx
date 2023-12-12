@@ -4,6 +4,7 @@ import { DeleteOutlined } from "@ant-design/icons";
 import { deleteUserApi } from "../../api/user/userApi";
 import UpdateRoleModal from "./UpdateRoleModal";
 
+let deletedUser = false;
 const columns = [
   {
     title: "Name",
@@ -30,6 +31,7 @@ const columns = [
           onConfirm={async () => {
             await deleteUserApi(record._id);
             message.success("User Deleted Successfully");
+            deletedUser = true;
           }}
           okText="Yes"
           cancelText="No"
@@ -51,10 +53,11 @@ const AllUsers = ({ data }) => {
   const [users, setUsers] = useState([]);
   const [userCapture, setUserCapture] = useState(false);
   const [clicked, setClicked] = useState(false);
+  const [deletedUser, setDeletedUser] = useState(false);
 
   useEffect(() => {
     setUsers(data);
-  }, [clicked]);
+  }, [clicked, deletedUser]);
 
   const handleItemClick = (item) => {
     setSearchQuery(item.email);
@@ -63,7 +66,6 @@ const AllUsers = ({ data }) => {
     const selectedUser = users.filter((user) => {
       return user.email === item.email;
     });
-    console.log(selectedUser);
     setUsers(selectedUser);
     setUserCapture(!userCapture);
     setSearchQuery("");

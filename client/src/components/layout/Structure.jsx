@@ -13,6 +13,7 @@ import { Layout, Menu, Button, theme } from "antd";
 import Navbar from "./Navbar";
 import { useNavigate } from "react-router-dom";
 import Chat from "../../pages/Chat";
+import WelcomeScreen from "./WelcomeScreen";
 
 const { Header, Sider, Content } = Layout;
 
@@ -101,6 +102,7 @@ const Structure = () => {
             }}
             className="" // Override padding for large screens
           >
+            {!showChat ? <WelcomeScreen /> : null}
             {showChat ? <Chat /> : null}
           </Content>
         </Layout>
