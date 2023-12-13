@@ -1,4 +1,4 @@
-const users = [];
+let users = [];
 
 // Join user to chat
 const userOnline = (id, username) => {
@@ -14,15 +14,15 @@ const userOnline = (id, username) => {
 };
 // User leaves chat
 const userOffline = (id) => {
-  const index = users.findIndex((user) => user.id === id);
-
-  if (index !== -1) {
-    return users.splice(index, 1)[0];
-  }
+  users = users.filter((user) => {
+    return user.id !== id;
+  });
+  return users;
 };
 
 //get users
 const getOnlineUsers = () => {
+  console.log(users);
   return users;
 };
 

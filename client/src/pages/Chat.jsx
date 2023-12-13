@@ -7,6 +7,7 @@ import { Tag } from "antd";
 import { CheckCircleOutlined, MenuOutlined } from "@ant-design/icons";
 import { fetchChatHistoryApi } from "../api/chat/chatApi";
 import { Button, Drawer, notification } from "antd";
+import { useOnlineStatus } from "../components/chat/OnlineStatus";
 
 const server = "http://localhost:3000";
 const connectionOptions = {
@@ -20,6 +21,7 @@ const connectionOptions = {
 const socket = io(server, connectionOptions);
 
 const Chat = () => {
+  const isOnline = useOnlineStatus();
   const { user } = useSelector((state) => state.user);
 
   const [api, contextHolder] = notification.useNotification();
@@ -37,6 +39,7 @@ const Chat = () => {
   );
 
   const openNotification = (placement, message, sender) => {
+    console.log(sender);
     api.info({
       description: (
         <div className="flex items-center rounded-md ">
@@ -72,8 +75,7 @@ const Chat = () => {
     socket.on("online-users-updated", (users) => {
       const uniqueUsernames = new Set(users.map((user) => user.username));
       const usernamesArray = Array.from(uniqueUsernames);
-      console.log(usernamesArray);
-      console.log("hello");
+      console.log(`online users: ${usernamesArray}`);
       setOnlineUsers(usernamesArray);
     });
   }, [onlineStatus]);
@@ -98,7 +100,7 @@ const Chat = () => {
   };
 
   useEffect(() => {
-    socket.emit("user-joined", user);
+    socket.on("user-online-to-chat", user);
 
     socket.on("message", (message) => {
       setChatHistory((messages) => {
@@ -110,10 +112,14 @@ const Chat = () => {
     socket.on("notification", (message) => {
       let senderName = undefined;
       if (message?.receiver === user?.data.user?._id) {
-        senderName = allUsers.find((user) => {
-          return user?._id === message?.sender;
-        });
-        openNotification("bottomRight", message, senderName);
+        console.log(allUsers);
+        if (allUsers) {
+          senderName = allUsers.find((user) => {
+            return user?._id === message?.sender;
+          });
+          console.log(`sender: ${senderName}`);
+          openNotification("bottomRight", message, senderName);
+        }
       }
     });
   }, []);
@@ -379,13 +385,6 @@ const Chat = () => {
                       placeholder="Your message"
                       onChange={(event) => sendMessage(event)}
                     />
-                  </div>
-                  <div>
-                    {chosenEmoji ? (
-                      <span>{chosenEmoji}</span>
-                    ) : (
-                      <Picker onSelect={handleEmojiClick} />
-                    )}
                   </div>
                 </div>
                 <div className="ml-4">

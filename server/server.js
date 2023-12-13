@@ -19,7 +19,11 @@ const socketIO = require("socket.io");
 const io = socketIO(server);
 
 const cloudinary = require("cloudinary");
-const { userOnline, getOnlineUsers } = require("./utils/chat/user");
+const {
+  userOnline,
+  getOnlineUsers,
+  userOffline,
+} = require("./utils/chat/user");
 
 const port = process.env.PORT || 8000;
 
@@ -41,9 +45,6 @@ io.on("connection", (socket) => {
       const user = userJoin(socket.id, userName, roomId, host, presenter);
       const roomUsers = getUsers(user.room);
       socket.join(user.room);
-      socket.emit("message", {
-        message: "Welcome to ChatRoom",
-      });
       socket.broadcast.to(user.room).emit("message", {
         message: `${user.username} has joined`,
       });
@@ -60,7 +61,10 @@ io.on("connection", (socket) => {
 
   socket.on("online-users", (name) => {
     const user = userOnline(socket.id, name);
-    socket.broadcast.emit("online-users-updated", getOnlineUsers());
+    socket.emit("message", {
+      message: `Welcome to Sync Track Chat, ${name}`,
+    });
+    io.emit("online-users-updated", getOnlineUsers());
   });
 
   socket.on("sendMessage", async (message) => {
@@ -80,12 +84,9 @@ io.on("connection", (socket) => {
       io.to(userLeaves.room).emit("users", roomUsers);
     }
 
-    // Remove user from online list
-    const index = onlineUsers.findIndex((user) => user.id === socket.id);
-    onlineUsers.splice(index, 1);
+    userOffline(socket.id);
 
-    // Emit offline event to all users
-    io.emit("online-users", onlineUsers);
+    io.emit("online-users-updated", getOnlineUsers());
   });
 });
 
