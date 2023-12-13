@@ -269,31 +269,32 @@ const resetPassword = async (req, res, next) => {
 const updateProfile = async (req, res, next) => {
   try {
     const newUserData = {
-      fullName: req.body.fullName,
       name: req.body.name,
       email: req.body.email,
     };
 
-    if (req.body.avatar !== "") {
-      const user = await User.findById(req.user.id);
+    const user = await User.findById(req.user.id);
 
+    if (req.body.avatar) {
       const imageId = user.avatar.public_id;
-
       await cloudinary.v2.uploader.destroy(imageId);
-
       const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
         folder: "avatars",
         width: 150,
         crop: "scale",
       });
-
       newUserData.avatar = {
         public_id: myCloud.public_id,
         url: myCloud.secure_url,
       };
+    } else {
+      newUserData.avatar = {
+        public_id: user.avatar.public_id,
+        url: user.avatar.url,
+      };
     }
 
-    const user = await User.findByIdAndUpdate(req.user.id, newUserData, {
+    await User.findByIdAndUpdate(req.user.id, newUserData, {
       new: true,
       runValidators: true,
       useFindAndModify: false,
@@ -303,6 +304,7 @@ const updateProfile = async (req, res, next) => {
       success: true,
     });
   } catch (error) {
+    console.log(error.message);
     return next(new ErrorHandler(error.message, 500));
   }
 };

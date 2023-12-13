@@ -74,11 +74,8 @@ const Footer = () => {
         style={{ backgroundColor: "#2E2E30" }}
       >
         © 2023 Copyright:
-        <a
-          className="text-white-800 dark:text-neutral-400"
-          href="https://tw-elements.com/"
-        >
-          TW elements
+        <a className="text-white-800 dark:text-neutral-400" href="#">
+          SyncTrack
         </a>
       </div>
     </footer>

@@ -14,6 +14,11 @@ const Profile = () => {
   const params = useParams();
   const { user } = useSelector((state) => state.user);
 
+  const [showMore, setShowMore] = useState(false);
+  const [name, setName] = useState("N/A");
+  const [email, setEmail] = useState("N/A");
+  const [imagePreview, setImagePreview] = useState("");
+
   useEffect(() => {
     fetchUserDetails();
   }, [params.user]);
@@ -32,11 +37,6 @@ const Profile = () => {
       info();
     }
   };
-
-  const [showMore, setShowMore] = useState(false);
-  const [name, setName] = useState("N/A");
-  const [email, setEmail] = useState("N/A");
-  const [imagePreview, setImagePreview] = useState("");
 
   const handleShowMore = () => {
     setShowMore(true);
@@ -148,11 +148,11 @@ const Profile = () => {
                 </div>
                 <div className="mb-2 text-blueGray-600 mt-10">
                   <i className="fas fa-briefcase mr-2 text-lg text-blueGray-400"></i>
-                  Solution Manager - Creative Tim Officer
+                  Comsats University
                 </div>
                 <div className="mb-2 text-blueGray-600">
                   <i className="fas fa-university mr-2 text-lg text-blueGray-400"></i>
-                  University of Computer Science
+                  Bachelor's in Computer Science
                 </div>
               </div>
               <div className="mt-10 py-10 border-t border-blueGray-200 text-center">

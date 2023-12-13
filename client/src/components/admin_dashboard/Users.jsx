@@ -4,48 +4,47 @@ import { DeleteOutlined } from "@ant-design/icons";
 import { deleteUserApi } from "../../api/user/userApi";
 import UpdateRoleModal from "./UpdateRoleModal";
 
-let deletedUser = false;
-const columns = [
-  {
-    title: "Name",
-    dataIndex: "name",
-    key: "name",
-    render: (text) => <a>{text}</a>,
-  },
-  {
-    title: "Email",
-    dataIndex: "email",
-    key: "email",
-    render: (text) => <a>{text}</a>,
-  },
-  {
-    title: "Action",
-    key: "action",
-    render: (_, record) => (
-      <Space size="middle">
-        <a>
-          <UpdateRoleModal record={record} />
-        </a>
-        <Popconfirm
-          title="Are you sure you want to delete this user?"
-          onConfirm={async () => {
-            await deleteUserApi(record._id);
-            message.success("User Deleted Successfully");
-            deletedUser = true;
-          }}
-          okText="Yes"
-          cancelText="No"
-          okButtonProps={{ style: { backgroundColor: "red" } }}
-        >
-          <a>
-            <DeleteOutlined style={{ fontSize: "20px" }} />
-          </a>
-        </Popconfirm>
-      </Space>
-    ),
-  },
-];
 const AllUsers = ({ data }) => {
+  const columns = [
+    {
+      title: "Name",
+      dataIndex: "name",
+      key: "name",
+      render: (text) => <a>{text}</a>,
+    },
+    {
+      title: "Email",
+      dataIndex: "email",
+      key: "email",
+      render: (text) => <a>{text}</a>,
+    },
+    {
+      title: "Action",
+      key: "action",
+      render: (_, record) => (
+        <Space size="middle">
+          <a>
+            <UpdateRoleModal record={record} />
+          </a>
+          <Popconfirm
+            title="Are you sure you want to delete this user?"
+            onConfirm={async () => {
+              handleUserDelete(record?._id);
+              setDeletedClick(!deletedClick);
+            }}
+            okText="Yes"
+            cancelText="No"
+            okButtonProps={{ style: { backgroundColor: "red" } }}
+          >
+            <a>
+              <DeleteOutlined style={{ fontSize: "20px" }} />
+            </a>
+          </Popconfirm>
+        </Space>
+      ),
+    },
+  ];
+
   const [bottom, setBottom] = useState("bottomRight");
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredItems, setFilteredItems] = useState(data);
@@ -53,11 +52,16 @@ const AllUsers = ({ data }) => {
   const [users, setUsers] = useState([]);
   const [userCapture, setUserCapture] = useState(false);
   const [clicked, setClicked] = useState(false);
-  const [deletedUser, setDeletedUser] = useState(false);
+  const [deletedClick, setDeletedClick] = useState(false);
 
   useEffect(() => {
     setUsers(data);
-  }, [clicked, deletedUser]);
+  }, [clicked]);
+
+  const handleUserDelete = async (id) => {
+    message.success("User Deleted Successfully");
+    await deleteUserApi(id);
+  };
 
   const handleItemClick = (item) => {
     setSearchQuery(item.email);
