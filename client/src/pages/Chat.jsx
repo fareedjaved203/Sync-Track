@@ -128,9 +128,7 @@ const Chat = () => {
     getAllUsersApi().then((data) => {
       const store = data?.data?.users;
       if (Array.isArray(store)) {
-        const filteredUsers = store.filter(
-          (user) => user.email !== "admin@gmail.com"
-        );
+        const filteredUsers = store.filter((user) => user.role !== "admin");
         setAllUsers([...filteredUsers]);
         setFilteredItems([...filteredUsers]);
       }
@@ -196,11 +194,11 @@ const Chat = () => {
             width={300}
           >
             <div className="flex flex-col w-64 bg-white flex-shrink-0">
-              <div className="fixed z-50 top-12 w-[300px] p-4 bg-white left-0">
+              <div className="relative z-50 w-[250px] bg-white left-0">
                 {displayUserInfo?.avatar && (
                   <>
                     <div className="flex flex-col items-center bg-indigo-100 border border-gray-200 mt-4 w-full py-6 px-4 rounded-lg">
-                      <div className="h-20 w-20 rounded-full border overflow-hidden">
+                      <div className="h-20 w-20 rounded-full border">
                         <img
                           src={displayUserInfo?.avatar?.url}
                           alt="Avatar"
@@ -277,7 +275,8 @@ const Chat = () => {
                   </div>
                 </div>
               </div>
-
+            </div>
+            <div className="flex flex-col w-64 bg-white flex-shrink-0">
               <div className="flex flex-col mt-8 mt-72 bg-white">
                 <div className="flex flex-row items-center justify-between text-xs bg-white p-1">
                   <span className="font-bold">Users</span>
@@ -288,7 +287,7 @@ const Chat = () => {
                 <div className="flex flex-col space-y-1 mt-4 -mx-2 h-48 overflow-y-auto">
                   <ul>
                     {allUsers &&
-                      allUsers.map((user) => (
+                      allUsers?.map((user) => (
                         <li
                           key={user._id}
                           onClick={() => activeUserStatus(user)}
@@ -300,7 +299,13 @@ const Chat = () => {
                                 : "hover:bg-gray-100"
                             }`}
                           >
-                            <div className="h-10 w-10 rounded-full border overflow-hidden">
+                            <div
+                              className={`h-10 w-10 rounded-full border-3 ${
+                                onlineUsers.includes(user?.name)
+                                  ? "border-green-500"
+                                  : "border-red-500"
+                              } overflow-hidden`}
+                            >
                               <img
                                 src={user?.avatar?.url}
                                 alt="Avatar"
