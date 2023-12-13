@@ -7,7 +7,6 @@ import { Tag } from "antd";
 import { CheckCircleOutlined, MenuOutlined } from "@ant-design/icons";
 import { fetchChatHistoryApi } from "../api/chat/chatApi";
 import { Button, Drawer, notification } from "antd";
-import { useOnlineStatus } from "../components/chat/OnlineStatus";
 
 const server = "http://localhost:3000";
 const connectionOptions = {
@@ -21,7 +20,6 @@ const connectionOptions = {
 const socket = io(server, connectionOptions);
 
 const Chat = () => {
-  const isOnline = useOnlineStatus();
   const { user } = useSelector((state) => state.user);
 
   const [api, contextHolder] = notification.useNotification();
@@ -100,6 +98,17 @@ const Chat = () => {
   };
 
   useEffect(() => {
+    getAllUsersApi().then((data) => {
+      const store = data?.data?.users;
+      if (Array.isArray(store)) {
+        const filteredUsers = store.filter((user) => user.role !== "admin");
+        setAllUsers([...filteredUsers]);
+        setFilteredItems([...filteredUsers]);
+      }
+    });
+  }, []);
+
+  useEffect(() => {
     socket.on("user-online-to-chat", user);
 
     socket.on("message", (message) => {
@@ -110,30 +119,15 @@ const Chat = () => {
     });
 
     socket.on("notification", (message) => {
-      let senderName = undefined;
       if (message?.receiver === user?.data.user?._id) {
-        console.log(allUsers);
         if (allUsers) {
-          senderName = allUsers.find((user) => {
-            return user?._id === message?.sender;
-          });
-          console.log(`sender: ${senderName}`);
-          openNotification("bottomRight", message, senderName);
+          const sender = allUsers.find((u) => u._id === message.sender);
+          console.log(sender);
+          openNotification("bottomRight", message, sender);
         }
       }
     });
-  }, []);
-
-  useEffect(() => {
-    getAllUsersApi().then((data) => {
-      const store = data?.data?.users;
-      if (Array.isArray(store)) {
-        const filteredUsers = store.filter((user) => user.role !== "admin");
-        setAllUsers([...filteredUsers]);
-        setFilteredItems([...filteredUsers]);
-      }
-    });
-  }, []);
+  }, [allUsers]);
 
   const updateChatHistory = (message) => {
     setChatHistory((chatHistory) => [...chatHistory, message]);
