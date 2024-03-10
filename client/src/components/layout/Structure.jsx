@@ -65,7 +65,9 @@ const Structure = () => {
           trigger={null}
           collapsible
           collapsed={collapsed}
-          style={{ borderTop: "1px solid grey" }}
+          style={{
+            borderTop: "1px solid grey",
+          }}
         >
           <div className="demo-logo-vertical" />
           <Menu
