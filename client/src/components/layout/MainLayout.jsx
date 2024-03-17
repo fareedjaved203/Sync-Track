@@ -38,16 +38,13 @@ const Structure = ({ children }) => {
       navigate("/whiteboard");
     }),
     getItem("Video Conference", "3", <VideoCameraOutlined />),
-    getItem("My Tasks", "sub1", <CheckCircleOutlined />, [
-      getItem("Figma Design", "4"),
-      getItem("Frontend", "5"),
-      getItem("Backend", "6"),
-    ]),
     getItem("My Projects", "sub2", <ProjectOutlined />, [
-      getItem("Devsinc", "7"),
+      getItem("Devsinc", "7", null, null, () => {
+        navigate("/channel");
+      }),
       getItem("Cowlar", "8"),
     ]),
-    getItem("Project Ads", "9", <FileOutlined />),
+    // getItem("Project Ads", "9", <FileOutlined />),
   ];
 
   const [collapsed, setCollapsed] = useState(false);
@@ -69,6 +66,7 @@ const Structure = ({ children }) => {
             position: "fixed",
             height: "100vh",
             marginTop: "58px",
+            backgroundColor: "#2E2E30",
           }}
         >
           <div className="demo-logo-vertical" />
@@ -85,6 +83,7 @@ const Structure = ({ children }) => {
                 backgroundColor: "black",
                 color: "white",
               },
+              marginTop: "10px",
             }}
             items={items}
           />
