@@ -3,81 +3,114 @@ import React from "react";
 const Milestone = () => {
   return (
     <>
-      <div className="p-64 pt-2 mt-4">
-        <h1 className="text-4xl text-center font-semibold mb-6">
-          Package status
-        </h1>
-        <div className="container">
-          <div className="flex flex-col md:grid grid-cols-12 text-gray-50">
-            <div className="flex md:contents">
-              <div className="col-start-2 col-end-4 mr-10 md:mx-auto relative">
-                <div className="h-full w-6 flex items-center justify-center">
-                  <div className="h-full w-1 bg-green-500 pointer-events-none"></div>
-                </div>
-                <div className="w-6 h-6 absolute top-1/2 -mt-3 rounded-full bg-green-500 shadow text-center">
-                  <i className="fas fa-check-circle text-white"></i>
-                </div>
+      <section className="text-gray-600 body-font overflow-hidden">
+        <div className="container px-5 py-8 mx-auto">
+          <div className="-my-8 divide-y-2 divide-gray-100">
+            <div className="py-8 flex flex-wrap md:flex-nowrap">
+              <div className="md:w-64 md:mb-0 mb-6 flex-shrink-0 flex flex-col">
+                <span className="font-semibold title-font text-gray-700">
+                  CATEGORY
+                </span>
+                <span className="mt-1 text-gray-500 text-sm">12 Jun 2019</span>
               </div>
-              <div className="bg-green-500 col-start-4 col-end-12 p-4 rounded-xl my-4 mr-auto shadow-md w-full">
-                <h3 className="font-semibold text-lg mb-1">Package Booked</h3>
-                <p className="leading-tight text-justify w-full">
-                  21 July 2021, 04:30 PM
+              <div className="md:flex-grow">
+                <h2 className="text-2xl font-medium text-gray-900 title-font mb-2">
+                  Bitters hashtag waistcoat fashion axe chia unicorn
+                </h2>
+                <p className="leading-relaxed">
+                  Glossier echo park pug, church-key sartorial biodiesel
+                  vexillologist pop-up snackwave ramps cornhole. Marfa 3 wolf
+                  moon party messenger bag selfies, poke vaporware kombucha
+                  lumbersexual pork belly polaroid hoodie portland craft beer.
                 </p>
+                <a className="text-indigo-500 inline-flex items-center mt-4">
+                  Learn More
+                  <svg
+                    className="w-4 h-4 ml-2"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    fill="none"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M5 12h14"></path>
+                    <path d="M12 5l7 7-7 7"></path>
+                  </svg>
+                </a>
               </div>
             </div>
-            <div className="flex md:contents">
-              <div className="col-start-2 col-end-4 mr-10 md:mx-auto relative">
-                <div className="h-full w-6 flex items-center justify-center">
-                  <div className="h-full w-1 bg-green-500 pointer-events-none"></div>
-                </div>
-                <div className="w-6 h-6 absolute top-1/2 -mt-3 rounded-full bg-green-500 shadow text-center">
-                  <i className="fas fa-check-circle text-white"></i>
-                </div>
+            <div className="py-8 flex flex-wrap md:flex-nowrap">
+              <div className="md:w-64 md:mb-0 mb-6 flex-shrink-0 flex flex-col">
+                <span className="font-semibold title-font text-gray-700">
+                  CATEGORY
+                </span>
+                <span className="mt-1 text-gray-500 text-sm">12 Jun 2019</span>
               </div>
-              <div className="bg-green-500 col-start-4 col-end-12 p-4 rounded-xl my-4 mr-auto shadow-md w-full">
-                <h3 className="font-semibold text-lg mb-1">Out for Delivery</h3>
-                <p className="leading-tight text-justify">
-                  22 July 2021, 01:00 PM
+              <div className="md:flex-grow">
+                <h2 className="text-2xl font-medium text-gray-900 title-font mb-2">
+                  Meditation bushwick direct trade taxidermy shaman
+                </h2>
+                <p className="leading-relaxed">
+                  Glossier echo park pug, church-key sartorial biodiesel
+                  vexillologist pop-up snackwave ramps cornhole. Marfa 3 wolf
+                  moon party messenger bag selfies, poke vaporware kombucha
+                  lumbersexual pork belly polaroid hoodie portland craft beer.
                 </p>
+                <a className="text-indigo-500 inline-flex items-center mt-4">
+                  Learn More
+                  <svg
+                    className="w-4 h-4 ml-2"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    fill="none"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M5 12h14"></path>
+                    <path d="M12 5l7 7-7 7"></path>
+                  </svg>
+                </a>
               </div>
             </div>
-            <div className="flex md:contents">
-              <div className="col-start-2 col-end-4 mr-10 md:mx-auto relative">
-                <div className="h-full w-6 flex items-center justify-center">
-                  <div className="h-full w-1 bg-red-500 pointer-events-none"></div>
-                </div>
-                <div className="w-6 h-6 absolute top-1/2 -mt-3 rounded-full bg-red-500 shadow text-center">
-                  <i className="fas fa-times-circle text-white"></i>
-                </div>
+            <div className="py-8 flex flex-wrap md:flex-nowrap">
+              <div className="md:w-64 md:mb-0 mb-6 flex-shrink-0 flex flex-col">
+                <span className="font-semibold title-font text-gray-700">
+                  CATEGORY
+                </span>
+                <span className="text-sm text-gray-500">12 Jun 2019</span>
               </div>
-              <div className="bg-red-500 col-start-4 col-end-12 p-4 rounded-xl my-4 mr-auto shadow-md w-full">
-                <h3 className="font-semibold text-lg mb-1 text-gray-50">
-                  Cancelled
-                </h3>
-                <p className="leading-tight text-justify">
-                  Customer cancelled the order
+              <div className="md:flex-grow">
+                <h2 className="text-2xl font-medium text-gray-900 title-font mb-2">
+                  Woke master cleanse drinking vinegar salvia
+                </h2>
+                <p className="leading-relaxed">
+                  Glossier echo park pug, church-key sartorial biodiesel
+                  vexillologist pop-up snackwave ramps cornhole. Marfa 3 wolf
+                  moon party messenger bag selfies, poke vaporware kombucha
+                  lumbersexual pork belly polaroid hoodie portland craft beer.
                 </p>
-              </div>
-            </div>
-            <div className="flex md:contents">
-              <div className="col-start-2 col-end-4 mr-10 md:mx-auto relative">
-                <div className="h-full w-6 flex items-center justify-center">
-                  <div className="h-full w-1 bg-gray-300 pointer-events-none"></div>
-                </div>
-                <div className="w-6 h-6 absolute top-1/2 -mt-3 rounded-full bg-gray-300 shadow text-center">
-                  <i className="fas fa-exclamation-circle text-gray-400"></i>
-                </div>
-              </div>
-              <div className="bg-gray-300 col-start-4 col-end-12 p-4 rounded-xl my-4 mr-auto shadow-md w-full">
-                <h3 className="font-semibold text-lg mb-1 text-gray-400">
-                  Delivered
-                </h3>
-                <p className="leading-tight text-justify"></p>
+                <a className="text-indigo-500 inline-flex items-center mt-4">
+                  Learn More
+                  <svg
+                    className="w-4 h-4 ml-2"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    fill="none"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M5 12h14"></path>
+                    <path d="M12 5l7 7-7 7"></path>
+                  </svg>
+                </a>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </section>
     </>
   );
 };

@@ -68,7 +68,7 @@ const Structure = ({ children }) => {
             borderTop: "1px solid grey",
             position: "fixed",
             height: "100vh",
-            marginTop: "50px",
+            marginTop: "58px",
           }}
         >
           <div className="demo-logo-vertical" />

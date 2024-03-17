@@ -5,13 +5,15 @@ import AddUser from "../components/AddUser";
 import Timeline from "../components/Timeline";
 import Milestone from "../components/Milestone";
 import Task from "../components/Task";
+import Team from "../components/Team";
 
 const items = [
   { label: "Timeline", key: "1", children: <Timeline /> },
   { label: "Milestone", key: "2", children: <Milestone /> },
-  { label: "Task", key: "3", children: <Task /> },
+  { label: "Tasks", key: "3", children: <Task /> },
   { label: "Standups", key: "4", children: "Content of Standups" },
   { label: "Announcements", key: "5", children: "Content of Announcements" },
+  { label: "Team", key: "6", children: <Team /> },
 ];
 
 const Channel = () => {
