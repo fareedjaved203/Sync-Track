@@ -56,8 +56,8 @@ const Navbar = () => {
 
   return (
     <nav
-      className="border-gray-200 dark:bg-gray-900"
-      style={{ backgroundColor: "#2E2E30" }}
+      className="border-gray-200 dark:bg-gray-900 z-10"
+      style={{ backgroundColor: "#2E2E30", position: "fixed", width: "100vw" }}
     >
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-2">
         {user?.data?.user?.role === "admin" ? (

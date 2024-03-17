@@ -17,7 +17,7 @@ import WelcomeScreen from "./WelcomeScreen";
 
 const { Header, Sider, Content } = Layout;
 
-const Structure = () => {
+const Structure = ({ children }) => {
   const navigate = useNavigate();
 
   function getItem(label, key, icon, children, onClick) {
@@ -32,7 +32,7 @@ const Structure = () => {
 
   const items = [
     getItem("Inbox", "1", <MessageOutlined />, null, () => {
-      setShowChat(true);
+      navigate("/chat");
     }),
     getItem("Whiteboard", "2", <DesktopOutlined />, null, () => {
       navigate("/whiteboard");
@@ -51,8 +51,6 @@ const Structure = () => {
   ];
 
   const [collapsed, setCollapsed] = useState(false);
-  const [showChat, setShowChat] = useState(false);
-  const [showChannel, setShowChannel] = useState(false);
 
   const {
     token: { colorBgContainer },
@@ -68,6 +66,9 @@ const Structure = () => {
           collapsed={collapsed}
           style={{
             borderTop: "1px solid grey",
+            position: "fixed",
+            height: "100vh",
+            marginTop: "50px",
           }}
         >
           <div className="demo-logo-vertical" />
@@ -101,12 +102,13 @@ const Structure = () => {
           <Content
             style={{
               minHeight: 280,
-              background: colorBgContainer,
+              background: "white",
+              marginLeft: "200px",
+              marginTop: "30px",
             }}
             className="" // Override padding for large screens
           >
-            {!showChat ? <WelcomeScreen /> : null}
-            {showChat ? <Chat /> : null}
+            {children}
           </Content>
         </Layout>
       </Layout>

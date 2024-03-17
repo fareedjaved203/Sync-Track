@@ -1,4 +1,5 @@
 import { useSelector } from "react-redux";
+import MainLayout from "../layout/MainLayout";
 
 const WelcomeScreen = () => {
   const { user } = useSelector((state) => state.user);
@@ -20,16 +21,18 @@ const WelcomeScreen = () => {
   };
 
   return (
-    <div className="flex h-screen items-start justify-center mt-5">
-      <div className="text-center">
-        <div className="text-2xl font-semibold mb-4">
-          {day} {month}
-        </div>
-        <div className="text-4xl font-bold">
-          {greeting()}, {userName}
+    <MainLayout>
+      <div className="flex h-screen items-start justify-center mt-5">
+        <div className="text-center">
+          <div className="text-2xl font-semibold mb-4">
+            {day} {month}
+          </div>
+          <div className="text-4xl font-bold">
+            {greeting()}, {userName}
+          </div>
         </div>
       </div>
-    </div>
+    </MainLayout>
   );
 };
 

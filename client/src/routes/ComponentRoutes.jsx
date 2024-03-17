@@ -17,6 +17,8 @@ import Testimonials from "../components/userProfile/Testimonials";
 import ResetPassword from "../pages/userProfile/ResetPassword";
 import Chat from "../pages/Chat";
 import AdminDashboard from "../pages/AdminDashboard";
+import Channel from "../pages/Channel";
+import WelcomeScreen from "../components/layout/WelcomeScreen";
 
 const ComponentRoutes = () => {
   const dispatch = useDispatch();
@@ -38,7 +40,7 @@ const ComponentRoutes = () => {
             path="/"
             element={
               isAuthenticated ? (
-                <Structure />
+                <WelcomeScreen />
               ) : (
                 <Navigate to="/signin" replace={true} />
               )
@@ -62,6 +64,9 @@ const ComponentRoutes = () => {
           <Route path="/contact" element={<Contact />} />
           <Route path="/password/reset/:token" element={<ResetPassword />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
+
+          <Route path="/channel" element={<Channel />} />
+
           <Route path="*" element={<Error />} />
         </Routes>
       )}
