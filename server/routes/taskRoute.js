@@ -4,6 +4,7 @@ const {
   deleteTask,
   updateTask,
   getSingleTask,
+  getAllTasks,
 } = require("../controllers/userController");
 
 const { isAuthenticatedUser, authorizeRoles } = require("../middlewares/auth");

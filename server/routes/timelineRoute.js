@@ -3,16 +3,16 @@ const {
   postTimeline,
   deleteTimeline,
   updateTimeline,
-  getSingleTimeline,
+  getTimeline,
 } = require("../controllers/userController");
 
 const { isAuthenticatedUser, authorizeRoles } = require("../middlewares/auth");
 
 const router = express.Router();
 
-router.post("/timeline", isAuthenticatedUser, postTask);
-router.get("/timeline/:id", isAuthenticatedUser, getSingleTask);
-router.delete("/timeline/:id", isAuthenticatedUser, deleteTask);
-router.put("/timeline/:id", isAuthenticatedUser, updateTask);
+router.post("/timeline", isAuthenticatedUser, postTimeline);
+router.get("/timeline/:id", isAuthenticatedUser, getTimeline);
+router.delete("/timeline/:id", isAuthenticatedUser, deleteTimeline);
+router.put("/timeline/:id", isAuthenticatedUser, updateTimeline);
 
 module.exports = router;

@@ -3,7 +3,7 @@ const {
   postStandUp,
   deleteStandUp,
   updateStandUp,
-  getSingleStandUp,
+  getSingleUserStandUps,
 } = require("../controllers/userController");
 
 const { isAuthenticatedUser, authorizeRoles } = require("../middlewares/auth");
@@ -11,7 +11,12 @@ const { isAuthenticatedUser, authorizeRoles } = require("../middlewares/auth");
 const router = express.Router();
 
 router.post("/standup", isAuthenticatedUser, postStandUp);
-router.get("/standup/:id", isAuthenticatedUser, getSingleStandUp);
+router.get(
+  "/standup/:projectId/:userId",
+  isAuthenticatedUser,
+  getSingleUserStandUps
+);
+router.get("/standup/:projectId", isAuthenticatedUser, getAllStandUps);
 router.delete("/standup/:id", isAuthenticatedUser, deleteStandUp);
 router.put("/standup/:id", isAuthenticatedUser, updateStandUp);
 
