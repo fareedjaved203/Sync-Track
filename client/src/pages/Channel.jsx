@@ -6,8 +6,10 @@ import Timeline from "../components/Timeline";
 import Milestone from "../components/Milestone";
 import Task from "../components/Task";
 import Team from "../components/Team";
+import ProjectOverview from "../components/ProjectOverview";
 
 const items = [
+  { label: "Overview", key: "7", children: <ProjectOverview /> },
   { label: "Timeline", key: "1", children: <Timeline /> },
   { label: "Milestone", key: "2", children: <Milestone /> },
   { label: "Tasks", key: "3", children: <Task /> },
