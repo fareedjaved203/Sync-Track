@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const DEVELOPMENT_ROLES = require("../types/developmentRoles");
 
 const channelSchema = new mongoose.Schema(
   {
@@ -6,11 +7,28 @@ const channelSchema = new mongoose.Schema(
       type: String,
       unique: true,
     },
-    user: {
+    creator: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
-    role: "Project Manager",
+    users: [
+      {
+        user: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "User",
+        },
+        role: {
+          type: String,
+          enum: [
+            DEVELOPMENT_ROLES.PROJECT_MANAGER,
+            DEVELOPMENT_ROLES.DEVELOPER,
+            DEVELOPMENT_ROLES.TEAM_LEAD,
+            DEVELOPMENT_ROLES.TESTER,
+          ],
+          default: DEVELOPMENT_ROLES.PROJECT_MANAGER,
+        },
+      },
+    ],
   },
   { timestamps: true }
 );

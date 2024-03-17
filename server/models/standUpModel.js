@@ -10,6 +10,10 @@ const standUpSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Project",
     },
+    channel: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Channel",
+    },
   },
   { timestamps: true }
 );

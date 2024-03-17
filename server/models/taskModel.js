@@ -14,6 +14,14 @@ const taskSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Project",
     },
+    assigned_to: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+    assigned_by: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
   },
   { timestamps: true }
 );
