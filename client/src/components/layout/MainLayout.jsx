@@ -22,6 +22,7 @@ import {
 } from "../../api/channel/channelApi";
 import { MdDelete } from "react-icons/md";
 import { MdEditDocument } from "react-icons/md";
+import UpdateChannelModal from "../channel/UpdateChannelModal";
 
 const { Header, Sider, Content } = Layout;
 
@@ -85,7 +86,7 @@ const Structure = ({ children }) => {
                   <MdDelete onClick={() => removeChannel(channel?._id)} />
                 </span>
                 <span>
-                  <MdEditDocument />,
+                  <UpdateChannelModal channel={channel} />,
                 </span>
               </span>,
 
