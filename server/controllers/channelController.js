@@ -7,29 +7,44 @@ const cloudinary = require("cloudinary");
 // POST channel
 const postChannel = async (req, res) => {
   try {
-    // Your logic here
+    console.log(req.body);
+    await Channel.create({
+      creator: req.user.id,
+      users: [
+        {
+          user: req.user.id,
+        },
+      ],
+      channel: req.body.channel,
+      ...req.body,
+    });
     res.status(201).json({ message: "Channel created" });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: error.toString() });
   }
 };
 
 // GET single channel
-const getSingleChannel = async (req, res) => {
+const myChannels = async (req, res) => {
   try {
-    const id = req.params.id;
-    // Your logic here
-    res.status(200).json({ message: `Channel ${id} fetched` });
+    const channels = await Channel.find({
+      users: { $elemMatch: { user: req.user.id } },
+    });
+    if (channels) {
+      res.status(200).json({ message: `Channels fetched`, channels });
+    }
   } catch (error) {
     res.status(500).json({ error: error.toString() });
   }
 };
 
-// GET all channels
-const getAllChannels = async (req, res) => {
+const myChannel = async (req, res) => {
   try {
-    // Your logic here
-    res.status(200).json({ message: "All channels fetched" });
+    const channels = await Channel.find(req.params.id);
+    if (channels) {
+      res.status(200).json({ message: `Channel fetched`, channels });
+    }
   } catch (error) {
     res.status(500).json({ error: error.toString() });
   }
@@ -39,8 +54,10 @@ const getAllChannels = async (req, res) => {
 const deleteChannel = async (req, res) => {
   try {
     const id = req.params.id;
-    // Your logic here
-    res.status(200).json({ message: `Channel ${id} deleted` });
+    const channel = await Channel.findByIdAndDelete(id);
+    if (channel) {
+      res.status(200).json({ message: `Channel deleted Successfully` });
+    }
   } catch (error) {
     res.status(500).json({ error: error.toString() });
   }
@@ -50,8 +67,16 @@ const deleteChannel = async (req, res) => {
 const updateChannel = async (req, res) => {
   try {
     const id = req.params.id;
-    // Your logic here
-    res.status(200).json({ message: `Channel ${id} updated` });
+    const newChannelData = {
+      ...req.body,
+    };
+    const channel = await Channel.findByIdAndUpdate(id, newChannelData, {
+      new: true,
+      runValidators: true,
+    });
+    if (channel) {
+      res.status(200).json({ message: `Channel ${id} updated` });
+    }
   } catch (error) {
     res.status(500).json({ error: error.toString() });
   }
@@ -60,7 +85,7 @@ const updateChannel = async (req, res) => {
 module.exports = {
   updateChannel,
   deleteChannel,
-  getAllChannels,
-  getSingleChannel,
+  myChannels,
+  myChannel,
   postChannel,
 };

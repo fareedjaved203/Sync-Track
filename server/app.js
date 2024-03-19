@@ -39,8 +39,20 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(fileupload());
 
 const user = require("./routes/userRoute");
+const channel = require("./routes/channelRoute");
+// const milestone = require("./routes/milestoneRoute");
+// const project = require("./routes/projectRoute");
+// const standUp = require("./routes/standUpRoute");
+// const timeline = require("./routes/timelineRoute");
+// const task = require("./routes/taskRoute");
 
 app.use("/api/v1", user);
+app.use("/api/v1", channel);
+// app.use("/api/v1", milestone);
+// app.use("/api/v1", project);
+// app.use("/api/v1", standUp);
+// app.use("/api/v1", timeline);
+// app.use("/api/v1", task);
 
 //middleware for error
 app.use(errorMiddleware);

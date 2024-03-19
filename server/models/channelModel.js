@@ -3,14 +3,19 @@ const DEVELOPMENT_ROLES = require("../types/developmentRoles");
 
 const channelSchema = new mongoose.Schema(
   {
-    name: {
+    channel: {
       type: String,
       unique: true,
+      required: true,
     },
     creator: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
+    name: String,
+    description: String,
+    startDate: Date,
+    endDate: Date,
     users: [
       {
         user: {

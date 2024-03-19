@@ -7,19 +7,33 @@ import Milestone from "../components/Milestone";
 import Task from "../components/Task";
 import Team from "../components/Team";
 import ProjectOverview from "../components/ProjectOverview";
-
-const items = [
-  { label: "Overview", key: "7", children: <ProjectOverview /> },
-  { label: "Timeline", key: "1", children: <Timeline /> },
-  { label: "Milestone", key: "2", children: <Milestone /> },
-  { label: "Tasks", key: "3", children: <Task /> },
-  { label: "Standups", key: "4", children: "Content of Standups" },
-  { label: "Announcements", key: "5", children: "Content of Announcements" },
-  { label: "Team", key: "6", children: <Team /> },
-];
+import { myChannelApi } from "../api/channel/channelApi";
+import { useParams } from "react-router-dom";
 
 const Channel = () => {
+  let { id } = useParams();
+  const [channel, setChannel] = useState([]);
+  useEffect(() => {
+    const getChannel = async () => {
+      const data = await myChannelApi(id);
+      setChannel(data.data.channels[0]);
+    };
+    getChannel();
+  }, []);
   const operations = <AddUser />;
+  const items = [
+    {
+      label: "Overview",
+      key: "7",
+      children: <ProjectOverview channel={channel} />,
+    },
+    { label: "Timeline", key: "1", children: <Timeline /> },
+    { label: "Milestone", key: "2", children: <Milestone /> },
+    { label: "Tasks", key: "3", children: <Task /> },
+    { label: "Standups", key: "4", children: "Content of Standups" },
+    { label: "Announcements", key: "5", children: "Content of Announcements" },
+    { label: "Team", key: "6", children: <Team /> },
+  ];
 
   return (
     <MainLayout>

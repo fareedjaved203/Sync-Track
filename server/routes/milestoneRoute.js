@@ -5,7 +5,7 @@ const {
   updateMilestone,
   getSingleMilestone,
   getAllMilestones,
-} = require("../controllers/userController");
+} = require("../controllers/milestoneController");
 
 const { isAuthenticatedUser, authorizeRoles } = require("../middlewares/auth");
 

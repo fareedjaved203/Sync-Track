@@ -4,8 +4,8 @@ const projectSchema = new mongoose.Schema(
   {
     name: String,
     description: String,
-    start_date: Date,
-    end_date: Date,
+    startDate: Date,
+    endDate: Date,
     creator: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

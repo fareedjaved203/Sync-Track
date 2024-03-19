@@ -3,17 +3,17 @@ const {
   postChannel,
   deleteChannel,
   updateChannel,
-  getSingleChannel,
-  getAllChannels,
-} = require("../controllers/userController");
+  myChannels,
+  myChannel,
+} = require("../controllers/channelController");
 
 const { isAuthenticatedUser, authorizeRoles } = require("../middlewares/auth");
 
 const router = express.Router();
 
 router.post("/channel", isAuthenticatedUser, postChannel);
-router.get("/channel/:id", isAuthenticatedUser, getSingleChannel);
-router.get("/channel", isAuthenticatedUser, getAllChannels);
+router.get("/channel", isAuthenticatedUser, myChannels);
+router.get("/channel/:id", isAuthenticatedUser, myChannels);
 router.delete("/channel/:id", isAuthenticatedUser, deleteChannel);
 router.put("/channel/:id", isAuthenticatedUser, updateChannel);
 
