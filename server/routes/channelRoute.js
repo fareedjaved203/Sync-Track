@@ -13,7 +13,7 @@ const router = express.Router();
 
 router.post("/channel", isAuthenticatedUser, postChannel);
 router.get("/channel", isAuthenticatedUser, myChannels);
-router.get("/channel/:id", isAuthenticatedUser, myChannels);
+router.get("/channel/:id", isAuthenticatedUser, myChannel);
 router.delete("/channel/:id", isAuthenticatedUser, deleteChannel);
 router.put("/channel/:id", isAuthenticatedUser, updateChannel);
 

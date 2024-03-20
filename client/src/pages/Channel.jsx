@@ -16,10 +16,11 @@ const Channel = () => {
   useEffect(() => {
     const getChannel = async () => {
       const data = await myChannelApi(id);
-      setChannel(data.data.channels[0]);
+      setChannel(data.data.channels);
+      console.log(data);
     };
     getChannel();
-  }, []);
+  }, [id]);
   const operations = <AddUser />;
   const items = [
     {

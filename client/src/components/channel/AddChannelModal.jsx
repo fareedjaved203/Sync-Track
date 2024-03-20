@@ -4,7 +4,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { createChannelApi } from "../../api/channel/channelApi";
 
-const AddChannelModal = () => {
+const AddChannelModal = ({ change, setChange }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
   const [confirmLoading, setConfirmLoading] = useState(false);
@@ -57,6 +57,7 @@ const AddChannelModal = () => {
     }
     setConfirmLoading(false);
     setModalVisible(false);
+    setChange(!change);
   };
 
   return (

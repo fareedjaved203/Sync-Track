@@ -41,7 +41,8 @@ const myChannels = async (req, res) => {
 
 const myChannel = async (req, res) => {
   try {
-    const channels = await Channel.find(req.params.id);
+    const channels = await Channel.findById(req.params.id);
+    console.log(channels);
     if (channels) {
       res.status(200).json({ message: `Channel fetched`, channels });
     }

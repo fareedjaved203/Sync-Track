@@ -9,11 +9,12 @@ import {
   ProjectOutlined,
   CheckCircleOutlined,
 } from "@ant-design/icons";
-import { Layout, Menu, Button, theme } from "antd";
+import { Layout, Menu, Button, theme, Dropdown } from "antd";
 import Navbar from "./Navbar";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { IoIosAddCircle } from "react-icons/io";
+import { HiDotsHorizontal } from "react-icons/hi";
 import AddChannelModal from "../channel/AddChannelModal";
 import {
   deleteChannelApi,
@@ -23,12 +24,15 @@ import {
 import { MdDelete } from "react-icons/md";
 import { MdEditDocument } from "react-icons/md";
 import UpdateChannelModal from "../channel/UpdateChannelModal";
+import DropDown from "./DropDown";
 
 const { Header, Sider, Content } = Layout;
 
 const Structure = ({ children }) => {
   const navigate = useNavigate();
   const [channels, setChannels] = useState([]);
+  const [change, setChange] = useState(false);
+  const [isDropDownVisible, setIsDropDownVisible] = useState(false);
   const { user } = useSelector((state) => state.user);
 
   useEffect(() => {
@@ -38,10 +42,11 @@ const Structure = ({ children }) => {
       setChannels([...data.data?.channels]);
     };
     getChannels();
-  }, []);
+  }, [change]);
 
   const removeChannel = async (id) => {
     const data = await deleteChannelApi(id);
+    setChange(!change);
     console.log(data);
   };
 
@@ -50,14 +55,61 @@ const Structure = ({ children }) => {
     console.log(data);
   };
 
+  const showDropDown = () => {
+    setIsDropDownVisible(!isDropDownVisible);
+  };
+
   function getItem(label, key, icon, children, onClick, Icon1, Icon2) {
+    const menu = (
+      <Menu>
+        <Menu.Item>
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            href="http://www.alipay.com/"
+          >
+            1st menu item
+          </a>
+        </Menu.Item>
+        <Menu.Item>
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            href="http://www.taobao.com/"
+          >
+            2nd menu item
+          </a>
+        </Menu.Item>
+        <Menu.Item>
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            href="http://www.tmall.com/"
+          >
+            3rd menu item
+          </a>
+        </Menu.Item>
+      </Menu>
+    );
+
     return {
       key,
       icon,
       children,
       label,
       onClick: onClick || (() => {}),
-      Icon1,
+      Icon1:
+        Icon1 ||
+        (() => (
+          <Dropdown overlay={menu}>
+            <a
+              className="ant-dropdown-link"
+              onClick={(e) => e.preventDefault()}
+            >
+              <HiDotsHorizontal />
+            </a>
+          </Dropdown>
+        )),
       Icon2,
     };
   }
@@ -81,19 +133,30 @@ const Structure = ({ children }) => {
             return getItem(
               channel.channel,
               `channel-${index}`,
-              <span>
-                <span>
-                  <MdDelete onClick={() => removeChannel(channel?._id)} />
-                </span>
-                <span>
-                  <UpdateChannelModal channel={channel} />,
-                </span>
-              </span>,
-
+              <>
+                {user?.data?.user?._id == channel?.creator && (
+                  <>
+                    <>
+                      <MdDelete
+                        style={{
+                          fontSize: "20px",
+                          color: "#EB3A0E",
+                        }}
+                        onClick={() => removeChannel(channel?._id)}
+                      />
+                    </>
+                    <>
+                      <UpdateChannelModal channel={channel} />
+                    </>
+                  </>
+                )}
+              </>,
               null,
               () => {
                 navigate(`/channel/${channel._id}`);
-              }
+              },
+              null,
+              null
             );
           });
       })
@@ -102,7 +165,7 @@ const Structure = ({ children }) => {
 
   const createChannel = [
     getItem(
-      <AddChannelModal />,
+      <AddChannelModal change={change} setChange={setChange} />,
       "4",
       <IoIosAddCircle style={{ fontSize: "20px" }} />
     ),
@@ -133,12 +196,17 @@ const Structure = ({ children }) => {
           <div className="demo-logo-vertical" />
           <Menu
             mode="inline"
+            className="my-menu"
             style={{
               height: "70%",
               backgroundColor: "#2E2E30",
               color: "white",
               transition: "background-color 0.3s, color 0.3s",
               "&:active": {
+                backgroundColor: "black",
+                color: "white",
+              },
+              "&:hover": {
                 backgroundColor: "black",
                 color: "white",
               },

@@ -111,7 +111,7 @@ const Navbar = () => {
             {/* <FaUserCircle style={{ fontSize: "30px", color: "white" }} /> */}
             <img
               src={user?.data?.user?.avatar?.url}
-              alt={user.name}
+              alt={user?.name}
               className="w-8 h-8 rounded-full mr-2"
             />
           </button>

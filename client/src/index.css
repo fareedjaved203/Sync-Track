@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.my-menu:hover {
+  background-color: none !important;
+  color: white !important;
+}

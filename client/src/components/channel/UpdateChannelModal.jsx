@@ -75,13 +75,13 @@ const UpdateChannelModal = ({ channel }) => {
   return (
     <>
       {contextHolder}
-      <a
+      <span
         href="#"
         className="text-gray-700 text-sm hover:underline text-end mt-1"
         onClick={() => setModalVisible(true)}
       >
-        <MdEditDocument />
-      </a>
+        <MdEditDocument style={{ fontSize: "20px", color: "D3B313" }} />
+      </span>
       <Modal
         title="Channel Name"
         visible={modalVisible}
