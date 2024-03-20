@@ -4,6 +4,7 @@ import { SiSaltproject } from "react-icons/si";
 import { getAllUsersApi, logoutUserApi } from "../../api/user/userApi";
 import { useSelector } from "react-redux";
 import { useCookies } from "react-cookie";
+import Notifications from "./Notifications";
 
 let searchItems = [];
 
@@ -96,6 +97,8 @@ const Navbar = () => {
         )}
 
         <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse relative">
+          <Notifications />
+
           <button
             type="button"
             className="flex text-sm bg-gray-800 rounded-full"

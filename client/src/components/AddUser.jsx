@@ -52,7 +52,7 @@ const AddUser = () => {
       console.log(data);
     } catch (error) {
       console.log(error);
-      messageApi.error(data.error);
+      messageApi.error(data?.error);
     }
     setConfirmLoading(false);
     setModalVisible(false);

@@ -16,6 +16,8 @@ import { useSelector } from "react-redux";
 import { IoIosAddCircle } from "react-icons/io";
 import { HiDotsHorizontal } from "react-icons/hi";
 import AddChannelModal from "../channel/AddChannelModal";
+import { IoMdNotificationsOutline } from "react-icons/io";
+
 import {
   deleteChannelApi,
   myChannelsApi,

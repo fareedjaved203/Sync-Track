@@ -19,6 +19,7 @@ import Chat from "../pages/Chat";
 import AdminDashboard from "../pages/AdminDashboard";
 import Channel from "../pages/Channel";
 import WelcomeScreen from "../components/layout/WelcomeScreen";
+import Notifications from "../components/layout/Notifications";
 
 const ComponentRoutes = () => {
   const dispatch = useDispatch();
@@ -66,6 +67,8 @@ const ComponentRoutes = () => {
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
 
           <Route path="/channel/:id" element={<Channel />} />
+
+          <Route path="/notifications" element={<Notifications />} />
 
           <Route path="*" element={<Error />} />
         </Routes>
