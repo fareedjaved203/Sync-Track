@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import { updateChannelApi } from "../../api/channel/channelApi";
 import { MdEditDocument } from "react-icons/md";
 
-const UpdateChannelModal = ({ channel }) => {
+const UpdateChannelModal = ({ channel, change, setChange }) => {
   console.log(channel);
   const [modalVisible, setModalVisible] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
@@ -70,6 +70,7 @@ const UpdateChannelModal = ({ channel }) => {
     }
     setConfirmLoading(false);
     setModalVisible(false);
+    setChange(!change);
   };
 
   return (
@@ -88,7 +89,7 @@ const UpdateChannelModal = ({ channel }) => {
         onCancel={() => setModalVisible(false)}
         footer={null}
         confirmLoading={confirmLoading}
-        onOk={formik?.handleSubmit} // Call formik's submit function on OK
+        onOk={formik?.handleSubmit}
       >
         <Form onFinish={formik?.handleSubmit}>
           <Form.Item

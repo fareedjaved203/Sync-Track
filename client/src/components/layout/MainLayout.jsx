@@ -146,7 +146,11 @@ const Structure = ({ children }) => {
                       />
                     </>
                     <>
-                      <UpdateChannelModal channel={channel} />
+                      <UpdateChannelModal
+                        channel={channel}
+                        change={change}
+                        setChange={setChange}
+                      />
                     </>
                   </>
                 )}

@@ -14,8 +14,8 @@ const channelSchema = new mongoose.Schema(
     },
     name: String,
     description: String,
-    startDate: Date,
-    endDate: Date,
+    startDate: String,
+    endDate: String,
     users: [
       {
         user: {
@@ -31,6 +31,10 @@ const channelSchema = new mongoose.Schema(
             DEVELOPMENT_ROLES.TESTER,
           ],
           default: DEVELOPMENT_ROLES.PROJECT_MANAGER,
+        },
+        status: {
+          type: String,
+          default: "pending",
         },
       },
     ],
