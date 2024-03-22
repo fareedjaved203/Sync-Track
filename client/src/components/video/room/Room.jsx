@@ -1,4 +1,3 @@
-import React from "react";
 import { useParams } from "react-router-dom";
 import { ZegoUIKitPrebuilt } from "@zegocloud/zego-uikit-prebuilt";
 
@@ -24,7 +23,7 @@ const VideoRoom = () => {
         },
       ],
       scenario: {
-        mode: ZegoUIKitPrebuilt.OneONoneCall,
+        mode: ZegoUIKitPrebuilt.GroupCall,
       },
       showScreenSharingButton: true,
     });

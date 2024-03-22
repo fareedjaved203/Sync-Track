@@ -30,7 +30,7 @@ import DropDown from "./DropDown";
 
 const { Header, Sider, Content } = Layout;
 
-const Structure = ({ children }) => {
+const Structure = ({ children, showDrawer }) => {
   const navigate = useNavigate();
   const [channels, setChannels] = useState([]);
   const [change, setChange] = useState(false);
@@ -185,7 +185,7 @@ const Structure = ({ children }) => {
 
   return (
     <>
-      <Navbar />
+      <Navbar showDrawer={showDrawer} />
       <Layout className="h-screen w-screen">
         <Sider
           trigger={null}

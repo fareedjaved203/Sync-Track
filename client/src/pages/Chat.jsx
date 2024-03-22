@@ -166,22 +166,10 @@ const Chat = () => {
 
   return (
     <>
-      <MainLayout>
+      <MainLayout showDrawer={showDrawer}>
         {contextHolder}
         <div className="flex h-full w-full antialiased text-gray-800">
           <div className="flex flex-row h-full w-full overflow-x-hidden">
-            <Button
-              type="dark"
-              onClick={showDrawer}
-              className="absolute right-[12%] top-[-1.5%] md:right-[5%] md:top-[-1%]"
-              style={{
-                color: "white",
-                padding: "8px",
-                fontSize: "25px",
-              }}
-            >
-              <MenuOutlined />
-            </Button>
             <Drawer
               title="Sync Track"
               placement="left"
@@ -331,53 +319,52 @@ const Chat = () => {
                   </div>
                 )}
 
-                <div className="flex flex-col h-[60%] overflow-x-auto">
+                <div className="flex flex-col h-[70%] overflow-x-auto">
                   <div className="flex flex-col h-full">
                     <div className="grid grid-cols-12 gap-y-1">
-                      {chatHistory?.map((message, index) => {
-                        if (message?.sender === activeUser?._id) {
-                          return (
-                            <div
-                              key={index}
-                              className="col-start-1 col-end-8 p-1 rounded-lg"
-                            >
-                              <div className="flex flex-row items-center">
-                                {/* <div className="flex items-center justify-center h-10 w-10 rounded-full bg-indigo-500 flex-shrink-0">
-                                {activeUser?.name?.charAt(0)}
-                              </div> */}
-                                <div className="relative ml-3 text-sm bg-white py-2 px-4 shadow rounded-xl">
-                                  <div>{message?.content}</div>
+                      {(() => {
+                        const displayedMessages = new Set();
+                        return chatHistory?.map((message, index) => {
+                          if (displayedMessages.has(message?.content)) {
+                            return null;
+                          }
+                          displayedMessages.add(message?.content);
+
+                          if (message?.sender === activeUser?._id) {
+                            return (
+                              <div
+                                key={index}
+                                className="col-start-1 col-end-8 p-1 rounded-lg"
+                              >
+                                <div className="flex flex-row items-center">
+                                  <div className="relative ml-3 text-sm bg-white py-2 px-4 shadow rounded-xl">
+                                    <div>{message?.content}</div>
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                          );
-                        } else if (message?.sender === sender) {
-                          return (
-                            <div
-                              key={index}
-                              className="col-start-6 col-end-13 p-1 rounded-lg flex flex-col items-end sm:items-end"
-                            >
-                              <div className="flex items-center justify-start flex-row-reverse">
-                                <div
-                                  className="relative mr-3 text-sm bg-gray-200 py-2 px-4 shadow rounded-xl"
-                                  // style={{
-                                  //   backgroundColor: "#2E2E2E",
-                                  //   color: "white",
-                                  // }}
-                                >
-                                  <div>{message?.content}</div>
+                            );
+                          } else if (message?.sender === sender) {
+                            return (
+                              <div
+                                key={index}
+                                className="col-start-6 col-end-13 p-1 rounded-lg flex flex-col items-end sm:items-end"
+                              >
+                                <div className="flex items-center justify-start flex-row-reverse">
+                                  <div className="relative mr-3 text-sm bg-gray-200 py-2 px-4 shadow rounded-xl">
+                                    <div>{message?.content}</div>
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                          );
-                        }
-                        return null;
-                      })}
+                            );
+                          }
+                          return null;
+                        });
+                      })()}
                     </div>
                   </div>
                 </div>
                 <div className="flex flex-row items-center h-10 rounded-xl bg-white w-full mt-4">
-                  <div className="flex-grow ml-4">
+                  <div className="flex-grow ml-4 ">
                     <div className="relative w-full">
                       <input
                         type="text"

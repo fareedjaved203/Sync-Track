@@ -5,10 +5,11 @@ import { getAllUsersApi, logoutUserApi } from "../../api/user/userApi";
 import { useSelector } from "react-redux";
 import { useCookies } from "react-cookie";
 import Notifications from "./Notifications";
+import { IoChatbubbleEllipses } from "react-icons/io5";
 
 let searchItems = [];
 
-const Navbar = () => {
+const Navbar = ({ showDrawer }) => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredItems, setFilteredItems] = useState(searchItems);
@@ -97,6 +98,17 @@ const Navbar = () => {
         )}
 
         <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse relative">
+          <button
+            type="dark"
+            onClick={showDrawer}
+            style={{
+              color: "white",
+              fontSize: "25px",
+              paddingRight: "10px",
+            }}
+          >
+            <IoChatbubbleEllipses />
+          </button>
           <Notifications />
 
           <button
