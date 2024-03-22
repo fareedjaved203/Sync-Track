@@ -6,3 +6,12 @@
   background-color: none !important;
   color: white !important;
 }
+
+.timeline-update-btn {
+  background-color: #e09200 !important;
+}
+
+.timeline-delete-btn {
+  background-color: maroon !important;
+  color: white !important;
+}

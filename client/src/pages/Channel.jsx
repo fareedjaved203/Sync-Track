@@ -9,6 +9,8 @@ import Team from "../components/Team";
 import ProjectOverview from "../components/ProjectOverview";
 import { myChannelApi } from "../api/channel/channelApi";
 import { useParams } from "react-router-dom";
+import StandUps from "../components/StandUps";
+import Announcements from "../components/Announcements";
 
 const Channel = () => {
   let { id } = useParams();
@@ -31,8 +33,8 @@ const Channel = () => {
     { label: "Timeline", key: "1", children: <Timeline /> },
     { label: "Milestone", key: "2", children: <Milestone /> },
     { label: "Tasks", key: "3", children: <Task /> },
-    { label: "Standups", key: "4", children: "Content of Standups" },
-    { label: "Announcements", key: "5", children: "Content of Announcements" },
+    { label: "Standups", key: "4", children: <StandUps /> },
+    { label: "Announcements", key: "5", children: <Announcements /> },
     { label: "Team", key: "6", children: <Team /> },
   ];
 
