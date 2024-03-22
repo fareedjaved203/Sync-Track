@@ -20,6 +20,8 @@ import AdminDashboard from "../pages/AdminDashboard";
 import Channel from "../pages/Channel";
 import WelcomeScreen from "../components/layout/WelcomeScreen";
 import Notifications from "../components/layout/Notifications";
+import Home from "../components/video/home/Home";
+import VideoRoom from "../components/video/room/Room";
 
 const ComponentRoutes = () => {
   const dispatch = useDispatch();
@@ -69,6 +71,9 @@ const ComponentRoutes = () => {
           <Route path="/channel/:id" element={<Channel />} />
 
           <Route path="/notifications" element={<Notifications />} />
+
+          <Route path="/video" element={<Home />} />
+          <Route path="/video/:roomId" element={<VideoRoom />} />
 
           <Route path="*" element={<Error />} />
         </Routes>
