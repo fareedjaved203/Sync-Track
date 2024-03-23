@@ -3,11 +3,14 @@ import UpdateTaskModal from "./channel/UpdateTaskModal";
 import { MdOutlineAddCircleOutline } from "react-icons/md";
 import ShowTaskDetailsModal from "./channel/showTaskdetailsModal";
 import AddTaskModal from "./channel/AddTaskModal";
+import ReminderModal from "./channel/ReminderModal";
 
 const Task = () => {
   const handleStatusChange = (e) => {
     // Logic to handle status change
   };
+
+  const handlePriorityChange = (e) => {};
   return (
     <section className="text-gray-600 body-font">
       <div className="w-full flex justify-content-end">
@@ -26,21 +29,43 @@ const Task = () => {
                 microdosing tousled waistcoat...
               </p>
               {/* Task status */}
-              <div className="mb-3 relative">
-                <label
-                  htmlFor="status"
-                  className="block mb-1 text-sm font-medium text-gray-700"
-                >
-                  Status
-                </label>
-                <select
-                  id="status"
-                  onChange={handleStatusChange}
-                  className="block appearance-none w-full bg-white border border-gray-300 text-gray-700 py-2 px-4 pr-8 rounded-md leading-tight focus:outline-none focus:border-info-500"
-                >
-                  <option value="pending">Pending</option>
-                  <option value="completed">Completed</option>
-                </select>
+              <div className="flex items-center mb-3 space-x-4">
+                {/* Task Status Dropdown */}
+                <div className="relative flex-grow">
+                  <label
+                    htmlFor="status"
+                    className="block mb-1 text-sm font-medium text-gray-700"
+                  >
+                    Status
+                  </label>
+                  <select
+                    id="status"
+                    onChange={handleStatusChange}
+                    className="block appearance-none w-full bg-white border border-gray-300 text-gray-700 py-2 px-4 pr-8 rounded-md leading-tight focus:outline-none focus:border-info-500"
+                  >
+                    <option value="pending">Pending</option>
+                    <option value="completed">Completed</option>
+                  </select>
+                </div>
+
+                {/* Task Priority Dropdown */}
+                <div className="relative flex-grow">
+                  <label
+                    htmlFor="priority"
+                    className="block mb-1 text-sm font-medium text-gray-700"
+                  >
+                    Priority
+                  </label>
+                  <select
+                    id="priority"
+                    onChange={handlePriorityChange}
+                    className="block appearance-none w-full bg-white border border-gray-300 text-gray-700 py-2 px-4 pr-8 rounded-md leading-tight focus:outline-none focus:border-info-500"
+                  >
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
+                  </select>
+                </div>
               </div>
 
               {/* Task assigned to */}
@@ -69,12 +94,7 @@ const Task = () => {
               >
                 Remove
               </button>
-              <button
-                type="button"
-                className="mt-4 bg-red-600 text-white px-4 py-2 rounded-md shadow-md hover:bg-info-600 transition duration-300 ease-in-out"
-              >
-                Send Reminder
-              </button>
+              <ReminderModal />
               <ShowTaskDetailsModal />
             </div>
           </div>
