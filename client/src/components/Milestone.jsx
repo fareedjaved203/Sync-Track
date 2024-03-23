@@ -1,10 +1,14 @@
 import React from "react";
 import UpdateMilestoneModal from "./channel/UpdateMilestoneModal";
+import AddMilestoneModal from "./channel/AddMilestoneModal";
 
 const Milestone = () => {
   return (
     <>
       <section className="text-gray-600 body-font overflow-hidden">
+        <div className="flex justify-content-end w-full">
+          <AddMilestoneModal />
+        </div>
         <div className="container px-5 py-8 mx-auto">
           <div className="-my-8 divide-y-2 divide-gray-100">
             <div className="py-8 flex flex-wrap md:flex-nowrap">

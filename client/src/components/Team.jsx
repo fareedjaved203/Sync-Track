@@ -1,5 +1,6 @@
 import React from "react";
 import { message } from "antd";
+import GiveFeedBackModal from "./channel/GiveFeedBackModal";
 
 const Team = () => {
   const [messageApi, contextHolder] = message.useMessage();
@@ -35,13 +36,7 @@ const Team = () => {
                   </h2>
                   <p className="text-gray-500">UI Designer</p>
                   <div className="flex space-x-1 mt-4">
-                    <button
-                      className="text-white py-1 px-2 rounded"
-                      style={{ backgroundColor: "green" }}
-                      onClick={generatePdf}
-                    >
-                      Conclude
-                    </button>
+                    <GiveFeedBackModal generatePdf={generatePdf} />
                     <button className="bg-red-600 text-white py-2 px-2 rounded">
                       Remove
                     </button>

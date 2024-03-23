@@ -1,12 +1,18 @@
 import React from "react";
 import UpdateTimelineModal from "./channel/UpdateTimelineModal";
+import { MdOutlineAddCircleOutline } from "react-icons/md";
+import AddTimelineModal from "./channel/AddTimelineModal";
 
 const Timeline = () => {
   return (
     <>
-      <h3 className="mb-6 ms-3 text-2xl font-bold text-neutral-700 dark:text-neutral-300">
-        Project Timeline
-      </h3>
+      <div className="flex justify-content-between">
+        <h3 className="mb-6 ms-3 text-2xl font-bold text-neutral-700 dark:text-neutral-300">
+          Project Timeline
+        </h3>
+        <AddTimelineModal />
+      </div>
+
       {/* <!--First item--> */}
 
       <ol className="border-s-2 border-info-100">
