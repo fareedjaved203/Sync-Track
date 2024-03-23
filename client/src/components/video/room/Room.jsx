@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
 import { ZegoUIKitPrebuilt } from "@zegocloud/zego-uikit-prebuilt";
+import MainLayout from "../../layout/MainLayout";
 
 const VideoRoom = () => {
   const { roomId } = useParams();
@@ -29,9 +30,11 @@ const VideoRoom = () => {
     });
   };
   return (
-    <div>
-      <div ref={myMeeting} />
-    </div>
+    <MainLayout>
+      <div>
+        <div ref={myMeeting} />
+      </div>
+    </MainLayout>
   );
 };
 

@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import { updateChannelApi } from "../../api/channel/channelApi";
 import { MdEditDocument } from "react-icons/md";
 
-const UpdateMilestoneModal = ({ channel, change, setChange }) => {
+const UpdateProjectModal = ({ channel, change, setChange }) => {
   console.log(channel);
   const [modalVisible, setModalVisible] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
@@ -77,13 +77,10 @@ const UpdateMilestoneModal = ({ channel, change, setChange }) => {
     <>
       {contextHolder}
       <button
-        type="button"
-        className="timeline-update-btn inline-block rounded p-3 py-1 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#54b4d3] transition duration-150 ease-in-out hover:bg-info-600 hover:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] focus:bg-info-600 focus:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] focus:outline-none focus:ring-0 active:bg-info-700 active:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(84,180,211,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.2),0_4px_18px_0_rgba(84,180,211,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.2),0_4px_18px_0_rgba(84,180,211,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.2),0_4px_18px_0_rgba(84,180,211,0.1)]"
-        data-twe-ripple-init
-        data-twe-ripple-color="light"
+        className="text-gray-700 hover:text-gray-900"
         onClick={() => setModalVisible(true)}
       >
-        Update
+        <MdEditDocument className="w-6 h-6" />{" "}
       </button>
       <Modal
         title="Channel Name"
@@ -187,4 +184,4 @@ const UpdateMilestoneModal = ({ channel, change, setChange }) => {
   );
 };
 
-export default UpdateMilestoneModal;
+export default UpdateProjectModal;

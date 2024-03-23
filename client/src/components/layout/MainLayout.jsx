@@ -253,9 +253,8 @@ const Structure = ({ children, showDrawer }) => {
               minHeight: 280,
               background: "white",
               marginLeft: "200px",
-              marginTop: "30px",
+              marginTop: "25px",
             }}
-            className="" // Override padding for large screens
           >
             {children}
           </Content>

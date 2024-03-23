@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
+import MainLayout from "../layout/MainLayout";
 import { message } from "antd";
-import Navbar from "../layout/Navbar";
 import { FaRegCopy } from "react-icons/fa";
 import { FcProcess } from "react-icons/fc";
 
@@ -50,7 +50,7 @@ const JoinCreateRoom = ({ uuid, setUser, setRoomJoined }) => {
 
   return (
     <>
-      <div className="container">
+      <div className="container mt-32">
         {contextHolder}
         <h1 className="text-center my-5 text-3xl">Whiteboard Collaboration</h1>
         <div className="row mx-5 m-5">

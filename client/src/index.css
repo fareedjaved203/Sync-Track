@@ -15,3 +15,8 @@
   background-color: maroon !important;
   color: white !important;
 }
+
+.ant-menu-item:hover {
+  background-color: black !important;
+  color: white !important;
+}

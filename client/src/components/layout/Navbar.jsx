@@ -73,9 +73,7 @@ const Navbar = ({ showDrawer }) => {
               to="/admin/dashboard"
               className="flex items-center space-x-3 rtl:space-x-reverse"
             >
-              <SiSaltproject
-                style={{ fontSize: "30px", color: "white", marginLeft: "20px" }}
-              />
+              <SiSaltproject style={{ fontSize: "30px", color: "white" }} />
               <span className="self-center text-1xl font-semibold whitespace-nowrap text-white">
                 Sync Track
               </span>
@@ -87,9 +85,7 @@ const Navbar = ({ showDrawer }) => {
               to="/"
               className="flex items-center space-x-3 rtl:space-x-reverse"
             >
-              <SiSaltproject
-                style={{ fontSize: "30px", color: "white", marginLeft: "20px" }}
-              />
+              <SiSaltproject style={{ fontSize: "30px", color: "white" }} />
               <span className="self-center text-1xl font-semibold whitespace-nowrap text-white">
                 Sync Track
               </span>

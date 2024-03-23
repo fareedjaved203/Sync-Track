@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { message } from "antd";
 import Canvas from "./Canvas";
-import { SiSaltproject } from "react-icons/si";
 
 const Room = ({ userNo, socket, setUsers, setUserNo }) => {
   const canvasRef = useRef(null);
