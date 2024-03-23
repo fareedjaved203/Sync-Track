@@ -123,7 +123,9 @@ const Structure = ({ children, showDrawer }) => {
     getItem("Whiteboard", "2", <DesktopOutlined />, null, () => {
       navigate("/whiteboard");
     }),
-    getItem("Video Conference", "3", <VideoCameraOutlined />),
+    getItem("Video Conference", "3", <VideoCameraOutlined />, null, () => {
+      navigate(`/video/${Date.now()}`);
+    }),
     getItem(
       "Channels",
       "sub2",
