@@ -7,23 +7,30 @@ const cloudinary = require("cloudinary");
 // POST milestone
 const postMilestone = async (req, res) => {
   try {
-    // Your logic here
-    res.status(201).json({ message: "Milestone created" });
-  } catch (error) {
-    res.status(500).json({ error: error.toString() });
-  }
-};
+    const { project } = req.body;
+    console.log(req.body);
+    let projectTimeline = await Milestone.findOne({ project });
 
-// GET all milestones
-const getAllMilestones = async (req, res) => {
-  try {
-    const projectId = req.params.projectId;
-    // Your logic here
+    if (projectTimeline) {
+      projectTimeline.milestones.push({
+        ...req.body,
+        milestoneNumber: projectTimeline.milestoneNumber + 1,
+      });
+      projectTimeline.milestoneNumber++;
+    } else {
+      projectTimeline = new Milestone({
+        project,
+        milestones: [{ ...req.body }],
+      });
+    }
+
+    await projectTimeline.save();
     res
-      .status(200)
-      .json({ message: `All milestones for project ${projectId} fetched` });
+      .status(201)
+      .json({ success: true, message: "Milestone created", projectTimeline });
   } catch (error) {
-    res.status(500).json({ error: error.toString() });
+    console.log(error);
+    res.status(500).json({ success: false, error: error.toString() });
   }
 };
 
@@ -31,10 +38,15 @@ const getAllMilestones = async (req, res) => {
 const getSingleMilestone = async (req, res) => {
   try {
     const id = req.params.id;
-    // Your logic here
-    res.status(200).json({ message: `Milestone ${id} fetched` });
+    const milestone = await Milestone.find({ project: id });
+    console.log(milestone);
+    if (milestone) {
+      res
+        .status(200)
+        .json({ success: true, message: `milestone fetched`, milestone });
+    }
   } catch (error) {
-    res.status(500).json({ error: error.toString() });
+    res.status(500).json({ success: false, message: error.toString() });
   }
 };
 
@@ -42,8 +54,20 @@ const getSingleMilestone = async (req, res) => {
 const deleteMilestone = async (req, res) => {
   try {
     const id = req.params.id;
-    // Your logic here
-    res.status(200).json({ message: `Milestone ${id} deleted` });
+
+    const milestone = await Milestone.findOneAndUpdate(
+      { "milestones._id": id },
+      { $pull: { milestones: { _id: id } } },
+      { new: true }
+    );
+
+    if (!milestone) {
+      return res
+        .status(404)
+        .json({ success: false, message: "milestone not found" });
+    }
+
+    res.status(200).json({ success: true, message: `milestone deleted` });
   } catch (error) {
     res.status(500).json({ error: error.toString() });
   }
@@ -52,9 +76,28 @@ const deleteMilestone = async (req, res) => {
 // PUT milestone
 const updateMilestone = async (req, res) => {
   try {
-    const id = req.params.id;
-    // Your logic here
-    res.status(200).json({ message: `Milestone ${id} updated` });
+    const timelineId = req.params.id;
+    const channelId = req.body.project;
+
+    console.log(req.body);
+
+    const updatedTimeline = await Milestone.findOneAndUpdate(
+      { "milestones._id": timelineId, project: channelId },
+      { $set: { "milestones.$": req.body } },
+      { new: true }
+    );
+
+    if (!updatedTimeline) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Milestone not found" });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Milestone updated successfully",
+      timeline: updatedTimeline,
+    });
   } catch (error) {
     res.status(500).json({ error: error.toString() });
   }
@@ -63,7 +106,6 @@ const updateMilestone = async (req, res) => {
 module.exports = {
   updateMilestone,
   deleteMilestone,
-  getAllMilestones,
   getSingleMilestone,
   postMilestone,
 };

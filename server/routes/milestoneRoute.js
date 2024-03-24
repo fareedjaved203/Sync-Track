@@ -12,9 +12,8 @@ const { isAuthenticatedUser, authorizeRoles } = require("../middlewares/auth");
 const router = express.Router();
 
 router.post("/milestone", isAuthenticatedUser, postMilestone);
-router.get("/milestone/:projectId", isAuthenticatedUser, getAllMilestones);
 router.get("/milestone/:id", isAuthenticatedUser, getSingleMilestone);
-router.delete("/milestone/:id", isAuthenticatedUser, deleteProject);
-router.put("/milestone/:id", isAuthenticatedUser, updateProject);
+router.delete("/milestone/:id", isAuthenticatedUser, deleteMilestone);
+router.put("/milestone/:id", isAuthenticatedUser, updateMilestone);
 
 module.exports = router;

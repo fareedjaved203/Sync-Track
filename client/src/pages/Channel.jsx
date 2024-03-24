@@ -16,6 +16,7 @@ import Progress from "../components/Progress";
 const Channel = () => {
   let { id } = useParams();
   const [channel, setChannel] = useState([]);
+  const [items, setItems] = useState([]);
   useEffect(() => {
     const getChannel = async () => {
       const data = await myChannelApi(id);
@@ -25,20 +26,27 @@ const Channel = () => {
     getChannel();
   }, [id]);
   const operations = <AddUser />;
-  const items = [
-    {
-      label: "Overview",
-      key: "7",
-      children: <ProjectOverview channel={channel} />,
-    },
-    { label: "Timeline", key: "1", children: <Timeline channel={channel} /> },
-    { label: "Milestone", key: "2", children: <Milestone /> },
-    { label: "Tasks", key: "3", children: <TaskViewOptions /> },
-    { label: "Standups", key: "4", children: <StandUps /> },
-    { label: "Progress", key: "5", children: <Progress /> },
-    { label: "Announcements", key: "6", children: <Announcements /> },
-    { label: "Team", key: "8", children: <Team /> },
-  ];
+
+  useEffect(() => {
+    setItems([
+      {
+        label: "Overview",
+        key: "7",
+        children: <ProjectOverview channel={channel} />,
+      },
+      { label: "Timeline", key: "1", children: <Timeline channel={channel} /> },
+      {
+        label: "Milestone",
+        key: "2",
+        children: <Milestone channel={channel} />,
+      },
+      { label: "Tasks", key: "3", children: <TaskViewOptions /> },
+      { label: "Standups", key: "4", children: <StandUps /> },
+      { label: "Progress", key: "5", children: <Progress /> },
+      { label: "Announcements", key: "6", children: <Announcements /> },
+      { label: "Team", key: "8", children: <Team /> },
+    ]);
+  }, [channel]);
 
   return (
     <MainLayout>

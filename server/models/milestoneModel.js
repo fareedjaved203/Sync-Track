@@ -2,11 +2,15 @@ const mongoose = require("mongoose");
 
 const milestoneSchema = new mongoose.Schema(
   {
-    title: String,
-    description: String,
-    milestoneNumber: String,
-    startDate: { type: Date, default: Date.now },
-    endDate: Date,
+    milestones: [
+      {
+        title: String,
+        description: String,
+        startDate: { type: Date, default: Date.now },
+        endDate: Date,
+      },
+    ],
+    milestoneNumber: { type: Number, default: 1 },
     project: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Channel",

@@ -40,8 +40,7 @@ app.use(fileupload());
 
 const user = require("./routes/userRoute");
 const channel = require("./routes/channelRoute");
-// const milestone = require("./routes/milestoneRoute");
-// const project = require("./routes/projectRoute");
+const milestone = require("./routes/milestoneRoute");
 // const standUp = require("./routes/standUpRoute");
 const timeline = require("./routes/timelineRoute");
 // const task = require("./routes/taskRoute");
@@ -49,6 +48,7 @@ const timeline = require("./routes/timelineRoute");
 app.use("/api/v1", user);
 app.use("/api/v1", channel);
 app.use("/api/v1", timeline);
+app.use("/api/v1", milestone);
 
 //middleware for error
 app.use(errorMiddleware);
