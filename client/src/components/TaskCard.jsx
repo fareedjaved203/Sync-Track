@@ -5,7 +5,7 @@ import ShowTaskDetailsModal from "./channel/showTaskdetailsModal";
 import AddTaskModal from "./channel/AddTaskModal";
 import ReminderModal from "./channel/ReminderModal";
 
-const Task = () => {
+const TaskCard = () => {
   const handleStatusChange = (e) => {
     // Logic to handle status change
   };
@@ -104,4 +104,4 @@ const Task = () => {
   );
 };
 
-export default Task;
+export default TaskCard;

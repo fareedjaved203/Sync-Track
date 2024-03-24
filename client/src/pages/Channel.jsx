@@ -4,13 +4,13 @@ import { Button, Tabs } from "antd";
 import AddUser from "../components/AddUser";
 import Timeline from "../components/Timeline";
 import Milestone from "../components/Milestone";
-import Task from "../components/Task";
 import Team from "../components/Team";
 import ProjectOverview from "../components/ProjectOverview";
 import { myChannelApi } from "../api/channel/channelApi";
 import { useParams } from "react-router-dom";
 import StandUps from "../components/StandUps";
 import Announcements from "../components/Announcements";
+import TaskViewOptions from "../components/TaskViewOptions";
 
 const Channel = () => {
   let { id } = useParams();
@@ -32,7 +32,7 @@ const Channel = () => {
     },
     { label: "Timeline", key: "1", children: <Timeline /> },
     { label: "Milestone", key: "2", children: <Milestone /> },
-    { label: "Tasks", key: "3", children: <Task /> },
+    { label: "Tasks", key: "3", children: <TaskViewOptions /> },
     { label: "Standups", key: "4", children: <StandUps /> },
     { label: "Announcements", key: "5", children: <Announcements /> },
     { label: "Team", key: "6", children: <Team /> },
