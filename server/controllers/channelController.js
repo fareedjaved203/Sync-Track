@@ -7,7 +7,6 @@ const User = require("../models/userModel");
 // POST channel
 const postChannel = async (req, res) => {
   try {
-    console.log(req.body);
     await Channel.create({
       creator: req.user.id,
       users: [
@@ -42,7 +41,6 @@ const myChannels = async (req, res) => {
 const myChannel = async (req, res) => {
   try {
     const channels = await Channel.findById(req.params.id);
-    console.log(channels);
     if (channels) {
       res.status(200).json({ message: `Channel fetched`, channels });
     }
@@ -80,12 +78,10 @@ const updateChannel = async (req, res) => {
     }
   } catch (error) {
     console.log(error);
-    res
-      .status(409)
-      .json({
-        message: "Channel with same name already exists",
-        success: false,
-      });
+    res.status(409).json({
+      message: "Channel with same name already exists",
+      success: false,
+    });
   }
 };
 

@@ -11,7 +11,7 @@ const ProjectOverview = ({ channel }) => {
   useEffect(() => {
     setName(channel?.name);
     setDescription(channel?.description);
-  }, []);
+  }, [channel]);
 
   return (
     <>

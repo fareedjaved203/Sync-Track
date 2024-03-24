@@ -2,14 +2,15 @@ import UpdateTimelineModal from "./channel/UpdateTimelineModal";
 import AddTimelineModal from "./channel/AddTimelineModal";
 import { useEffect, useState } from "react";
 import { deleteTimelineApi, getTimelineApi } from "../api/timeline/timelineApi";
+import { useParams } from "react-router-dom";
 
 const Timeline = ({ channel }) => {
+  const { id } = useParams();
   const [timeline, setTimeline] = useState([]);
   const [update, isUpdated] = useState(false);
   useEffect(() => {
     const getTimeline = async () => {
       const data = await getTimelineApi(channel?._id);
-      console.log(data);
 
       if (data.data?.timeline[0]?.timelines) {
         const formattedTimelines = data.data.timeline[0].timelines.map(
@@ -24,7 +25,7 @@ const Timeline = ({ channel }) => {
     };
 
     getTimeline();
-  }, [update]);
+  }, [update, channel]);
 
   const getDate = (dateString) => {
     const date = new Date(dateString);
@@ -92,7 +93,12 @@ const Timeline = ({ channel }) => {
                 <p className="mb-6 text-neutral-700 dark:text-neutral-200">
                   {item?.description}
                 </p>
-                <UpdateTimelineModal />
+                <UpdateTimelineModal
+                  channel={item}
+                  update={update}
+                  isUpdated={isUpdated}
+                  id={channel?._id}
+                />
                 <button
                   type="button"
                   className="timeline-delete-btn inline-block rounded ml-3 p-3 py-1 text-xs font-medium uppercase leading-normal text-info transition duration-150 ease-in-out hover:border-info-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-info-600 focus:border-info-600 focus:text-info-600 focus:outline-none focus:ring-0 active:border-info-700 active:text-info-700 dark:hover:bg-neutral-100 dark:hover:bg-opacity-10"

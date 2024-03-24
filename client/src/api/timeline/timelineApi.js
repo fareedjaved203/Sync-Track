@@ -29,9 +29,9 @@ export const deleteTimelineApi = async (id) => {
   }
 };
 
-export const updateTimelineApi = async (channelData) => {
+export const updateTimelineApi = async (id, channelData) => {
   try {
-    const data = await apiService.put("/timeline/:id", channelData);
+    const data = await apiService.put(`/timeline/${id}`, channelData);
     return data;
   } catch (error) {
     console.log(error);

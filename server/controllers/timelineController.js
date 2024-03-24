@@ -36,6 +36,7 @@ const getTimeline = async (req, res) => {
   try {
     const id = req.params.id;
     const timeline = await Timeline.find({ project: id });
+    console.log(timeline);
     if (timeline) {
       res
         .status(200)
@@ -72,9 +73,26 @@ const deleteTimeline = async (req, res) => {
 // PUT timeline
 const updateTimeline = async (req, res) => {
   try {
-    const id = req.params.id;
-    // Your logic here
-    res.status(200).json({ message: `Timeline ${id} updated` });
+    const timelineId = req.params.id;
+    const channelId = req.body.project;
+
+    const updatedTimeline = await Timeline.findOneAndUpdate(
+      { "timelines._id": timelineId, project: channelId },
+      { $set: { "timelines.$": req.body } },
+      { new: true }
+    );
+
+    if (!updatedTimeline) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Timeline not found" });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Timeline updated successfully",
+      timeline: updatedTimeline,
+    });
   } catch (error) {
     res.status(500).json({ error: error.toString() });
   }
