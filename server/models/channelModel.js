@@ -33,8 +33,9 @@ const channelSchema = new mongoose.Schema(
           default: DEVELOPMENT_ROLES.PROJECT_MANAGER,
         },
         status: {
+          enum: ["working", "approved", "disapproved"],
           type: String,
-          default: "pending",
+          default: "working",
         },
       },
     ],

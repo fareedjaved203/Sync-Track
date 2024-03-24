@@ -5,7 +5,7 @@ const announcementSchema = new mongoose.Schema(
     description: String,
     project: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Project",
+      ref: "Channel",
     },
     user: {
       type: mongoose.Schema.Types.ObjectId,

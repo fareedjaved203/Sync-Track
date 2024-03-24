@@ -4,11 +4,12 @@ const milestoneSchema = new mongoose.Schema(
   {
     title: String,
     description: String,
+    milestoneNumber: String,
     startDate: { type: Date, default: Date.now },
     endDate: Date,
     project: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Project",
+      ref: "Channel",
     },
   },
   { timestamps: true }

@@ -4,8 +4,6 @@ const Channel = require("../models/channelModel");
 
 const User = require("../models/userModel");
 
-const cloudinary = require("cloudinary");
-
 // POST channel
 const postChannel = async (req, res) => {
   try {

@@ -13,7 +13,7 @@ const ProjectOverview = ({ channel }) => {
             <h1 className="text-3xl font-bold mb-2">
               Project: {channel?.name}
             </h1>
-            <UpdateProjectModal />
+            <UpdateProjectModal channel={channel} />
           </div>
           <h4 className="text-lg flex items-center justify-start mb-4">
             <span className="text-gray-700">

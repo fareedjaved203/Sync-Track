@@ -5,6 +5,11 @@ const taskSchema = new mongoose.Schema(
     name: String,
     description: String,
     status: String,
+    priority: String,
+    startDate: {
+      type: Date,
+      default: Date.now,
+    },
     endDate: Date,
     milestone: {
       type: mongoose.Schema.Types.ObjectId,
@@ -12,7 +17,7 @@ const taskSchema = new mongoose.Schema(
     },
     project: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Project",
+      ref: "Channel",
     },
     assigned_to: {
       type: mongoose.Schema.Types.ObjectId,
@@ -22,6 +27,7 @@ const taskSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
+    feedback: String,
   },
   { timestamps: true }
 );

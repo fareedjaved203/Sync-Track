@@ -286,7 +286,7 @@ const Structure = ({ children, showDrawer }) => {
                 backgroundColor: "black",
                 color: "white",
               },
-              marginTop: "40px",
+              marginTop: "10px",
             }}
             items={createChannel}
           />

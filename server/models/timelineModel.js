@@ -2,17 +2,13 @@ const mongoose = require("mongoose");
 
 const timelineSchema = new mongoose.Schema(
   {
-    event: String,
-    date: Date,
+    title: String,
     description: String,
-    created_at: { type: Date, default: Date.now },
-    milestone: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Milestone",
-    },
+    startDate: { type: Date, default: Date.now },
+    endDate: Date,
     project: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Project",
+      ref: "Channel",
     },
   },
   { timestamps: true }
