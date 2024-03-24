@@ -12,61 +12,27 @@ const UpdateChannelModal = ({ channel, change, setChange }) => {
   const [confirmLoading, setConfirmLoading] = useState(false);
 
   const info = () => {
-    messageApi.success("Channel Created Successfully");
+    messageApi.success("Channel Updated Successfully");
   };
 
   const error = () => {
     messageApi.error("Channel Name already exists");
   };
 
-  const validationSchema = Yup.object().shape({
-    channel: Yup.string().required("Name is required"),
-    name: Yup.string().required("Project name is required"),
-    description: Yup.string().required("Project description is required"),
-  });
-
-  const formik = useFormik({
-    initialValues: {
-      channel: "",
-      name: "",
-      description: "",
-      startDate: "",
-      endDate: "",
-    },
-    validationSchema: validationSchema,
-    onSubmit: async (values) => {
-      console.log(values);
-      handleOk(values);
-    },
-  });
-
-  useEffect(() => {
-    if (channel) {
-      formik.setValues({
-        channel: channel?.channel,
-        name: channel?.name,
-        description: channel?.description,
-        startDate: channel?.startDate,
-        endDate: channel?.endDate,
-      });
-    }
-  }, [channel]);
-
-  const handleOk = async (values) => {
-    setConfirmLoading(true);
+  const onFinish = async (values) => {
+    const channelData = new FormData();
+    channelData.append("channel", values.channel);
     try {
-      const channelData = new FormData();
-      for (const key in values) {
-        channelData.append(key, values[key]);
-      }
       const data = await updateChannelApi(channel?._id, channelData);
-      if (data) {
+      console.log(data);
+      if (data?.data?.success) {
         info();
       } else {
-        error();
+        messageApi.error(data.response?.data?.message);
       }
     } catch (error) {
-      error();
+      console.log(error);
+      messageApi.error(error.response?.data?.message);
     }
     setConfirmLoading(false);
     setModalVisible(false);
@@ -89,94 +55,25 @@ const UpdateChannelModal = ({ channel, change, setChange }) => {
         onCancel={() => setModalVisible(false)}
         footer={null}
         confirmLoading={confirmLoading}
-        onOk={formik?.handleSubmit}
       >
-        <Form onFinish={formik?.handleSubmit}>
+        <Form onFinish={onFinish}>
           <Form.Item
             name="channel"
-            help={formik?.touched.channel && formik?.errors.channel}
-            validateStatus={
-              formik?.touched.channel && formik?.errors.channel ? "error" : ""
-            }
+            rules={[
+              { required: true, message: "Please enter project channel" },
+            ]}
+            initialValue={channel?.channel}
           >
-            <Input type="text" {...formik?.getFieldProps("channel")} />
+            <Input placeholder="Project Channel" />
           </Form.Item>
-          <h2>Project Description</h2>
-          <Form.Item
-            name="name"
-            help={formik?.touched.name && formik?.errors.name}
-            validateStatus={
-              formik?.touched.name && formik?.errors.name ? "error" : ""
-            }
-          >
-            <Input
-              type="text"
-              {...formik?.getFieldProps("name")}
-              placeholder="Project Name"
-            />
-          </Form.Item>
-          <Form.Item
-            name="description"
-            help={formik?.touched.description && formik?.errors.description}
-            validateStatus={
-              formik?.touched.description && formik?.errors.description
-                ? "error"
-                : ""
-            }
-          >
-            <Input
-              type="text"
-              {...formik?.getFieldProps("description")}
-              placeholder="Project Description"
-            />
-          </Form.Item>
-          <Form.Item
-            name="startDate"
-            help={formik?.touched.startDate && formik?.errors.startDate}
-            validateStatus={
-              formik?.touched.startDate && formik?.errors.startDate
-                ? "error"
-                : ""
-            }
-          >
-            <DatePicker
-              {...formik?.getFieldProps("startDate")}
-              placeholder="Start Date"
-              format="YYYY-MM-DD"
-              onChange={(value) => {
-                formik?.setFieldValue(
-                  "startDate",
-                  value ? value.format("YYYY-MM-DD") : ""
-                );
-              }}
-            />
-          </Form.Item>
-          <Form.Item
-            name="endDate"
-            help={formik?.touched.endDate && formik?.errors.endDate}
-            validateStatus={
-              formik?.touched.endDate && formik?.errors.endDate ? "error" : ""
-            }
-          >
-            <DatePicker
-              {...formik?.getFieldProps("endDate")}
-              placeholder="End Date"
-              format="YYYY-MM-DD"
-              onChange={(value) => {
-                formik?.setFieldValue(
-                  "endDate",
-                  value ? value.format("YYYY-MM-DD") : ""
-                );
-              }}
-            />
-          </Form.Item>
+
           <Form.Item>
             <Button
               type="primary"
               htmlType="submit"
               style={{ backgroundColor: "#2E2E2E", color: "white" }}
             >
-              Create
+              Update
             </Button>
           </Form.Item>
         </Form>

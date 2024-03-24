@@ -44,11 +44,9 @@ export const deleteChannelApi = async (id) => {
 export const updateChannelApi = async (id, channelData) => {
   try {
     const data = await apiService.put(`/channel/${id}`, channelData);
-    console.log(data);
     return data;
   } catch (error) {
-    console.log(error);
-    return error.message;
+    return error;
   }
 };
 

@@ -76,11 +76,16 @@ const updateChannel = async (req, res) => {
       runValidators: true,
     });
     if (channel) {
-      res.status(200).json({ message: `Channel ${id} updated` });
+      res.status(200).json({ message: `Channel ${id} updated`, success: true });
     }
   } catch (error) {
     console.log(error);
-    res.status(500).json({ error: error.toString() });
+    res
+      .status(409)
+      .json({
+        message: "Channel with same name already exists",
+        success: false,
+      });
   }
 };
 

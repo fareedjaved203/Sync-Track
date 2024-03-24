@@ -1,19 +1,37 @@
 import { useState, useEffect } from "react";
 import { Modal, Form, Input, Button, message } from "antd";
-import { useFormik } from "formik";
-import * as Yup from "yup";
 import { updateChannelApi } from "../../api/channel/channelApi";
 import { MdEditDocument } from "react-icons/md";
 
-const UpdateProjectModal = ({ channel }) => {
+const UpdateProjectModal = ({ channel, setName, setDescription }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
   const [confirmLoading, setConfirmLoading] = useState(false);
-  console.log(channel);
 
-  const onFinish = (values) => {
-    console.log("Received values:", values);
-    // Handle form submission here
+  const info = () => {
+    messageApi.success("Channel Updated Successfully");
+  };
+
+  const onFinish = async (values) => {
+    const channelData = new FormData();
+    channelData.append("name", values.name);
+    channelData.append("description", values.description);
+    try {
+      const data = await updateChannelApi(channel?._id, channelData);
+      console.log(data);
+      if (data?.data?.success) {
+        setName(values.name);
+        setDescription(values.description);
+        info();
+      } else {
+        messageApi.error(data.response?.data?.message);
+      }
+    } catch (error) {
+      console.log(error);
+      messageApi.error(error.response?.data?.message);
+    }
+    setConfirmLoading(false);
+    setModalVisible(false);
   };
 
   return (
