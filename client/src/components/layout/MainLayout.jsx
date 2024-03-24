@@ -30,11 +30,16 @@ import DropDown from "./DropDown";
 
 const { Header, Sider, Content } = Layout;
 
+let searchItems = [];
+
 const Structure = ({ children, showDrawer }) => {
   const navigate = useNavigate();
   const [channels, setChannels] = useState([]);
   const [change, setChange] = useState(false);
   const [isDropDownVisible, setIsDropDownVisible] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredItems, setFilteredItems] = useState(searchItems);
+  const [showDropdown, setShowDropdown] = useState(false);
   const { user } = useSelector((state) => state.user);
 
   useEffect(() => {
@@ -42,6 +47,7 @@ const Structure = ({ children, showDrawer }) => {
       const data = await myChannelsApi();
       console.log(data);
       setChannels([...data.data?.channels]);
+      searchItems = [...data?.data?.channels];
     };
     getChannels();
   }, [change]);
@@ -185,6 +191,24 @@ const Structure = ({ children, showDrawer }) => {
     token: { colorBgContainer },
   } = theme.useToken();
 
+  const handleItemClick = (item) => {
+    setSearchQuery(item.channel);
+    setFilteredItems([item]);
+    setShowDropdown(false);
+    navigate(`/channel/${item._id}`);
+    setSearchQuery("");
+  };
+
+  const handleSearch = (e) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+    const filtered = searchItems.filter((item) =>
+      item.channel.toLowerCase().includes(query.toLowerCase())
+    );
+    setFilteredItems(filtered);
+    setShowDropdown(!!query);
+  };
+
   return (
     <>
       <Navbar showDrawer={showDrawer} />
@@ -201,7 +225,36 @@ const Structure = ({ children, showDrawer }) => {
             backgroundColor: "#2E2E30",
           }}
         >
-          <div className="demo-logo-vertical" />
+          <div className="relative flex justify-content-center">
+            <input
+              type="text"
+              className=" w-[90%] mt-2 px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:border-blue-500"
+              placeholder="Search channel..."
+              value={searchQuery}
+              onChange={handleSearch}
+            />
+            {showDropdown && (
+              <div className="absolute w-full top-10 left-0 bg-white border border-gray-300 rounded-lg shadow-lg mt-2 z-50">
+                <ul className="py-1 w-100">
+                  {Array.isArray(filteredItems) &&
+                    filteredItems.map((user) => (
+                      <li
+                        key={user._id}
+                        className="px-4 py-2 w-100 hover:bg-gray-100 cursor-pointer"
+                        onClick={() => handleItemClick(user)}
+                      >
+                        <div className="flex items-center">
+                          <div>
+                            <div className="font-semibold">{user.channel}</div>
+                            <div className="text-gray-600">{user.name}</div>
+                          </div>
+                        </div>
+                      </li>
+                    ))}
+                </ul>
+              </div>
+            )}
+          </div>
           <Menu
             mode="inline"
             className="my-menu"
