@@ -11,6 +11,7 @@ import { useParams } from "react-router-dom";
 import StandUps from "../components/StandUps";
 import Announcements from "../components/Announcements";
 import TaskViewOptions from "../components/TaskViewOptions";
+import Progress from "../components/Progress";
 
 const Channel = () => {
   let { id } = useParams();
@@ -34,8 +35,9 @@ const Channel = () => {
     { label: "Milestone", key: "2", children: <Milestone /> },
     { label: "Tasks", key: "3", children: <TaskViewOptions /> },
     { label: "Standups", key: "4", children: <StandUps /> },
-    { label: "Announcements", key: "5", children: <Announcements /> },
-    { label: "Team", key: "6", children: <Team /> },
+    { label: "Progress", key: "5", children: <Progress /> },
+    { label: "Announcements", key: "6", children: <Announcements /> },
+    { label: "Team", key: "8", children: <Team /> },
   ];
 
   return (
