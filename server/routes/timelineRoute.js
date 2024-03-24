@@ -4,7 +4,7 @@ const {
   deleteTimeline,
   updateTimeline,
   getTimeline,
-} = require("../controllers/userController");
+} = require("../controllers/timelineController");
 
 const { isAuthenticatedUser, authorizeRoles } = require("../middlewares/auth");
 

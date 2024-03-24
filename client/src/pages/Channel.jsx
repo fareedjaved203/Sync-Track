@@ -31,7 +31,7 @@ const Channel = () => {
       key: "7",
       children: <ProjectOverview channel={channel} />,
     },
-    { label: "Timeline", key: "1", children: <Timeline /> },
+    { label: "Timeline", key: "1", children: <Timeline channel={channel} /> },
     { label: "Milestone", key: "2", children: <Milestone /> },
     { label: "Tasks", key: "3", children: <TaskViewOptions /> },
     { label: "Standups", key: "4", children: <StandUps /> },

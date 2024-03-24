@@ -2,10 +2,15 @@ const mongoose = require("mongoose");
 
 const timelineSchema = new mongoose.Schema(
   {
-    title: String,
-    description: String,
-    startDate: { type: Date, default: Date.now },
-    endDate: Date,
+    timelines: [
+      {
+        title: String,
+        description: String,
+        startDate: { type: Date, default: Date.now },
+        endDate: Date,
+      },
+    ],
+    timelineNumber: { type: Number, default: 1 },
     project: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Channel",
