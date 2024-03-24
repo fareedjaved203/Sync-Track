@@ -3,6 +3,7 @@ import { Select } from "antd";
 import ReminderModal from "./channel/ReminderModal";
 import ShowTaskDetailsModal from "./channel/showTaskdetailsModal";
 import UpdateTaskModal from "./channel/UpdateTaskModal";
+import AddTaskModal from "./channel/AddTaskModal";
 
 const { Option } = Select;
 
@@ -20,7 +21,7 @@ const TaskList = () => {
   return (
     <section className="text-gray-600 body-font">
       <div className="w-full flex justify-content-end">
-        {/* Add Task Modal Button Goes Here */}
+        <AddTaskModal />
       </div>
       <div className="flex flex-col items-center">
         <div className="w-full max-w-lg">
