@@ -66,6 +66,36 @@ const myTeam = async (req, res) => {
   }
 };
 
+const specificUser = async (req, res) => {
+  try {
+    const channelId = req.params.channelId;
+    const userId = req.params.userId;
+
+    const channel = await Channel.findOne({
+      _id: channelId,
+      "users.user": userId,
+    }).populate("users.user");
+
+    if (channel) {
+      const user = channel.users.find((u) => u.user._id.toString() === userId);
+      res
+        .status(200)
+        .json({
+          success: true,
+          message: `User and channel fetched`,
+          user,
+          channel,
+        });
+    } else {
+      res
+        .status(404)
+        .json({ success: false, message: `User not found in the channel` });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.toString() });
+  }
+};
+
 // DELETE channel
 const deleteChannel = async (req, res) => {
   try {
@@ -208,10 +238,6 @@ const userResponse = async (req, res) => {
     const channelId = req.params.channelId;
     const userId = req.params.userId;
     const newRequestStatus = req.body.request;
-    console.log(newRequestStatus);
-    console.log(userId);
-    console.log(channelId);
-    console.log(req.user.id);
 
     const updatedChannel = await Channel.findOneAndUpdate(
       { _id: channelId, "users.user": req.user.id },
@@ -223,8 +249,6 @@ const userResponse = async (req, res) => {
       { new: true }
     );
 
-    console.log(updatedChannel);
-
     if (updatedChannel) {
       res
         .status(200)
@@ -232,6 +256,72 @@ const userResponse = async (req, res) => {
     }
   } catch (error) {
     res.status(404).json({ success: false, message: error.toString() });
+  }
+};
+
+const concludeUser = async (req, res) => {
+  try {
+    const channelId = req.params.channelId;
+    const userId = req.params.userId;
+    const feedback = req.body.feedback;
+    console.log(feedback);
+    const user = await User.findById(userId);
+    if (user) {
+      const channel = await Channel.findById(channelId);
+      if (!channel) {
+        return res.status(404).json({ error: "Channel not found" });
+      }
+
+      const userIndex = channel.users.findIndex(
+        (userObj) => userObj.user.toString() === userId
+      );
+      if (userIndex === -1) {
+        return res.status(404).json({ error: "User not found in the channel" });
+      }
+
+      channel.users[userIndex].status = "approved";
+      channel.users[userIndex].feedback = feedback;
+
+      channel.markModified("users");
+
+      await channel.save();
+
+      const certificateUrl = `${process.env.CERTIFICATE_URL}/${channelId}/${userId}`;
+
+      const certificateData = {
+        certificateUrl: certificateUrl,
+      };
+
+      const path = require("path");
+      const templatePath = path.join(
+        __dirname,
+        "..",
+        "public",
+        "views",
+        "templates",
+        "certificateTemplate.html"
+      );
+      const certificateContent = renderEmailTemplate(
+        templatePath,
+        certificateData
+      );
+
+      await sendEmail({
+        email: user.email,
+        subject: "Sync Track Project certificate",
+        html: certificateContent,
+      });
+
+      res.status(200).json({
+        success: true,
+        message: `Email Sent to the user`,
+      });
+    } else {
+      res.status(404).json({ message: error.toString() });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: error.toString() });
   }
 };
 
@@ -245,4 +335,6 @@ module.exports = {
   userResponse,
   myTeam,
   deleteMember,
+  concludeUser,
+  specificUser,
 };

@@ -9,6 +9,8 @@ const {
   userResponse,
   myTeam,
   deleteMember,
+  concludeUser,
+  specificUser,
 } = require("../controllers/channelController");
 
 const { isAuthenticatedUser, authorizeRoles } = require("../middlewares/auth");
@@ -29,5 +31,9 @@ router.put(
 
 router.get("/team/:id", isAuthenticatedUser, myTeam);
 router.delete("/team/:id/:userId", isAuthenticatedUser, deleteMember);
+
+router.put("/team/:channelId/:userId", isAuthenticatedUser, concludeUser);
+
+router.get("/team/:channelId/:userId", isAuthenticatedUser, specificUser);
 
 module.exports = router;

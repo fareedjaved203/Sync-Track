@@ -4,8 +4,9 @@ import { Select } from "antd";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useParams } from "react-router-dom";
+import { concludeTeamMemberApi } from "../../api/team/teamApi";
 
-const GiveFeedBackModal = ({ generatePdf }) => {
+const GiveFeedBackModal = ({ generatePdf, userId, channelId, email }) => {
   let { id } = useParams();
   const [modalVisible, setModalVisible] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
@@ -21,38 +22,37 @@ const GiveFeedBackModal = ({ generatePdf }) => {
   };
 
   const validationSchema = Yup.object().shape({
-    email: Yup.string().email("Invalid email").required("Email is required"),
+    feedback: Yup.string().required("Feedback is mandatory"),
   });
 
   const formik = useFormik({
     initialValues: {
-      email: "",
-      role: "",
+      feedback: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      console.log(values.email);
       handleOk(values);
     },
   });
 
   const handleOk = async (values) => {
     setConfirmLoading(true);
-    // try {
-    //   const formData = new FormData();
-    //   formData.append("email", values.email);
-    //   formData.append("role", values.role);
-    //   const data = await addUserApi(id, formData);
-    //   if (!data.error) {
-    //     info();
-    //   } else {
-    //     messageApi.error(data.error);
-    //   }
-    //   console.log(data);
-    // } catch (error) {
-    //   console.log(error);
-    //   messageApi.error(data?.error);
-    // }
+    try {
+      const formData = new FormData();
+      formData.append("feedback", values.feedback);
+      formData.append("email", email);
+      console.log(values.feedback);
+      const data = await concludeTeamMemberApi(channelId, userId, formData);
+      if (!data?.error) {
+        info();
+      } else {
+        messageApi.error(data.error);
+      }
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+      messageApi.error(error);
+    }
     setConfirmLoading(false);
     setModalVisible(false);
     generatePdf();
@@ -82,32 +82,14 @@ const GiveFeedBackModal = ({ generatePdf }) => {
       >
         <Form onFinish={formik.handleSubmit}>
           <Form.Item
-            label="Email"
-            name="email"
-            help={formik.touched.email && formik.errors.email}
+            label="feedback"
+            name="feedback"
+            help={formik.touched.feedback && formik.errors.feedback}
             validateStatus={
-              formik.touched.email && formik.errors.email ? "error" : ""
+              formik.touched.feedback && formik.errors.feedback ? "error" : ""
             }
           >
-            <Input type="email" {...formik.getFieldProps("email")} />
-          </Form.Item>
-          <Form.Item
-            label="Role"
-            name="role"
-            help={formik.touched.role && formik.errors.role}
-            validateStatus={
-              formik.touched.role && formik.errors.role ? "error" : ""
-            }
-          >
-            <Select
-              placeholder="Select a role"
-              onChange={(value) => formik.setFieldValue("role", value)}
-              value={formik.values.role}
-            >
-              <Option value="tester">Tester</Option>
-              <Option value="developer">Developer</Option>
-              <Option value="team_lead">Team Lead</Option>
-            </Select>
+            <Input type="text" {...formik.getFieldProps("feedback")} />
           </Form.Item>
           <Form.Item>
             <Button

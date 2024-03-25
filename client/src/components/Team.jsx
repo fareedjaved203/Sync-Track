@@ -23,6 +23,7 @@ const Team = ({ channel }) => {
       });
       setProjectManager(project_manager?.user?._id);
       setTeam(data?.data?.channels?.users);
+      console.log(data);
     };
     myTeam();
   }, [channel, change]);
@@ -69,7 +70,12 @@ const Team = ({ channel }) => {
                     <p className="text-gray-500">{user?.role}</p>
                     {show && user?.role !== "project manager" && (
                       <div className="flex space-x-1 mt-4">
-                        <GiveFeedBackModal generatePdf={generatePdf} />
+                        <GiveFeedBackModal
+                          userId={user?.user?._id}
+                          channelId={channel?._id}
+                          email={user?.user?.email}
+                          generatePdf={generatePdf}
+                        />
                         <button
                           className="bg-red-600 text-white py-2 px-2 rounded"
                           onClick={() => removeMember(user?.user?._id)}

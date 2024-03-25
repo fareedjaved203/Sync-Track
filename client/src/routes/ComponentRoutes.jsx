@@ -77,7 +77,10 @@ const ComponentRoutes = () => {
           <Route path="/video" element={<Home />} />
           <Route path="/video/:roomId" element={<VideoRoom />} />
 
-          <Route path="/certificate" element={<CertificatePage />} />
+          <Route
+            path="/certificate/:channelId/:userId"
+            element={<CertificatePage />}
+          />
 
           <Route path="/request/:id" element={<Request />} />
 

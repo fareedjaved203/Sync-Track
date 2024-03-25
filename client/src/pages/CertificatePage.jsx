@@ -1,11 +1,25 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
+import { getTeamUserApi } from "../api/team/teamApi";
+import { useParams } from "react-router-dom";
 
 const CertificatePage = ({
   userName = "Fareed Javed",
   achievement = "Team Lead",
 }) => {
+  const { channelId, userId } = useParams();
+  const [user, setUser] = useState([]);
+  const [channel, setChannel] = useState();
+  useEffect(() => {
+    const getUser = async () => {
+      const data = await getTeamUserApi(channelId, userId);
+      console.log(data);
+      setUser(data?.data?.user);
+      setChannel(data.data?.channel?.name);
+    };
+    getUser();
+  }, []);
   const handleDownloadPDF = () => {
     html2canvas(document.querySelector("body")).then((canvas) => {
       const imgData = canvas.toDataURL("image/png");
@@ -40,21 +54,22 @@ const CertificatePage = ({
             </div>
             <div className="w-16 h-16 bg-gray-300 rounded-full flex justify-center items-center">
               <img
-                src="https://via.placeholder.com/150"
+                src={user?.user?.avatar?.url}
                 alt="User"
                 className="w-full h-full rounded-full"
               />
             </div>
           </div>
           <div className="mt-4">
-            <p className="text-3xl font-semibold text-blue-300">{userName}</p>
-            <p className="text-lg font-semibold text-gray-300">has achieved</p>
             <p className="text-3xl font-semibold text-blue-300">
-              {achievement}
+              {user?.user?.name}
             </p>
-            <p className="text-lg font-semibold text-gray-300">awarded on</p>
+            <p className="text-lg font-semibold text-gray-300">on being</p>
+            <p className="text-3xl font-semibold text-blue-300">{user?.role}</p>
+            <p className="text-lg font-semibold text-gray-300">at</p>
+            <p className="text-3xl font-semibold text-blue-300">{channel}</p>
             <p className="text-lg font-semibold text-gray-300">
-              Date of Achievement
+              Feedback: {user?.feedback}
             </p>
           </div>
         </div>
@@ -64,9 +79,6 @@ const CertificatePage = ({
             <p className="text-base font-semibold text-gray-200">Sync Track</p>
             <p className="text-sm text-gray-400">
               Comsats University Islamabad
-            </p>
-            <p className="text-sm text-gray-400">
-              Contact: +1234567890, Email: info@example.com
             </p>
           </div>
           <button
