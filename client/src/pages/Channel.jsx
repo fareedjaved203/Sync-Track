@@ -41,9 +41,13 @@ const Channel = () => {
         children: <Milestone channel={channel} />,
       },
       { label: "Tasks", key: "3", children: <TaskViewOptions /> },
-      { label: "Standups", key: "4", children: <StandUps /> },
+      { label: "Standups", key: "4", children: <StandUps channel={channel} /> },
       { label: "Progress", key: "5", children: <Progress /> },
-      { label: "Announcements", key: "6", children: <Announcements /> },
+      {
+        label: "Announcements",
+        key: "6",
+        children: <Announcements channel={channel} />,
+      },
       { label: "Team", key: "8", children: <Team /> },
     ]);
   }, [channel]);

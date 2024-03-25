@@ -7,10 +7,7 @@ const announcementSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Channel",
     },
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-    },
+    user: String,
   },
   { timestamps: true }
 );

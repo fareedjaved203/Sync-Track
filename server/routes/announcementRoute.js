@@ -2,17 +2,15 @@ const express = require("express");
 const {
   postAnnouncement,
   getAllAnnouncements,
-} = require("../controllers/userController");
+  deleteAnnouncement,
+} = require("../controllers/announcementController");
 
 const { isAuthenticatedUser, authorizeRoles } = require("../middlewares/auth");
 
 const router = express.Router();
 
-router.post("/Announcement", isAuthenticatedUser, postAnnouncement);
-router.get(
-  "/announcement/:projectId",
-  isAuthenticatedUser,
-  getAllAnnouncements
-);
+router.post("/announcement", isAuthenticatedUser, postAnnouncement);
+router.get("/announcement/:id", isAuthenticatedUser, getAllAnnouncements);
+router.delete("/announcement/:id", isAuthenticatedUser, deleteAnnouncement);
 
 module.exports = router;
