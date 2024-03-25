@@ -78,14 +78,12 @@ const specificUser = async (req, res) => {
 
     if (channel) {
       const user = channel.users.find((u) => u.user._id.toString() === userId);
-      res
-        .status(200)
-        .json({
-          success: true,
-          message: `User and channel fetched`,
-          user,
-          channel,
-        });
+      res.status(200).json({
+        success: true,
+        message: `User and channel fetched`,
+        user,
+        channel,
+      });
     } else {
       res
         .status(404)
@@ -164,33 +162,29 @@ const addUser = async (req, res) => {
     const channelId = req.params.channelId;
     const email = req.body.email;
     const user = await User.find({ email });
-    console.log(user);
     if (user) {
       const channel = await Channel.findById(channelId);
       if (!channel) {
         return res.status(404).json({ error: "Channel not found" });
       }
-      // const userExists = channel.users.some(
-      //   (userObj) => userObj.user?.toString() === user?._id?.toString()
-      // );
-      // if (userExists) {
-      //   return res
-      //     .status(400)
-      //     .json({ error: "User already added to the channel" });
-      // }
 
-      const updatedChannel = await Channel.findByIdAndUpdate(
-        channelId,
-        {
-          $addToSet: {
-            users: {
-              user: user[0]._id,
-              role: req.body.role,
-            },
-          },
-        },
-        { new: true }
+      const userInChannel = channel.users.find(
+        (u) => u.user.toString() === user[0]._id.toString()
       );
+
+      if (userInChannel) {
+        userInChannel.status = "working";
+        userInChannel.request = "pending";
+        userInChannel.role = req.body.role;
+      } else {
+        channel.users.push({
+          user: user[0]._id,
+          role: req.body.role,
+        });
+      }
+
+      const updatedChannel = await channel.save();
+
       if (updatedChannel) {
         console.log("hello");
         const invitationUrl = `${process.env.INVITATION_URL}/${channelId}`;
