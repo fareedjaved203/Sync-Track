@@ -61,10 +61,10 @@ export const addUserApi = async (id, channelData) => {
   }
 };
 
-export const userResponseApi = async (id, userId, response) => {
+export const userResponseApi = async (channelId, userId, response) => {
   try {
     const data = await apiService.put(
-      `/channel/user-response/${id}/${userId}`,
+      `/channel/user-response/${channelId}/${userId}`,
       response
     );
     console.log(data);

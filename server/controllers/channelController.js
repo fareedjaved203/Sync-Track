@@ -94,6 +94,7 @@ const addUser = async (req, res) => {
     const channelId = req.params.channelId;
     const email = req.body.email;
     const user = await User.find({ email });
+    console.log(user);
     if (user) {
       const channel = await Channel.findById(channelId);
       if (!channel) {
@@ -113,7 +114,7 @@ const addUser = async (req, res) => {
         {
           $addToSet: {
             users: {
-              user: user._id,
+              user: user[0]._id,
               role: req.body.role,
             },
           },
@@ -164,12 +165,16 @@ const addUser = async (req, res) => {
 
 const userResponse = async (req, res) => {
   try {
-    const channelId = req.params.id;
+    const channelId = req.params.channelId;
     const userId = req.params.userId;
     const newRequestStatus = req.body.request;
+    console.log(newRequestStatus);
+    console.log(userId);
+    console.log(channelId);
+    console.log(req.user.id);
 
     const updatedChannel = await Channel.findOneAndUpdate(
-      { _id: channelId, "users.user": userId },
+      { _id: channelId, "users.user": req.user.id },
       {
         $set: {
           "users.$.request": newRequestStatus,
@@ -177,6 +182,8 @@ const userResponse = async (req, res) => {
       },
       { new: true }
     );
+
+    console.log(updatedChannel);
 
     if (updatedChannel) {
       res

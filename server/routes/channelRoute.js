@@ -20,7 +20,7 @@ router.delete("/channel/:id", isAuthenticatedUser, deleteChannel);
 router.put("/channel/:id", isAuthenticatedUser, updateChannel);
 router.put("/channel/add-user/:channelId", isAuthenticatedUser, addUser);
 router.put(
-  "/channel/user-response/:id/:userId",
+  "/channel/user-response/:channelId/:userId",
   isAuthenticatedUser,
   userResponse
 );

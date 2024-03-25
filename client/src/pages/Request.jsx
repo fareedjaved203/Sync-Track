@@ -8,10 +8,12 @@ const Request = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.user);
+  console.log(user);
 
   const requestResponse = async (response) => {
     const formData = new FormData();
     formData.append("request", response);
+    console.log(user.data.user._id);
     const data = await userResponseApi(id, user?.data?.user?._id, formData);
     console.log(data);
     navigate("/");
