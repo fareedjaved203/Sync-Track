@@ -53,6 +53,19 @@ const myChannel = async (req, res) => {
   }
 };
 
+const myTeam = async (req, res) => {
+  try {
+    const channels = await Channel.findById(req.params.id).populate(
+      "users.user"
+    );
+    if (channels) {
+      res.status(200).json({ message: `Channel fetched`, channels });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.toString() });
+  }
+};
+
 // DELETE channel
 const deleteChannel = async (req, res) => {
   try {
@@ -62,6 +75,33 @@ const deleteChannel = async (req, res) => {
       res.status(200).json({ message: `Channel deleted Successfully` });
     }
   } catch (error) {
+    res.status(500).json({ error: error.toString() });
+  }
+};
+
+const deleteMember = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const userId = req.params.userId;
+    console.log(userId);
+
+    const channel = await Channel.findByIdAndUpdate(
+      id,
+      {
+        $pull: { users: { user: userId } },
+      },
+      { new: true }
+    );
+
+    if (channel) {
+      res
+        .status(200)
+        .json({ success: true, message: `User removed Successfully` });
+    } else {
+      res.status(404).json({ success: false, message: `Channel not found` });
+    }
+  } catch (error) {
+    console.log(error);
     res.status(500).json({ error: error.toString() });
   }
 };
@@ -203,4 +243,6 @@ module.exports = {
   postChannel,
   addUser,
   userResponse,
+  myTeam,
+  deleteMember,
 };

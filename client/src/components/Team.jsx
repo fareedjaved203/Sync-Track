@@ -1,11 +1,42 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { message } from "antd";
 import GiveFeedBackModal from "./channel/GiveFeedBackModal";
+import { getTeamApi, removeTeamMemberApi } from "../api/team/teamApi";
+import { useSelector } from "react-redux";
 
-const Team = () => {
+const Team = ({ channel }) => {
+  const { user } = useSelector((state) => state.user);
   const [messageApi, contextHolder] = message.useMessage();
+  const [change, isChange] = useState(false);
+  const [team, setTeam] = useState([]);
+  const [projectManager, setProjectManager] = useState("");
+  const [show, isShow] = useState(false);
   const generatePdf = () => {
     messageApi.success("Certificate generated Successfully");
+  };
+
+  useEffect(() => {
+    const myTeam = async () => {
+      const data = await getTeamApi(channel?._id);
+      const project_manager = data.data?.channels?.users?.find((user) => {
+        return user.role === "project manager";
+      });
+      setProjectManager(project_manager?.user?._id);
+      setTeam(data?.data?.channels?.users);
+    };
+    myTeam();
+  }, [channel, change]);
+
+  useEffect(() => {
+    if (projectManager === user.data.user._id) {
+      isShow(true);
+    }
+  }, [projectManager]);
+
+  const removeMember = async (id) => {
+    const data = await removeTeamMemberApi(channel?._id, id);
+    isChange(!change);
+    console.log(data);
   };
   return (
     <>
@@ -22,29 +53,36 @@ const Team = () => {
               haven't heard of them.
             </p>
           </div>
-          <div className="flex flex-wrap -m-2">
-            <div className="p-2 lg:w-1/3 md:w-1/2 w-full">
-              <div className="h-full flex items-center border-gray-200 border p-4 rounded-lg">
-                <img
-                  alt="team"
-                  className="w-16 h-16 bg-gray-100 object-cover object-center flex-shrink-0 rounded-full mr-4"
-                  src="https://dummyimage.com/80x80"
-                />
-                <div className="flex-grow">
-                  <h2 className="text-gray-900 title-font font-medium">
-                    Holden Caulfield
-                  </h2>
-                  <p className="text-gray-500">UI Designer</p>
-                  <div className="flex space-x-1 mt-4">
-                    <GiveFeedBackModal generatePdf={generatePdf} />
-                    <button className="bg-red-600 text-white py-2 px-2 rounded">
-                      Remove
-                    </button>
+          {team?.map((user) => (
+            <div className="flex flex-wrap -m-2" key={user?._id}>
+              <div className="p-2 lg:w-1/3 md:w-1/2 w-full">
+                <div className="h-full flex items-center border-gray-200 border p-4 rounded-lg">
+                  <img
+                    alt="team"
+                    className="w-16 h-16 bg-gray-100 object-cover object-center flex-shrink-0 rounded-full mr-4"
+                    src={user?.user?.avatar?.url}
+                  />
+                  <div className="flex-grow">
+                    <h2 className="text-gray-900 title-font font-medium">
+                      {user?.user?.email}
+                    </h2>
+                    <p className="text-gray-500">{user?.role}</p>
+                    {show && user?.role !== "project manager" && (
+                      <div className="flex space-x-1 mt-4">
+                        <GiveFeedBackModal generatePdf={generatePdf} />
+                        <button
+                          className="bg-red-600 text-white py-2 px-2 rounded"
+                          onClick={() => removeMember(user?.user?._id)}
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
             </div>
-          </div>
+          ))}
         </div>
       </section>
     </>

@@ -16,6 +16,7 @@ const Request = () => {
     console.log(user.data.user._id);
     const data = await userResponseApi(id, user?.data?.user?._id, formData);
     console.log(data);
+    alert("Request successful");
     navigate("/");
   };
   return (

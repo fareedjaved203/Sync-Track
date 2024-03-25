@@ -48,7 +48,7 @@ const Channel = () => {
         key: "6",
         children: <Announcements channel={channel} />,
       },
-      { label: "Team", key: "8", children: <Team /> },
+      { label: "Team", key: "8", children: <Team channel={channel} /> },
     ]);
   }, [channel]);
 
