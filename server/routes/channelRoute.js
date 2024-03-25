@@ -6,6 +6,7 @@ const {
   myChannels,
   myChannel,
   addUser,
+  userResponse,
 } = require("../controllers/channelController");
 
 const { isAuthenticatedUser, authorizeRoles } = require("../middlewares/auth");
@@ -18,5 +19,10 @@ router.get("/channel/:id", isAuthenticatedUser, myChannel);
 router.delete("/channel/:id", isAuthenticatedUser, deleteChannel);
 router.put("/channel/:id", isAuthenticatedUser, updateChannel);
 router.put("/channel/add-user/:channelId", isAuthenticatedUser, addUser);
+router.put(
+  "/channel/user-response/:id/:userId",
+  isAuthenticatedUser,
+  userResponse
+);
 
 module.exports = router;

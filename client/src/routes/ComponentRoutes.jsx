@@ -23,6 +23,7 @@ import Notifications from "../components/layout/Notifications";
 import Home from "../components/video/home/Home";
 import VideoRoom from "../components/video/room/Room";
 import CertificatePage from "../pages/CertificatePage";
+import Request from "../pages/Request";
 
 const ComponentRoutes = () => {
   const dispatch = useDispatch();
@@ -77,6 +78,8 @@ const ComponentRoutes = () => {
           <Route path="/video/:roomId" element={<VideoRoom />} />
 
           <Route path="/certificate" element={<CertificatePage />} />
+
+          <Route path="/request/:id" element={<Request />} />
 
           <Route path="*" element={<Error />} />
         </Routes>

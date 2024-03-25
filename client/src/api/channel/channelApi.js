@@ -56,6 +56,20 @@ export const addUserApi = async (id, channelData) => {
     console.log(data);
     return data;
   } catch (error) {
+    console.log(error);
+    return error.message;
+  }
+};
+
+export const userResponseApi = async (id, userId, response) => {
+  try {
+    const data = await apiService.put(
+      `/channel/user-response/${id}/${userId}`,
+      response
+    );
+    console.log(data);
+    return data;
+  } catch (error) {
     return error.message;
   }
 };

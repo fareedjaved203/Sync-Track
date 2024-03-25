@@ -44,15 +44,14 @@ const AddUser = () => {
       formData.append("email", values.email);
       formData.append("role", values.role);
       const data = await addUserApi(id, formData);
-      if (!data.error) {
+      if (data.success) {
         info();
       } else {
-        messageApi.error(data.error);
+        messageApi.error(data?.response?.data?.error);
       }
-      console.log(data);
     } catch (error) {
       console.log(error);
-      messageApi.error(data?.error);
+      messageApi.error(error.response?.data?.error);
     }
     setConfirmLoading(false);
     setModalVisible(false);

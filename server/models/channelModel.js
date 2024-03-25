@@ -37,6 +37,11 @@ const channelSchema = new mongoose.Schema(
           type: String,
           default: "working",
         },
+        request: {
+          enum: ["pending", "approved", "declined"],
+          type: String,
+          default: "pending",
+        },
       },
     ],
   },

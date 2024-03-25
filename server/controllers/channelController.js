@@ -4,6 +4,10 @@ const Channel = require("../models/channelModel");
 
 const User = require("../models/userModel");
 
+const renderEmailTemplate = require("../utils/emailTemplate");
+
+const sendEmail = require("../utils/sendEmail");
+
 // POST channel
 const postChannel = async (req, res) => {
   try {
@@ -95,15 +99,14 @@ const addUser = async (req, res) => {
       if (!channel) {
         return res.status(404).json({ error: "Channel not found" });
       }
-
-      const userExists = channel.users.some(
-        (userObj) => userObj.user?.toString() === user?._id?.toString()
-      );
-      if (userExists) {
-        return res
-          .status(400)
-          .json({ error: "User already added to the channel" });
-      }
+      // const userExists = channel.users.some(
+      //   (userObj) => userObj.user?.toString() === user?._id?.toString()
+      // );
+      // if (userExists) {
+      //   return res
+      //     .status(400)
+      //     .json({ error: "User already added to the channel" });
+      // }
 
       const updatedChannel = await Channel.findByIdAndUpdate(
         channelId,
@@ -118,13 +121,70 @@ const addUser = async (req, res) => {
         { new: true }
       );
       if (updatedChannel) {
-        res.status(200).json({ message: `User Added updated` });
+        console.log("hello");
+        const invitationUrl = `${process.env.INVITATION_URL}/${channelId}`;
+
+        const invitationData = {
+          invitationUrl: invitationUrl,
+        };
+
+        const path = require("path");
+        const templatePath = path.join(
+          __dirname,
+          "..",
+          "public",
+          "views",
+          "templates",
+          "invitationTemplate.html"
+        );
+        const invitationContent = renderEmailTemplate(
+          templatePath,
+          invitationData
+        );
+
+        await sendEmail({
+          email: email,
+          subject: "Sync Track Project Invitation",
+          html: invitationContent,
+        });
+
+        res.status(200).json({
+          success: true,
+          message: `Email Sent to the user`,
+        });
       }
     } else {
-      res.status(404).json({ message: `User Cannot Be Added` });
+      res.status(404).json({ message: error.toString() });
     }
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: error.toString() });
+  }
+};
+
+const userResponse = async (req, res) => {
+  try {
+    const channelId = req.params.id;
+    const userId = req.params.userId;
+    const newRequestStatus = req.body.request;
+
+    const updatedChannel = await Channel.findOneAndUpdate(
+      { _id: channelId, "users.user": userId },
+      {
+        $set: {
+          "users.$.request": newRequestStatus,
+        },
+      },
+      { new: true }
+    );
+
+    if (updatedChannel) {
+      res
+        .status(200)
+        .json({ success: true, message: `User request status updated` });
+    }
+  } catch (error) {
+    res.status(404).json({ success: false, message: error.toString() });
   }
 };
 
@@ -135,4 +195,5 @@ module.exports = {
   myChannel,
   postChannel,
   addUser,
+  userResponse,
 };
