@@ -54,9 +54,9 @@ const Team = ({ channel }) => {
               haven't heard of them.
             </p>
           </div>
-          {team?.map((user) => (
-            <div className="flex flex-wrap -m-2" key={user?._id}>
-              <div className="p-2 lg:w-1/3 md:w-1/2 w-full">
+          <div className="flex flex-wrap -m-2">
+            {team?.map((user) => (
+              <div className="p-2 lg:w-1/3 md:w-1/2 w-full" key={user?._id}>
                 <div className="h-full flex items-center border-gray-200 border p-4 rounded-lg">
                   <img
                     alt="team"
@@ -89,8 +89,8 @@ const Team = ({ channel }) => {
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </section>
     </>
