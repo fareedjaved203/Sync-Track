@@ -40,7 +40,7 @@ const Announcements = ({ channel }) => {
       setAnnounce(data?.data?.data);
     };
     getAnnouncements();
-  }, [update]);
+  }, [update, channel]);
 
   const removeData = async (id) => {
     const data = await deleteAnnouncementsApi(id);

@@ -27,7 +27,7 @@ const StandUps = ({ channel }) => {
       setStandUps(data?.data?.standup);
     };
     getAllStandUps();
-  }, [update]);
+  }, [update, channel]);
   return (
     <>
       {contextHolder}
