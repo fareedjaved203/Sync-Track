@@ -14,7 +14,7 @@ const Announcements = ({ channel }) => {
   const [announcement, setAnnouncement] = useState("");
   const [announce, setAnnounce] = useState([]);
   const [update, isUpdate] = useState(false);
-  console.log(channel);
+  const [projectManager, setProjectManager] = useState(false);
 
   const handleChange = (value) => {
     setAnnouncement(value);
@@ -32,6 +32,12 @@ const Announcements = ({ channel }) => {
     }
     setAnnouncement("");
   };
+  useEffect(() => {
+    if (user.data?.user?._id == channel?.creator) {
+      setProjectManager(true);
+    }
+    [channel];
+  });
 
   useEffect(() => {
     const getAnnouncements = async () => {
@@ -43,7 +49,7 @@ const Announcements = ({ channel }) => {
   }, [update, channel]);
 
   const removeData = async (id) => {
-    const data = await deleteAnnouncementsApi(id);
+    await deleteAnnouncementsApi(id);
     isUpdate(!update);
   };
 
@@ -62,36 +68,44 @@ const Announcements = ({ channel }) => {
                 dangerouslySetInnerHTML={{ __html: item?.description }}
               />
             </div>
-            <span className="text-gray-400 cursor-pointer">
-              <MdDelete
-                className="w-8 h-8"
-                onClick={() => removeData(item?._id)}
-              />
-            </span>
+            {projectManager && (
+              <>
+                <span className="text-gray-400 cursor-pointer">
+                  <MdDelete
+                    className="w-8 h-8"
+                    onClick={() => removeData(item?._id)}
+                  />
+                </span>
+              </>
+            )}
           </div>
         ))}
       </div>
 
-      <div className="mt-4">
-        <div className="bg-gray-100 p-4 rounded-lg">
-          <label className="block text-lg font-semibold mb-2">
-            Add Announcement
-          </label>
-          <div className="quill-container bg-white border border-gray-300 rounded-lg">
-            <ReactQuill
-              value={announcement}
-              onChange={handleChange}
-              className="quill-editor"
-            />
+      {projectManager && (
+        <>
+          <div className="mt-4">
+            <div className="bg-gray-100 p-4 rounded-lg">
+              <label className="block text-lg font-semibold mb-2">
+                Add Announcement
+              </label>
+              <div className="quill-container bg-white border border-gray-300 rounded-lg">
+                <ReactQuill
+                  value={announcement}
+                  onChange={handleChange}
+                  className="quill-editor"
+                />
+              </div>
+              <button
+                className="mt-4 px-4 py-2 text-white rounded-lg bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                onClick={handleSubmit}
+              >
+                Post
+              </button>
+            </div>
           </div>
-          <button
-            className="mt-4 px-4 py-2 text-white rounded-lg bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-            onClick={handleSubmit}
-          >
-            Post
-          </button>
-        </div>
-      </div>
+        </>
+      )}
     </div>
   );
 };
