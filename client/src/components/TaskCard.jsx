@@ -5,7 +5,7 @@ import ShowTaskDetailsModal from "./channel/showTaskdetailsModal";
 import AddTaskModal from "./channel/AddTaskModal";
 import ReminderModal from "./channel/ReminderModal";
 
-const TaskCard = ({ channel, change, setChange, removeTask, tasks }) => {
+const TaskCard = ({ channel, change, setChange, removeTask, tasks, user }) => {
   const handleStatusChange = (e) => {
     // Logic to handle status change
   };
@@ -46,14 +46,19 @@ const TaskCard = ({ channel, change, setChange, removeTask, tasks }) => {
                 </div>
 
                 <UpdateTaskModal />
-                <button
-                  type="button"
-                  className="inline-block bg-red-500 rounded p-1 px-2 ml-2 text-xs font-medium uppercase leading-normal text-white transition duration-150 ease-in-out hover:bg-red-500 hover:text-white focus:outline-none focus:bg-red-600 focus:text-white"
-                  onClick={() => removeTask(task._id)}
-                >
-                  Remove
-                </button>
-                <ReminderModal />
+                {user.data?.user?._id == channel?.creator && (
+                  <>
+                    <button
+                      type="button"
+                      className="inline-block bg-red-500 rounded p-1 px-2 ml-2 text-xs font-medium uppercase leading-normal text-white transition duration-150 ease-in-out hover:bg-red-500 hover:text-white focus:outline-none focus:bg-red-600 focus:text-white"
+                      onClick={() => removeTask(task._id)}
+                    >
+                      Remove
+                    </button>
+                    <ReminderModal />
+                  </>
+                )}
+
                 <span className="pl-2">
                   <ShowTaskDetailsModal task={task} />
                 </span>

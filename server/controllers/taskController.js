@@ -2,6 +2,8 @@ const ErrorHandler = require("../utils/errorHandler");
 
 const Task = require("../models/taskModel");
 
+const User = require("../models/userModel");
+
 // POST task
 const postTask = async (req, res) => {
   try {
@@ -18,8 +20,10 @@ const postTask = async (req, res) => {
 // GET single task
 const getAssignedTask = async (req, res) => {
   try {
+    console.log(req.user);
+    const user = await User.findById(req.user.id);
     const tasks = await Task.find({
-      assigned_to: req.user.id,
+      assigned_to: user.email,
       project: req.params.channelId,
     });
     res.status(200).json({ success: true, message: "tasks fetched", tasks });

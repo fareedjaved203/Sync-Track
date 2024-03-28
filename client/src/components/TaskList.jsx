@@ -7,7 +7,7 @@ import AddTaskModal from "./channel/AddTaskModal";
 
 const { Option } = Select;
 
-const TaskList = ({ channel, change, setChange, removeTask, tasks }) => {
+const TaskList = ({ channel, change, setChange, removeTask, tasks, user }) => {
   return (
     <section className="text-gray-600 body-font">
       <div className="w-full flex justify-content-end">
@@ -51,17 +51,25 @@ const TaskList = ({ channel, change, setChange, removeTask, tasks }) => {
               <div className="flex items-center justify-between p-2">
                 <div>
                   <UpdateTaskModal />
-                  <button
-                    className="bg-red-500 text-white px-2 py-1 rounded-md focus:outline-none ml-2"
-                    onClick={() => removeTask(task._id)}
-                  >
-                    Remove
-                  </button>
+                  {user.data?.user?._id == channel?.creator && (
+                    <>
+                      <button
+                        className="bg-red-500 text-white px-2 py-1 rounded-md focus:outline-none ml-2"
+                        onClick={() => removeTask(task._id)}
+                      >
+                        Remove
+                      </button>
+                    </>
+                  )}
                 </div>
                 <div>
-                  <span className="mr-2">
-                    <ReminderModal />
-                  </span>
+                  {user.data?.user?._id == channel?.creator && (
+                    <>
+                      <span className="mr-2">
+                        <ReminderModal />
+                      </span>
+                    </>
+                  )}
                   <span>
                     <ShowTaskDetailsModal task={task} />
                   </span>

@@ -3,7 +3,11 @@ import { Tabs } from "antd";
 import TaskCard from "./TaskCard";
 import TaskList from "./TaskList";
 import { useSelector } from "react-redux";
-import { getAllTasksApi, getMyTasksApi } from "../api/task/taskApi";
+import {
+  deleteTaskApi,
+  getAllTasksApi,
+  getMyTasksApi,
+} from "../api/task/taskApi";
 
 const { TabPane } = Tabs;
 
@@ -20,19 +24,21 @@ const TaskViewOptions = ({ channel }) => {
         console.log(data);
       } else {
         const data = await getMyTasksApi(channel?._id);
-        setTasks(data?.data);
+        setTasks(data?.data?.tasks);
         console.log(data);
       }
     };
     getTasks();
-  }, [channel]);
+  }, [channel, change]);
 
-  const removeTask = (id) => {};
+  const removeTask = async (id) => {
+    const data = await deleteTaskApi(id);
+    console.log(data);
+    setChange(!change);
+  };
   const onChange = (key) => {
     console.log(key);
   };
-
-  useEffect(() => {}, []);
 
   return (
     <Tabs onChange={onChange} type="card">
@@ -43,6 +49,7 @@ const TaskViewOptions = ({ channel }) => {
           setChange={setChange}
           removeTask={removeTask}
           tasks={tasks}
+          user={user}
         />
       </TabPane>
       <TabPane tab="List View" key="list">
@@ -52,6 +59,7 @@ const TaskViewOptions = ({ channel }) => {
           setChange={setChange}
           removeTask={removeTask}
           tasks={tasks}
+          user={user}
         />
       </TabPane>
     </Tabs>
