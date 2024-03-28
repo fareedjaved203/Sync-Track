@@ -70,7 +70,8 @@ const Team = ({ channel }) => {
                     <p className="text-gray-500">{user?.role}</p>
                     {show &&
                       user?.role !== "project manager" &&
-                      user.status == "working" && (
+                      user?.status == "working" &&
+                      user?.request == "accepted" && (
                         <div className="flex space-x-1 mt-4">
                           <GiveFeedBackModal
                             userId={user?.user?._id}
