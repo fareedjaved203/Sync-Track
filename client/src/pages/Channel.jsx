@@ -40,7 +40,11 @@ const Channel = () => {
         key: "2",
         children: <Milestone channel={channel} />,
       },
-      { label: "Tasks", key: "3", children: <TaskViewOptions /> },
+      {
+        label: "Tasks",
+        key: "3",
+        children: <TaskViewOptions channel={channel} />,
+      },
       { label: "Standups", key: "4", children: <StandUps channel={channel} /> },
       { label: "Progress", key: "5", children: <Progress /> },
       {

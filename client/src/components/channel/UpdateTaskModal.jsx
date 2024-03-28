@@ -1,76 +1,47 @@
-import { useState, useEffect } from "react";
-import { Modal, Form, Input, Button, message, DatePicker } from "antd";
-import { useFormik } from "formik";
-import * as Yup from "yup";
-import { updateChannelApi } from "../../api/channel/channelApi";
-import { MdEditDocument } from "react-icons/md";
+import { useState } from "react";
+import { Modal, Form, Input, Button, message, DatePicker, Select } from "antd";
+import { MdOutlineAddCircleOutline } from "react-icons/md";
+import { createAndUpdateMilestoneApi } from "../../api/milestone/milestoneApi";
 
 const UpdateTaskModal = ({ channel, change, setChange }) => {
-  console.log(channel);
+  const { Option } = Select;
   const [modalVisible, setModalVisible] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
   const [confirmLoading, setConfirmLoading] = useState(false);
+  console.log(channel);
+
+  const priorities = ["High", "Medium", "Low"];
+  const statuses = ["pending", "completed", "accepted"];
+  const users = ["User1", "User2", "User3"];
 
   const info = () => {
-    messageApi.success("Channel Created Successfully");
+    messageApi.success("Task Added Successfully");
   };
 
-  const error = () => {
-    messageApi.error("Channel Name already exists");
-  };
-
-  const validationSchema = Yup.object().shape({
-    channel: Yup.string().required("Name is required"),
-    name: Yup.string().required("Project name is required"),
-    description: Yup.string().required("Project description is required"),
-  });
-
-  const formik = useFormik({
-    initialValues: {
-      channel: "",
-      name: "",
-      description: "",
-      startDate: "",
-      endDate: "",
-    },
-    validationSchema: validationSchema,
-    onSubmit: async (values) => {
-      console.log(values);
-      handleOk(values);
-    },
-  });
-
-  useEffect(() => {
-    if (channel) {
-      formik.setValues({
-        channel: channel?.channel,
-        name: channel?.name,
-        description: channel?.description,
-        startDate: channel?.startDate,
-        endDate: channel?.endDate,
-      });
-    }
-  }, [channel]);
-
-  const handleOk = async (values) => {
-    setConfirmLoading(true);
+  const onFinish = async (values) => {
+    const startDate = values.startDate.format();
+    const endDate = values.endDate.format();
+    const channelData = new FormData();
+    channelData.append("name", values.name);
+    channelData.append("description", values.description);
+    channelData.append("startDate", startDate);
+    channelData.append("endDate", endDate);
+    channelData.append("project", channel?._id);
     try {
-      const channelData = new FormData();
-      for (const key in values) {
-        channelData.append(key, values[key]);
-      }
-      const data = await updateChannelApi(channel?._id, channelData);
-      if (data) {
+      const data = await createAndUpdateMilestoneApi(channelData);
+      console.log(data);
+      if (data?.data?.success) {
         info();
+        setChange(!change);
       } else {
-        error();
+        messageApi.error(data.response?.data?.message);
       }
     } catch (error) {
-      error();
+      console.log(error);
+      messageApi.error(error.response?.data?.message);
     }
     setConfirmLoading(false);
     setModalVisible(false);
-    setChange(!change);
   };
 
   return (
@@ -86,92 +57,90 @@ const UpdateTaskModal = ({ channel, change, setChange }) => {
         Update
       </button>
       <Modal
-        title="Channel Name"
+        title="Task"
         visible={modalVisible}
         onCancel={() => setModalVisible(false)}
         footer={null}
         confirmLoading={confirmLoading}
-        onOk={formik?.handleSubmit}
       >
-        <Form onFinish={formik?.handleSubmit}>
-          <Form.Item
-            name="channel"
-            help={formik?.touched.channel && formik?.errors.channel}
-            validateStatus={
-              formik?.touched.channel && formik?.errors.channel ? "error" : ""
-            }
-          >
-            <Input type="text" {...formik?.getFieldProps("channel")} />
-          </Form.Item>
-          <h2>Project Description</h2>
+        <Form onFinish={onFinish}>
           <Form.Item
             name="name"
-            help={formik?.touched.name && formik?.errors.name}
-            validateStatus={
-              formik?.touched.name && formik?.errors.name ? "error" : ""
-            }
+            rules={[{ required: true, message: "Please enter task name" }]}
           >
-            <Input
-              type="text"
-              {...formik?.getFieldProps("name")}
-              placeholder="Project Name"
-            />
+            <Input placeholder="Task Name" />
           </Form.Item>
+
           <Form.Item
             name="description"
-            help={formik?.touched.description && formik?.errors.description}
-            validateStatus={
-              formik?.touched.description && formik?.errors.description
-                ? "error"
-                : ""
-            }
+            rules={[
+              { required: true, message: "Please enter task description" },
+            ]}
           >
-            <Input
-              type="text"
-              {...formik?.getFieldProps("description")}
-              placeholder="Project Description"
-            />
+            <Input placeholder="Task description" />
           </Form.Item>
+
+          <Form.Item
+            name="priority"
+            rules={[{ required: true, message: "Please select task priority" }]}
+          >
+            <Select placeholder="Select a priority">
+              {priorities.map((priority) => (
+                <Option key={priority} value={priority}>
+                  {priority}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+
+          <Form.Item
+            name="status"
+            rules={[{ required: true, message: "Please select task status" }]}
+          >
+            <Select placeholder="Select a status">
+              {statuses.map((status) => (
+                <Option key={status} value={status}>
+                  {status}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+
+          <Form.Item
+            name="assigned_to"
+            rules={[{ required: true, message: "Please select a user" }]}
+          >
+            <Select placeholder="Select a user">
+              {users.map((user) => (
+                <Option key={user} value={user}>
+                  {user}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+
           <Form.Item
             name="startDate"
-            help={formik?.touched.startDate && formik?.errors.startDate}
-            validateStatus={
-              formik?.touched.startDate && formik?.errors.startDate
-                ? "error"
-                : ""
-            }
+            rules={[{ required: true, message: "Please select start date" }]}
           >
             <DatePicker
-              {...formik?.getFieldProps("startDate")}
               placeholder="Start Date"
-              format="YYYY-MM-DD"
-              onChange={(value) => {
-                formik?.setFieldValue(
-                  "startDate",
-                  value ? value.format("YYYY-MM-DD") : ""
-                );
-              }}
+              showTime
+              format="YYYY-MM-DD HH:mm:ss"
             />
           </Form.Item>
+
           <Form.Item
             name="endDate"
-            help={formik?.touched.endDate && formik?.errors.endDate}
-            validateStatus={
-              formik?.touched.endDate && formik?.errors.endDate ? "error" : ""
-            }
+            rules={[{ required: true, message: "Please select end date" }]}
           >
             <DatePicker
-              {...formik?.getFieldProps("endDate")}
               placeholder="End Date"
-              format="YYYY-MM-DD"
-              onChange={(value) => {
-                formik?.setFieldValue(
-                  "endDate",
-                  value ? value.format("YYYY-MM-DD") : ""
-                );
-              }}
+              showTime
+              format="YYYY-MM-DD HH:mm:ss"
             />
           </Form.Item>
+
           <Form.Item>
             <Button
               type="primary"

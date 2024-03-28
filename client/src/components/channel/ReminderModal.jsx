@@ -1,64 +1,33 @@
 import { useState } from "react";
-import { Modal, Form, Input, Button, message, DatePicker } from "antd";
-import { useFormik } from "formik";
-import * as Yup from "yup";
-import { createChannelApi } from "../../api/channel/channelApi";
+import { Modal, Form, Input, Button, message } from "antd";
 import { MdOutlineAddCircleOutline } from "react-icons/md";
+import { createAndUpdateMilestoneApi } from "../../api/milestone/milestoneApi";
 
-const ReminderModal = ({ change, setChange }) => {
+const ReminderModal = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
   const [confirmLoading, setConfirmLoading] = useState(false);
 
   const info = () => {
-    messageApi.success("Channel Created Successfully");
+    messageApi.success("Task Added Successfully");
   };
 
-  const error = () => {
-    messageApi.error("Channel Name already exists");
-  };
-
-  const validationSchema = Yup.object().shape({
-    channel: Yup.string().required("Name is required"),
-    name: Yup.string().required("Project name is required"),
-    description: Yup.string().required("Project description is required"),
-  });
-
-  const formik = useFormik({
-    initialValues: {
-      channel: "",
-      name: "",
-      description: "",
-      startDate: "",
-      endDate: "",
-    },
-    validationSchema: validationSchema,
-    onSubmit: async (values) => {
-      console.log(values);
-      handleOk(values);
-    },
-  });
-
-  const handleOk = async (values) => {
-    setConfirmLoading(true);
+  const onFinish = async (values) => {
+    const channelData = new FormData();
     try {
-      const channelData = new FormData();
-      for (const key in values) {
-        channelData.append(key, values[key]);
-      }
-      const data = await createChannelApi(channelData);
+      const data = await createAndUpdateMilestoneApi(channelData);
       console.log(data);
-      if (data) {
+      if (data?.data?.success) {
         info();
       } else {
-        error();
+        messageApi.error(data.response?.data?.message);
       }
     } catch (error) {
-      error();
+      console.log(error);
+      messageApi.error(error.response?.data?.message);
     }
     setConfirmLoading(false);
     setModalVisible(false);
-    setChange(!change);
   };
 
   return (
@@ -66,96 +35,30 @@ const ReminderModal = ({ change, setChange }) => {
       {contextHolder}
       <button
         type="button"
-        className="mt-4 bg-red-600 text-white px-4 py-2 rounded-md shadow-md hover:bg-info-600 transition duration-300 ease-in-out"
+        className="bg-red-600 inline-block rounded p-3 py-2 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#54b4d3] transition duration-150 ease-in-out hover:bg-info-600 hover:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] focus:bg-info-600 focus:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] focus:outline-none focus:ring-0 active:bg-info-700 active:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(84,180,211,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.2),0_4px_18px_0_rgba(84,180,211,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.2),0_4px_18px_0_rgba(84,180,211,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.2),0_4px_18px_0_rgba(84,180,211,0.1)]"
+        data-twe-ripple-init
+        data-twe-ripple-color="light"
         onClick={() => setModalVisible(true)}
       >
-        Send Reminder
+        Set Reminder
       </button>
       <Modal
-        title="Channel Name"
+        title="Task"
         visible={modalVisible}
         onCancel={() => setModalVisible(false)}
         footer={null}
         confirmLoading={confirmLoading}
-        onOk={formik.handleSubmit} // Call formik's submit function on OK
       >
-        <Form onFinish={formik.handleSubmit}>
-          <Form.Item
-            name="channel"
-            help={formik.touched.channel && formik.errors.channel}
-            validateStatus={
-              formik.touched.channel && formik.errors.channel ? "error" : ""
-            }
-          >
-            <Input type="text" {...formik.getFieldProps("channel")} />
-          </Form.Item>
-          <h2>Project Description</h2>
-          <Form.Item
-            name="name"
-            help={formik.touched.name && formik.errors.name}
-            validateStatus={
-              formik.touched.name && formik.errors.name ? "error" : ""
-            }
-          >
-            <Input
-              type="text"
-              {...formik.getFieldProps("name")}
-              placeholder="Project Name"
-            />
-          </Form.Item>
+        <Form onFinish={onFinish}>
           <Form.Item
             name="description"
-            help={formik.touched.description && formik.errors.description}
-            validateStatus={
-              formik.touched.description && formik.errors.description
-                ? "error"
-                : ""
-            }
+            rules={[
+              { required: true, message: "Please enter task description" },
+            ]}
           >
-            <Input
-              type="text"
-              {...formik.getFieldProps("description")}
-              placeholder="Project Description"
-            />
+            <Input placeholder="Task description" />
           </Form.Item>
-          <Form.Item
-            name="startDate"
-            help={formik.touched.startDate && formik.errors.startDate}
-            validateStatus={
-              formik.touched.startDate && formik.errors.startDate ? "error" : ""
-            }
-          >
-            <DatePicker
-              {...formik.getFieldProps("startDate")}
-              placeholder="Start Date"
-              format="YYYY-MM-DD"
-              onChange={(value) => {
-                formik.setFieldValue(
-                  "startDate",
-                  value ? value.format("YYYY-MM-DD") : ""
-                );
-              }}
-            />
-          </Form.Item>
-          <Form.Item
-            name="endDate"
-            help={formik.touched.endDate && formik.errors.endDate}
-            validateStatus={
-              formik.touched.endDate && formik.errors.endDate ? "error" : ""
-            }
-          >
-            <DatePicker
-              {...formik.getFieldProps("endDate")}
-              placeholder="End Date"
-              format="YYYY-MM-DD"
-              onChange={(value) => {
-                formik.setFieldValue(
-                  "endDate",
-                  value ? value.format("YYYY-MM-DD") : ""
-                );
-              }}
-            />
-          </Form.Item>
+
           <Form.Item>
             <Button
               type="primary"

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Modal, Button, message, DatePicker } from "antd";
 import { MdEditDocument } from "react-icons/md";
 
-const ShowTaskDetailsModal = () => {
+const ShowTaskDetailsModal = ({ task }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
   const [confirmLoading, setConfirmLoading] = useState(false);
@@ -37,26 +37,24 @@ const ShowTaskDetailsModal = () => {
         ]}
       >
         <div className="mb-4">
-          <p className="text-lg font-semibold mb-1">Project Name:</p>
-          <p className="text-gray-800">Sample Project</p>
-        </div>
-        <div className="mb-4">
           <p className="text-lg font-semibold mb-1">Task Name:</p>
-          <p className="text-gray-800">Sample Task</p>
+          <p className="text-gray-800">{task?.name}</p>
         </div>
         <div className="mb-4">
           <p className="text-lg font-semibold mb-1">Detailed Description:</p>
-          <p className="text-gray-800">
-            This is a sample description for the task.
-          </p>
+          <p className="text-gray-800">{task?.description}</p>
         </div>
         <div className="mb-4">
           <p className="text-lg font-semibold mb-1">Status:</p>
-          <p className="text-green-600 font-semibold">Completed</p>
+          <p className="text-green-600 font-semibold">{task?.status}</p>
+        </div>
+        <div className="mb-4">
+          <p className="text-lg font-semibold mb-1">Priority:</p>
+          <p className="text-green-600 font-semibold">{task?.priority}</p>
         </div>
         <div className="mb-4">
           <p className="text-lg font-semibold mb-1">Assigned To:</p>
-          <p className="text-blue-600">John Doe</p>
+          <p className="text-blue-600">{task?.assigned_to}</p>
         </div>
         <div className="mb-4">
           <p className="text-lg font-semibold mb-1">Start Date:</p>

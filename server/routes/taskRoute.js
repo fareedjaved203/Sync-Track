@@ -3,17 +3,17 @@ const {
   postTask,
   deleteTask,
   updateTask,
-  getSingleTask,
+  getAssignedTask,
   getAllTasks,
-} = require("../controllers/userController");
+} = require("../controllers/taskController");
 
 const { isAuthenticatedUser, authorizeRoles } = require("../middlewares/auth");
 
 const router = express.Router();
 
 router.post("/task", isAuthenticatedUser, postTask);
-router.get("/task/:id", isAuthenticatedUser, getSingleTask);
-router.get("/all-tasks", isAuthenticatedUser, getAllTasks);
+router.get("/mytasks/:channelId", isAuthenticatedUser, getAssignedTask);
+router.get("/tasks/:id", isAuthenticatedUser, getAllTasks);
 router.delete("/task/:id", isAuthenticatedUser, deleteTask);
 router.put("/task/:id", isAuthenticatedUser, updateTask);
 

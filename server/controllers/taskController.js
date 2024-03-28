@@ -2,24 +2,27 @@ const ErrorHandler = require("../utils/errorHandler");
 
 const Task = require("../models/taskModel");
 
-const cloudinary = require("cloudinary");
-
 // POST task
 const postTask = async (req, res) => {
   try {
-    // Your logic here
-    res.status(201).json({ message: "Task created" });
+    console.log(req.body);
+    const task = await Task.create({
+      ...req.body,
+    });
+    res.status(201).json({ success: true, message: "Task created" });
   } catch (error) {
-    res.status(500).json({ error: error.toString() });
+    res.status(500).json({ success: false, message: error.toString() });
   }
 };
 
 // GET single task
-const getSingleTask = async (req, res) => {
+const getAssignedTask = async (req, res) => {
   try {
-    const id = req.params.id;
-    // Your logic here
-    res.status(200).json({ message: `Task ${id} fetched` });
+    const tasks = await Task.find({
+      assigned_to: req.user.id,
+      project: req.params.channelId,
+    });
+    res.status(200).json({ success: true, message: "tasks fetched", tasks });
   } catch (error) {
     res.status(500).json({ error: error.toString() });
   }
@@ -28,8 +31,9 @@ const getSingleTask = async (req, res) => {
 // GET all tasks
 const getAllTasks = async (req, res) => {
   try {
-    // Your logic here
-    res.status(200).json({ message: "All tasks fetched" });
+    // Assuming Task is your mongoose model
+    const tasks = await Task.find({ project: req.params.id });
+    res.status(200).json(tasks);
   } catch (error) {
     res.status(500).json({ error: error.toString() });
   }
@@ -39,8 +43,10 @@ const getAllTasks = async (req, res) => {
 const deleteTask = async (req, res) => {
   try {
     const id = req.params.id;
-    // Your logic here
-    res.status(200).json({ message: `Task ${id} deleted` });
+    const task = await Task.findByIdAndDelete(id);
+    if (task) {
+      res.status(200).json({ success: true, message: `Task deleted` });
+    }
   } catch (error) {
     res.status(500).json({ error: error.toString() });
   }
@@ -49,9 +55,20 @@ const deleteTask = async (req, res) => {
 // PUT task
 const updateTask = async (req, res) => {
   try {
-    const id = req.params.id;
-    // Your logic here
-    res.status(200).json({ message: `Task ${id} updated` });
+    const taskId = req.params.taskId;
+    const updatedData = req.body;
+
+    const task = await Task.findByIdAndUpdate(taskId, updatedData, {
+      new: true,
+    });
+
+    if (!task) {
+      return res
+        .status(404)
+        .json({ success: false, message: `Task not found` });
+    }
+
+    res.status(200).json({ success: true, message: `Task updated`, task });
   } catch (error) {
     res.status(500).json({ error: error.toString() });
   }
@@ -61,6 +78,6 @@ module.exports = {
   updateTask,
   deleteTask,
   getAllTasks,
-  getSingleTask,
+  getAssignedTask,
   postTask,
 };
