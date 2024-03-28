@@ -35,3 +35,12 @@ export const deleteTaskApi = async (id) => {
     console.log(error);
   }
 };
+
+export const updateTaskApi = async (id, taskData) => {
+  try {
+    const data = await apiService.put(`/task/${id}`, taskData);
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};

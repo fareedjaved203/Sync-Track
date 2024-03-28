@@ -7,7 +7,6 @@ const User = require("../models/userModel");
 // POST task
 const postTask = async (req, res) => {
   try {
-    console.log(req.body);
     const task = await Task.create({
       ...req.body,
     });
@@ -20,7 +19,6 @@ const postTask = async (req, res) => {
 // GET single task
 const getAssignedTask = async (req, res) => {
   try {
-    console.log(req.user);
     const user = await User.findById(req.user.id);
     const tasks = await Task.find({
       assigned_to: user.email,

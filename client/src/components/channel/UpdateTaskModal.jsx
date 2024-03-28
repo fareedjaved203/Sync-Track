@@ -1,34 +1,61 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Modal, Form, Input, Button, message, DatePicker, Select } from "antd";
 import { MdOutlineAddCircleOutline } from "react-icons/md";
+import { useSelector } from "react-redux";
 import { createAndUpdateMilestoneApi } from "../../api/milestone/milestoneApi";
+import { getAllUsersApi } from "../../api/user/userApi";
+import { postTaskApi, updateTaskApi } from "../../api/task/taskApi";
 
-const UpdateTaskModal = ({ channel, change, setChange }) => {
+const UpdateTaskModal = ({ channel, change, setChange, task }) => {
   const { Option } = Select;
   const [modalVisible, setModalVisible] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
   const [confirmLoading, setConfirmLoading] = useState(false);
-  console.log(channel);
+  const { user } = useSelector((state) => state.user);
+  const [users, setUsers] = useState([]);
+  const [projectManager, setProjectManager] = useState(false);
 
-  const priorities = ["High", "Medium", "Low"];
-  const statuses = ["pending", "completed", "accepted"];
-  const users = ["User1", "User2", "User3"];
+  const priorities = ["high", "medium", "low"];
+  const statusListManager = ["pending", "completed", "accepted", "revision"];
+  const statusList = ["pending", "completed"];
 
   const info = () => {
     messageApi.success("Task Added Successfully");
   };
 
+  useEffect(() => {
+    getAllUsersApi().then((data) => {
+      const store = data?.data?.users;
+      if (Array.isArray(store)) {
+        const filteredUsers = store.filter(
+          (user) => user.email !== "admin@gmail.com"
+        );
+        const searchItems = [...filteredUsers];
+        console.log(searchItems);
+        setUsers(searchItems);
+      }
+    });
+  }, [channel]);
+
+  useEffect(() => {
+    if (user.data.user._id == channel?.creator) {
+      setProjectManager(true);
+    }
+  }, [channel]);
+
   const onFinish = async (values) => {
-    const startDate = values.startDate.format();
-    const endDate = values.endDate.format();
+    console.log(values);
     const channelData = new FormData();
-    channelData.append("name", values.name);
-    channelData.append("description", values.description);
-    channelData.append("startDate", startDate);
-    channelData.append("endDate", endDate);
-    channelData.append("project", channel?._id);
+    if (projectManager) {
+      channelData.append("name", values.name);
+      channelData.append("description", values.description);
+      channelData.append("priority", values.priority);
+      channelData.append("feedback", values.feedback);
+      channelData.append("assigned_to", values.assigned_to);
+    }
+    channelData.append("status", values.status);
     try {
-      const data = await createAndUpdateMilestoneApi(channelData);
+      const data = await updateTaskApi(task?._id, channelData);
       console.log(data);
       if (data?.data?.success) {
         info();
@@ -64,82 +91,101 @@ const UpdateTaskModal = ({ channel, change, setChange }) => {
         confirmLoading={confirmLoading}
       >
         <Form onFinish={onFinish}>
-          <Form.Item
-            name="name"
-            rules={[{ required: true, message: "Please enter task name" }]}
-          >
-            <Input placeholder="Task Name" />
-          </Form.Item>
+          {projectManager ? (
+            <>
+              <Form.Item
+                name="name"
+                rules={[{ required: true, message: "Please enter task name" }]}
+                initialValue={task?.name}
+              >
+                <Input placeholder="Task Name" />
+              </Form.Item>
 
-          <Form.Item
-            name="description"
-            rules={[
-              { required: true, message: "Please enter task description" },
-            ]}
-          >
-            <Input placeholder="Task description" />
-          </Form.Item>
+              <Form.Item
+                name="description"
+                rules={[
+                  { required: true, message: "Please enter task description" },
+                ]}
+                initialValue={task?.description}
+              >
+                <Input placeholder="Task description" />
+              </Form.Item>
 
-          <Form.Item
-            name="priority"
-            rules={[{ required: true, message: "Please select task priority" }]}
-          >
-            <Select placeholder="Select a priority">
-              {priorities.map((priority) => (
-                <Option key={priority} value={priority}>
-                  {priority}
-                </Option>
-              ))}
-            </Select>
-          </Form.Item>
+              <Form.Item
+                name="priority"
+                rules={[
+                  { required: true, message: "Please select task priority" },
+                ]}
+                initialValue={task?.priority}
+              >
+                <Select placeholder="Select a priority">
+                  {priorities.map((priority) => (
+                    <Option key={priority} value={priority}>
+                      {priority}
+                    </Option>
+                  ))}
+                </Select>
+              </Form.Item>
 
-          <Form.Item
-            name="status"
-            rules={[{ required: true, message: "Please select task status" }]}
-          >
-            <Select placeholder="Select a status">
-              {statuses.map((status) => (
-                <Option key={status} value={status}>
-                  {status}
-                </Option>
-              ))}
-            </Select>
-          </Form.Item>
+              <Form.Item
+                name="assigned_to"
+                rules={[{ required: true, message: "Please select a user" }]}
+                initialValue={task?.assigned_to}
+              >
+                <Select placeholder="Select a user">
+                  {users.map((user) => (
+                    <Option key={user?._id} value={user?.email}>
+                      {user?.email}
+                    </Option>
+                  ))}
+                </Select>
+              </Form.Item>
 
-          <Form.Item
-            name="assigned_to"
-            rules={[{ required: true, message: "Please select a user" }]}
-          >
-            <Select placeholder="Select a user">
-              {users.map((user) => (
-                <Option key={user} value={user}>
-                  {user}
-                </Option>
-              ))}
-            </Select>
-          </Form.Item>
+              <Form.Item
+                name="feedback"
+                rules={[
+                  { required: true, message: "Please enter task feedback" },
+                ]}
+                initialValue={task?.feedback}
+              >
+                <Input placeholder="Task feedback" />
+              </Form.Item>
 
-          <Form.Item
-            name="startDate"
-            rules={[{ required: true, message: "Please select start date" }]}
-          >
-            <DatePicker
-              placeholder="Start Date"
-              showTime
-              format="YYYY-MM-DD HH:mm:ss"
-            />
-          </Form.Item>
-
-          <Form.Item
-            name="endDate"
-            rules={[{ required: true, message: "Please select end date" }]}
-          >
-            <DatePicker
-              placeholder="End Date"
-              showTime
-              format="YYYY-MM-DD HH:mm:ss"
-            />
-          </Form.Item>
+              <Form.Item
+                name="status"
+                rules={[
+                  { required: true, message: "Please select task status" },
+                ]}
+                initialValue={task?.status}
+              >
+                <Select placeholder="Select a status">
+                  {statusListManager.map((status) => (
+                    <Option key={status} value={status}>
+                      {status}
+                    </Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </>
+          ) : (
+            <>
+              <Form.Item
+                name="status"
+                rules={[
+                  { required: true, message: "Please select task status" },
+                ]}
+                initialValue={task?.status}
+              >
+                <Select placeholder="Select a status">
+                  {statusList.map((status) => (
+                    <Option key={status} value={status}>
+                      {status}
+                    </Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </>
+          )}
 
           <Form.Item>
             <Button
@@ -147,7 +193,7 @@ const UpdateTaskModal = ({ channel, change, setChange }) => {
               htmlType="submit"
               style={{ backgroundColor: "#2E2E2E", color: "white" }}
             >
-              Create
+              Update
             </Button>
           </Form.Item>
         </Form>

@@ -15,6 +15,6 @@ router.post("/task", isAuthenticatedUser, postTask);
 router.get("/mytasks/:channelId", isAuthenticatedUser, getAssignedTask);
 router.get("/tasks/:id", isAuthenticatedUser, getAllTasks);
 router.delete("/task/:id", isAuthenticatedUser, deleteTask);
-router.put("/task/:id", isAuthenticatedUser, updateTask);
+router.put("/task/:taskId", isAuthenticatedUser, updateTask);
 
 module.exports = router;

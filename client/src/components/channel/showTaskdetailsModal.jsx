@@ -52,6 +52,14 @@ const ShowTaskDetailsModal = ({ task }) => {
           <p className="text-lg font-semibold mb-1">Priority:</p>
           <p className="text-green-600 font-semibold">{task?.priority}</p>
         </div>
+        {task?.feedback && (
+          <>
+            <div className="mb-4">
+              <p className="text-lg font-semibold mb-1">Feedback:</p>
+              <p className="text-green-600 font-semibold">{task?.feedback}</p>
+            </div>
+          </>
+        )}
         <div className="mb-4">
           <p className="text-lg font-semibold mb-1">Assigned To:</p>
           <p className="text-blue-600">{task?.assigned_to}</p>
