@@ -303,8 +303,7 @@ const Structure = ({ children, showDrawer }) => {
           />
           <Content
             style={{
-              minHeight: 280,
-              background: "white",
+              backgroundColor: "white",
               marginLeft: "200px",
               marginTop: "25px",
             }}

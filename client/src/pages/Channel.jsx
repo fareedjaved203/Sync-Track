@@ -46,7 +46,6 @@ const Channel = () => {
         children: <TaskViewOptions channel={channel} />,
       },
       { label: "Standups", key: "4", children: <StandUps channel={channel} /> },
-      { label: "Progress", key: "5", children: <Progress /> },
       {
         label: "Announcements",
         key: "6",
