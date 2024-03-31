@@ -19,7 +19,7 @@ const UpdateTaskModal = ({ channel, change, setChange, task }) => {
   const statusList = ["pending", "completed"];
 
   const info = () => {
-    messageApi.success("Task Added Successfully");
+    messageApi.success("Task Updated Successfully");
   };
 
   useEffect(() => {
