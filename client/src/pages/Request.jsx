@@ -1,26 +1,52 @@
-import React, { useState } from "react";
 import MainLayout from "../components/layout/MainLayout";
-import { userResponseApi } from "../api/channel/channelApi";
+import { myChannelApi, userResponseApi } from "../api/channel/channelApi";
 import { useParams, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { message } from "antd";
+import { postNotificationApi } from "../api/notifications/notificationsApi";
 
 const Request = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.user);
-  console.log(user);
+  const [channel, setChannel] = useState([]);
+  const [messageApi, contextHolder] = message.useMessage();
+
+  useEffect(() => {
+    const myChannel = async () => {
+      if (id) {
+        const data = await myChannelApi(id);
+        setChannel(data?.data?.channels);
+      }
+    };
+    myChannel();
+  }, [id]);
 
   const requestResponse = async (response) => {
     const formData = new FormData();
     formData.append("request", response);
-    console.log(user.data.user._id);
     const data = await userResponseApi(id, user?.data?.user?._id, formData);
-    console.log(data);
-    alert("Request successful");
-    navigate("/");
+    if (data?.data?.success) {
+      messageApi.success(data.data.message);
+      const formData = new FormData();
+      formData.append("type", "information");
+      formData.append(
+        "description",
+        `${user.data.user.email} has ${response} your request`
+      );
+      formData.append("project", channel?.name);
+      formData.append("sender", user.data.user.email);
+      formData.append("receiver", channel?.creator);
+      await postNotificationApi(formData);
+    }
+    setTimeout(() => {
+      navigate("/");
+    }, 1000);
   };
   return (
     <MainLayout>
+      {contextHolder}
       <div className="min-h-screen bg-gray-100 flex flex-col justify-center py-8 sm:px-4 lg:px-6">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
@@ -29,7 +55,7 @@ const Request = () => {
                 Project Request
               </h2>
               <h4 className="text-center text-2xl font-extrabold text-gray-900">
-                Devsinc
+                {channel?.channel}
               </h4>
               <div className="mt-8">
                 <div className="mt-6">

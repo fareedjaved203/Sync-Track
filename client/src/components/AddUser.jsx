@@ -21,10 +21,6 @@ const AddUser = () => {
     messageApi.success("Invite Sent!");
   };
 
-  const error = () => {
-    messageApi.error("Email Not Found");
-  };
-
   const validationSchema = Yup.object().shape({
     email: Yup.string().email("Invalid email").required("Email is required"),
   });
@@ -48,7 +44,8 @@ const AddUser = () => {
       formData.append("email", values.email);
       formData.append("role", values.role);
       const data = await addUserApi(id, formData);
-      if (data.success) {
+      console.log(data);
+      if (data?.data?.success) {
         info();
         const formData = new FormData();
         formData.append("type", "information");
@@ -58,11 +55,10 @@ const AddUser = () => {
         const notification = await postNotificationApi(formData);
         console.log(notification);
       } else {
-        messageApi.error(data?.response?.data?.error);
+        messageApi.error(data?.response?.data?.message);
       }
     } catch (error) {
-      console.log(error);
-      messageApi.error(error.response?.data?.error);
+      messageApi.error(error?.response?.data?.message);
     }
     setConfirmLoading(false);
     setModalVisible(false);

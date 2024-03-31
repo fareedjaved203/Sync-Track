@@ -1,10 +1,8 @@
 import { useState, useEffect } from "react";
-import { Modal, Form, Input, Button, message, DatePicker, Select } from "antd";
-import { MdOutlineAddCircleOutline } from "react-icons/md";
+import { Modal, Form, Input, Button, message, Select } from "antd";
 import { useSelector } from "react-redux";
-import { createAndUpdateMilestoneApi } from "../../api/milestone/milestoneApi";
 import { getAllUsersApi } from "../../api/user/userApi";
-import { postTaskApi, updateTaskApi } from "../../api/task/taskApi";
+import { updateTaskApi } from "../../api/task/taskApi";
 import { postNotificationApi } from "../../api/notifications/notificationsApi";
 
 const UpdateTaskModal = ({ channel, change, setChange, task }) => {

@@ -87,6 +87,14 @@ const Team = ({ channel }) => {
                           </button>
                         </div>
                       )}
+                    {user.request == "pending" &&
+                      user.role != "project manager" && (
+                        <>
+                          <p className="text-gray-500 text-sm">
+                            {user?.request}
+                          </p>
+                        </>
+                      )}
                   </div>
                 </div>
               </div>

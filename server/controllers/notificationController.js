@@ -16,7 +16,7 @@ const postNotifications = async (req, res) => {
 const getAllNotifications = async (req, res) => {
   try {
     const data = await Notification.find({
-      receiver: req.params.email,
+      $or: [{ receiver: req.params.email }, { receiver: req.user.id }],
     });
     if (data) {
       res.status(200).json({ message: `All Notifications fetched`, data });

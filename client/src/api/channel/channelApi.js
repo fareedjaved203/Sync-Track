@@ -57,7 +57,7 @@ export const addUserApi = async (id, channelData) => {
     return data;
   } catch (error) {
     console.log(error);
-    return error.message;
+    return error;
   }
 };
 

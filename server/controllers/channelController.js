@@ -162,23 +162,30 @@ const addUser = async (req, res) => {
     const channelId = req.params.channelId;
     const email = req.body.email;
     const user = await User.find({ email });
-    if (user) {
+    if (user[0]) {
+      console.log(user);
       const channel = await Channel.findById(channelId);
       if (!channel) {
         return res.status(404).json({ error: "Channel not found" });
       }
 
       const userInChannel = channel.users.find(
-        (u) => u.user.toString() === user[0]._id.toString()
+        (u) => u.user && u.user.toString() === user[0]?._id?.toString()
       );
 
       if (userInChannel) {
-        userInChannel.status = "working";
-        userInChannel.request = "pending";
-        userInChannel.role = req.body.role;
+        if (userInChannel.request === "rejected") {
+          channel.users = channel.users.filter(
+            (u) => u.user.toString() !== user[0]._id.toString()
+          );
+        } else {
+          return res
+            .status(400)
+            .json({ success: false, message: "User already added" });
+        }
       } else {
         channel.users.push({
-          user: user[0]._id,
+          user: user[0]?._id,
           role: req.body.role,
         });
       }
@@ -186,7 +193,6 @@ const addUser = async (req, res) => {
       const updatedChannel = await channel.save();
 
       if (updatedChannel) {
-        console.log("hello");
         const invitationUrl = `${process.env.INVITATION_URL}/${channelId}`;
 
         const invitationData = {
@@ -219,37 +225,47 @@ const addUser = async (req, res) => {
         });
       }
     } else {
-      res.status(404).json({ message: error.toString() });
+      res.status(404).json({ success: false, message: "User not found" });
     }
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: error.toString() });
   }
 };
-
 const userResponse = async (req, res) => {
   try {
     const channelId = req.params.channelId;
     const userId = req.params.userId;
     const newRequestStatus = req.body.request;
 
-    const updatedChannel = await Channel.findOneAndUpdate(
-      { _id: channelId, "users.user": req.user.id },
-      {
-        $set: {
-          "users.$.request": newRequestStatus,
-        },
-      },
-      { new: true }
-    );
+    let updatedChannel = await Channel.findOne({
+      _id: channelId,
+      "users.user": req.user.id,
+    });
+
+    if (newRequestStatus === "rejected") {
+      updatedChannel.users = updatedChannel.users.filter(
+        (user) => user.user.toString() !== req.user.id
+      );
+    } else {
+      const userIndex = updatedChannel.users.findIndex(
+        (user) => user.user.toString() === req.user.id
+      );
+      if (userIndex !== -1) {
+        updatedChannel.users[userIndex].request = newRequestStatus;
+      }
+    }
+
+    updatedChannel = await updatedChannel.save();
 
     if (updatedChannel) {
       res
         .status(200)
-        .json({ success: true, message: `User request status updated` });
+        .json({ success: true, message: `Your request is sent to the team!` });
     }
   } catch (error) {
-    res.status(404).json({ success: false, message: error.toString() });
+    console.log(error);
+    res.status(404).json({ success: false, message: "Something went wrong" });
   }
 };
 

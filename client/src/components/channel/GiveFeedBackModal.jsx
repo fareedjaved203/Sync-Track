@@ -13,14 +13,6 @@ const GiveFeedBackModal = ({ generatePdf, userId, channelId, email }) => {
   const [confirmLoading, setConfirmLoading] = useState(false);
   const { Option } = Select;
 
-  const info = () => {
-    messageApi.success("Invite Sent!");
-  };
-
-  const error = () => {
-    messageApi.error("Email Not Found");
-  };
-
   const validationSchema = Yup.object().shape({
     feedback: Yup.string().required("Feedback is mandatory"),
   });
@@ -43,11 +35,6 @@ const GiveFeedBackModal = ({ generatePdf, userId, channelId, email }) => {
       formData.append("email", email);
       console.log(values.feedback);
       const data = await concludeTeamMemberApi(channelId, userId, formData);
-      if (!data?.error) {
-        info();
-      } else {
-        messageApi.error(data.error);
-      }
       console.log(data);
     } catch (error) {
       console.log(error);
