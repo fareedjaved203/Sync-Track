@@ -12,23 +12,31 @@ const ReminderModal = () => {
     messageApi.success("Task Added Successfully");
   };
 
-  const onFinish = async (values) => {
-    const channelData = new FormData();
-    try {
-      const data = await createAndUpdateMilestoneApi(channelData);
-      console.log(data);
-      if (data?.data?.success) {
-        info();
-      } else {
-        messageApi.error(data.response?.data?.message);
-      }
-    } catch (error) {
-      console.log(error);
-      messageApi.error(error.response?.data?.message);
-    }
-    setConfirmLoading(false);
-    setModalVisible(false);
-  };
+  // const onFinish = async (values) => {
+  //   try {
+  //     const formData = new FormData();
+  //     formData.append("type", "reminder");
+  //     formData.append(
+  //       "description",
+  //       `Task ${values.name} Updated in ${channel?.name}`
+  //     );
+  //     formData.append("project", channel?.name);
+  //     formData.append("sender", user.data.user.email);
+  //     formData.append("receiver", values.assigned_to);
+  //     const notification = await postNotificationApi(formData);
+  //     console.log(data);
+  //     if (data?.data?.success) {
+  //       info();
+  //     } else {
+  //       messageApi.error(data.response?.data?.message);
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //     messageApi.error(error.response?.data?.message);
+  //   }
+  //   setConfirmLoading(false);
+  //   setModalVisible(false);
+  // };
 
   return (
     <>

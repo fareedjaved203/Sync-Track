@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { createAndUpdateMilestoneApi } from "../../api/milestone/milestoneApi";
 import { getAllUsersApi } from "../../api/user/userApi";
 import { postTaskApi, updateTaskApi } from "../../api/task/taskApi";
+import { postNotificationApi } from "../../api/notifications/notificationsApi";
 
 const UpdateTaskModal = ({ channel, change, setChange, task }) => {
   const { Option } = Select;
@@ -60,6 +61,17 @@ const UpdateTaskModal = ({ channel, change, setChange, task }) => {
       if (data?.data?.success) {
         info();
         setChange(!change);
+        const formData = new FormData();
+        formData.append("type", "reminder");
+        formData.append(
+          "description",
+          `Task ${values.name} Updated in ${channel?.name}`
+        );
+        formData.append("project", channel?.name);
+        formData.append("sender", user.data.user.email);
+        formData.append("receiver", values.assigned_to);
+        const notification = await postNotificationApi(formData);
+        console.log(notification);
       } else {
         messageApi.error(data.response?.data?.message);
       }

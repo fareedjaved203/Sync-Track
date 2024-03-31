@@ -8,6 +8,7 @@ import {
   getAllTasksApi,
   getMyTasksApi,
 } from "../api/task/taskApi";
+import { postNotificationApi } from "../api/notifications/notificationsApi";
 
 const { TabPane } = Tabs;
 
@@ -31,10 +32,21 @@ const TaskViewOptions = ({ channel }) => {
     getTasks();
   }, [channel, change]);
 
-  const removeTask = async (id) => {
-    const data = await deleteTaskApi(id);
+  const removeTask = async (task) => {
+    const data = await deleteTaskApi(task._id);
     console.log(data);
     setChange(!change);
+    const formData = new FormData();
+    formData.append("type", "deletion");
+    formData.append(
+      "description",
+      "Your Task is deleted by the project manager"
+    );
+    formData.append("project", channel?.name);
+    formData.append("sender", user.data.user.email);
+    formData.append("receiver", task?.assigned_to);
+    const notification = await postNotificationApi(formData);
+    console.log(notification);
   };
   const onChange = (key) => {
     console.log(key);

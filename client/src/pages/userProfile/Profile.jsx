@@ -9,6 +9,7 @@ import Navbar from "../../components/layout/Navbar";
 import Footer from "../../components/layout/Footer";
 import { getUserDetailsApi } from "../../api/user/userApi";
 import { message } from "antd";
+import AddUser from "../../components/AddUser";
 
 const Profile = () => {
   const params = useParams();
@@ -102,13 +103,7 @@ const Profile = () => {
                       </>
                     ) : (
                       <>
-                        <button
-                          className="active:bg-black-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1 ease-linear transition-all duration-150"
-                          type="button"
-                          style={{ backgroundColor: "#2E2E30", color: "white" }}
-                        >
-                          Connect
-                        </button>
+                        <AddUser />
                       </>
                     )}
                   </div>

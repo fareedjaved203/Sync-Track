@@ -60,7 +60,7 @@ const TaskList = ({ channel, change, setChange, removeTask, tasks, user }) => {
                       <>
                         <button
                           className="bg-red-500 text-white px-2 py-1 rounded-md focus:outline-none ml-2"
-                          onClick={() => removeTask(task._id)}
+                          onClick={() => removeTask(task)}
                         >
                           Remove
                         </button>

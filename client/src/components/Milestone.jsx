@@ -51,8 +51,8 @@ const Milestone = ({ channel }) => {
 
   return (
     <>
-      <section className="text-gray-600 body-font overflow-hidden">
-        <div className="flex justify-content-end w-full">
+      <section className="text-gray-600 body-font overflow-hidden bg-gray-100">
+        <div className="flex justify-end w-full px-5 py-4">
           <AddMilestoneModal
             channel={channel}
             isUpdated={isUpdated}
@@ -60,23 +60,20 @@ const Milestone = ({ channel }) => {
           />
         </div>
         {milestone.map((item) => (
-          <div className="container px-5 py-8 mx-auto" key={item?._id}>
-            <div className="-my-8 divide-y-2 divide-gray-100">
-              <div className="py-8 flex flex-wrap md:flex-nowrap">
-                <>
-                  <div className="md:w-64 md:mb-0 mb-6 flex-shrink-0 flex flex-col">
-                    <span className="font-semibold title-font text-gray-700">
-                      {item?.title}
-                    </span>
-                    <span className="mt-1 text-gray-500 text-sm">
-                      {item?.startDate}
-                    </span>
-                  </div>
-                  <div className="md:flex-grow">
-                    <h2 className="text-2xl font-medium text-gray-900 title-font mb-2">
-                      {item?.title}
-                    </h2>
-                    <p className="leading-relaxed mb-4">{item?.description}</p>
+          <div key={item?._id} className="container px-5 py-4 mx-auto">
+            <div className="-my-4 divide-y-2 divide-gray-200">
+              <div className="py-4 flex flex-wrap md:flex-nowrap">
+                <div className="md:w-64 md:mb-0 mb-4 flex-shrink-0 flex flex-col">
+                  <h2 className="text-xl font-medium text-gray-900 title-font mb-2">
+                    {item?.title}
+                  </h2>
+                  <span className="mt-1 text-sm text-gray-600">
+                    {item?.startDate}
+                  </span>
+                </div>
+                <div className="md:flex-grow">
+                  <p className="leading-relaxed mb-4">{item?.description}</p>
+                  <div className="flex items-center justify-start">
                     <UpdateMilestoneModal
                       channel={item}
                       update={update}
@@ -85,14 +82,13 @@ const Milestone = ({ channel }) => {
                     />
                     <button
                       type="button"
-                      className="timeline-delete-btn inline-block rounded ml-3 p-3 py-1 text-xs font-medium uppercase leading-normal text-info transition duration-150 ease-in-out hover:border-info-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-info-600 focus:border-info-600 focus:text-info-600 focus:outline-none focus:ring-0 active:border-info-700 active:text-info-700 dark:hover:bg-neutral-100 dark:hover:bg-opacity-10"
-                      data-twe-ripple-init
+                      className="ml-3 px-3 py-1 text-sm font-medium text-white uppercase bg-red-500 rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-400 transition duration-300 ease-in-out"
                       onClick={() => removeMilestone(item?._id)}
                     >
                       Remove
                     </button>
                   </div>
-                </>
+                </div>
               </div>
             </div>
           </div>

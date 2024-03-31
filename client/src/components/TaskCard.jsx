@@ -50,7 +50,7 @@ const TaskCard = ({ channel, change, setChange, removeTask, tasks, user }) => {
                       <button
                         type="button"
                         className="inline-block bg-red-500 rounded p-1 px-2 ml-2 text-xs font-medium uppercase leading-normal text-white transition duration-150 ease-in-out hover:bg-red-500 hover:text-white focus:outline-none focus:bg-red-600 focus:text-white"
-                        onClick={() => removeTask(task._id)}
+                        onClick={() => removeTask(task)}
                       >
                         Remove
                       </button>
