@@ -211,7 +211,7 @@ const Structure = ({ children, showDrawer }) => {
 
   return (
     <>
-      <Navbar showDrawer={showDrawer} />
+      <Navbar showDrawer={showDrawer} channel={channels} />
       <Layout className="h-screen w-screen">
         <Sider
           trigger={null}

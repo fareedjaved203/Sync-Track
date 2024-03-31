@@ -9,7 +9,7 @@ import { IoChatbubbleEllipses } from "react-icons/io5";
 
 let searchItems = [];
 
-const Navbar = ({ showDrawer }) => {
+const Navbar = ({ showDrawer, channel }) => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredItems, setFilteredItems] = useState(searchItems);
@@ -105,7 +105,7 @@ const Navbar = ({ showDrawer }) => {
           >
             <IoChatbubbleEllipses />
           </button>
-          <Notifications />
+          <Notifications channel={channel} />
 
           <button
             type="button"

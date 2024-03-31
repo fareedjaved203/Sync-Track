@@ -54,7 +54,11 @@ const TaskCard = ({ channel, change, setChange, removeTask, tasks, user }) => {
                       >
                         Remove
                       </button>
-                      <ReminderModal />
+                      <ReminderModal
+                        channel={channel}
+                        task={task}
+                        user={user}
+                      />
                     </>
                   )}
 

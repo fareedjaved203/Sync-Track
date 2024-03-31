@@ -62,7 +62,7 @@ const UpdateTaskModal = ({ channel, change, setChange, task }) => {
         info();
         setChange(!change);
         const formData = new FormData();
-        formData.append("type", "reminder");
+        formData.append("type", "improvement");
         formData.append(
           "description",
           `Task ${values.name} Updated in ${channel?.name}`

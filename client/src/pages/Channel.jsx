@@ -20,8 +20,7 @@ const Channel = () => {
   useEffect(() => {
     const getChannel = async () => {
       const data = await myChannelApi(id);
-      setChannel(data.data.channels);
-      console.log(data);
+      setChannel(data?.data?.channels);
     };
     getChannel();
   }, [id]);

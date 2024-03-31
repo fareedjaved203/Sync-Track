@@ -18,7 +18,7 @@ const Team = ({ channel }) => {
   useEffect(() => {
     const myTeam = async () => {
       const data = await getTeamApi(channel?._id);
-      const project_manager = data.data?.channels?.users?.find((user) => {
+      const project_manager = data?.data?.channels?.users?.find((user) => {
         return user.role === "project manager";
       });
       setProjectManager(project_manager?.user?._id);

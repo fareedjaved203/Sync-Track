@@ -45,6 +45,7 @@ const standUp = require("./routes/standUpRoute");
 const timeline = require("./routes/timelineRoute");
 const announcement = require("./routes/announcementRoute");
 const task = require("./routes/taskRoute");
+const notification = require("./routes/notificationsRoute");
 
 app.use("/api/v1", user);
 app.use("/api/v1", channel);
@@ -53,6 +54,7 @@ app.use("/api/v1", milestone);
 app.use("/api/v1", standUp);
 app.use("/api/v1", announcement);
 app.use("/api/v1", task);
+app.use("/api/v1", notification);
 
 //middleware for error
 app.use(errorMiddleware);

@@ -9,9 +9,9 @@ export const postNotificationApi = async (notificationData) => {
   }
 };
 
-export const getNotificationApi = async (name, email) => {
+export const getNotificationApi = async (email) => {
   try {
-    const data = await apiService.get(`/notifications/${name}/${email}`);
+    const data = await apiService.get(`/notifications/${email}`);
     return data;
   } catch (error) {
     console.log(error);

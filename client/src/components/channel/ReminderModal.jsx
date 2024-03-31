@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { Modal, Form, Input, Button, message } from "antd";
-import { MdOutlineAddCircleOutline } from "react-icons/md";
-import { createAndUpdateMilestoneApi } from "../../api/milestone/milestoneApi";
+import { postNotificationApi } from "../../api/notifications/notificationsApi";
 
-const ReminderModal = () => {
+const ReminderModal = ({ channel, task, user }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
   const [confirmLoading, setConfirmLoading] = useState(false);
@@ -12,31 +11,28 @@ const ReminderModal = () => {
     messageApi.success("Task Added Successfully");
   };
 
-  // const onFinish = async (values) => {
-  //   try {
-  //     const formData = new FormData();
-  //     formData.append("type", "reminder");
-  //     formData.append(
-  //       "description",
-  //       `Task ${values.name} Updated in ${channel?.name}`
-  //     );
-  //     formData.append("project", channel?.name);
-  //     formData.append("sender", user.data.user.email);
-  //     formData.append("receiver", values.assigned_to);
-  //     const notification = await postNotificationApi(formData);
-  //     console.log(data);
-  //     if (data?.data?.success) {
-  //       info();
-  //     } else {
-  //       messageApi.error(data.response?.data?.message);
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //     messageApi.error(error.response?.data?.message);
-  //   }
-  //   setConfirmLoading(false);
-  //   setModalVisible(false);
-  // };
+  const onFinish = async (values) => {
+    try {
+      const formData = new FormData();
+      formData.append("type", "reminder");
+      formData.append("description", values.description);
+      formData.append("project", channel?.name);
+      formData.append("sender", user.data.user.email);
+      formData.append("receiver", task.assigned_to);
+      const notification = await postNotificationApi(formData);
+      console.log(notification);
+      if (notification) {
+        info();
+      } else {
+        console.log("error");
+      }
+    } catch (error) {
+      console.log(error);
+      messageApi.error(error.response?.data?.message);
+    }
+    setConfirmLoading(false);
+    setModalVisible(false);
+  };
 
   return (
     <>

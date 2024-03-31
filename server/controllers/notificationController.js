@@ -1,4 +1,4 @@
-const Notification = require("../models/notficationsModel");
+const Notification = require("../models/notificationsModel");
 
 const postNotifications = async (req, res) => {
   try {
@@ -16,7 +16,6 @@ const postNotifications = async (req, res) => {
 const getAllNotifications = async (req, res) => {
   try {
     const data = await Notification.find({
-      project: req.params.channel,
       receiver: req.params.email,
     });
     if (data) {

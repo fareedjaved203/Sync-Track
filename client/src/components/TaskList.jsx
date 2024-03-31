@@ -71,7 +71,11 @@ const TaskList = ({ channel, change, setChange, removeTask, tasks, user }) => {
                     {user.data?.user?._id == channel?.creator && (
                       <>
                         <span className="mr-2">
-                          <ReminderModal />
+                          <ReminderModal
+                            channel={channel}
+                            task={task}
+                            user={user}
+                          />
                         </span>
                       </>
                     )}

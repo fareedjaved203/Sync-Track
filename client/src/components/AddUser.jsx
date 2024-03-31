@@ -2,15 +2,19 @@ import { useState } from "react";
 import { Modal, Form, Input, Button, message } from "antd";
 import { Select } from "antd";
 import { useFormik } from "formik";
+import { useSelector } from "react-redux";
 import * as Yup from "yup";
 import { useParams } from "react-router-dom";
 import { addUserApi } from "../api/channel/channelApi";
+import { postNotificationApi } from "../api/notifications/notificationsApi";
 
 const AddUser = () => {
   let { id } = useParams();
   const [modalVisible, setModalVisible] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
   const [confirmLoading, setConfirmLoading] = useState(false);
+  const { user } = useSelector((state) => state.user);
+
   const { Option } = Select;
 
   const info = () => {
@@ -46,6 +50,13 @@ const AddUser = () => {
       const data = await addUserApi(id, formData);
       if (data.success) {
         info();
+        const formData = new FormData();
+        formData.append("type", "information");
+        formData.append("description", `You have a new invitation`);
+        formData.append("sender", user.data.user.email);
+        formData.append("receiver", values.email);
+        const notification = await postNotificationApi(formData);
+        console.log(notification);
       } else {
         messageApi.error(data?.response?.data?.error);
       }
