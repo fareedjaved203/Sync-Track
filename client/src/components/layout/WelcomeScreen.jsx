@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 import MainLayout from "../layout/MainLayout";
 
 const WelcomeScreen = () => {
-  const { user } = useSelector((state) => state.user);
+  const user = useSelector((state) => state.user);
 
   const currentDate = new Date();
   const day = currentDate.getDate();

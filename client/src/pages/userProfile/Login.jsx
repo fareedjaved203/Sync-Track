@@ -1,5 +1,5 @@
 import { SiSaltproject } from "react-icons/si";
-import { Carousel, Alert, Space } from "antd";
+import { Carousel, Alert, Space, message } from "antd";
 import { Link } from "react-router-dom";
 import {
   FundTwoTone,
@@ -13,6 +13,13 @@ import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import { useState } from "react";
 import ForgotPasswordModal from "../../components/userProfile/ForgotPasswordModal";
+import { useDispatch } from "react-redux";
+import {
+  onLogin,
+  onLoginSuccess,
+  onLoginFailure,
+} from "../../redux/slices/userSlice";
+import setCookie from "../../helpers/setCookie";
 
 const schema = yup.object().shape({
   email: yup.string().email().required(),
@@ -21,6 +28,7 @@ const schema = yup.object().shape({
 
 const Login = () => {
   const [isValid, setIsValid] = useState(true);
+  const [messageApi, contextHolder] = message.useMessage();
   const navigate = useNavigate();
   const {
     register,
@@ -28,22 +36,44 @@ const Login = () => {
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
 
+  const dispatch = useDispatch();
+
   const onSubmit = async (data) => {
-    const loginSuccess = await loginUserApi(data);
-    if (loginSuccess?.data?.user?.role === "user") {
-      setIsValid(true);
-      navigate("/");
-      location.reload();
-    } else if (loginSuccess?.data?.user?.role === "admin") {
-      setIsValid(true);
-      navigate("/admin/dashboard");
-      location.reload();
-    } else {
+    dispatch(onLogin());
+
+    try {
+      const loginSuccess = await loginUserApi(data);
+
+      if (loginSuccess?.data?.user?.role === "user") {
+        setCookie("token", loginSuccess.data?.token, 1);
+        setCookie("user", JSON.stringify(loginSuccess.data?.user), 1);
+        dispatch(onLoginSuccess(loginSuccess.data.user));
+        setIsValid(true);
+        messageApi.success("Logged In Successfully");
+        setTimeout(() => {
+          navigate("/");
+        }, 1000);
+      } else if (loginSuccess?.data?.user?.role === "admin") {
+        dispatch(onLoginSuccess(loginSuccess.data.user));
+        setIsValid(true);
+        messageApi.success("Logged In Successfully");
+        setTimeout(() => {
+          navigate("/admin/dashboard");
+        }, 1000);
+      } else {
+        dispatch(onLoginFailure("Invalid credentials"));
+        setIsValid(false);
+        messageApi.error("Invalid credentials");
+      }
+    } catch (error) {
+      dispatch(onLoginFailure(error.message));
       setIsValid(false);
+      messageApi.error(error.message);
     }
   };
   return (
     <>
+      {contextHolder}
       <section className="text-gray-600 body-font">
         <div className="container px-5 py-10 mx-auto flex flex-wrap items-start">
           <div className="left-class mx-auto w-full lg:w-3/5 md:w-1/2 md:pr-16 lg:pr-0 pr-0">

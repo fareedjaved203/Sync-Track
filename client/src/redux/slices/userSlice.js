@@ -1,42 +1,58 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { loadUserApi } from "../../api/user/userApi";
-
-export const fetchUserDetails = createAsyncThunk(
-  "user/fetchUserDetails",
-  async (_, { rejectWithValue }) => {
-    try {
-      const data = await loadUserApi();
-      return data;
-    } catch (error) {
-      return rejectWithValue(error.message);
-    }
-  }
-);
+import { createSlice } from "@reduxjs/toolkit";
+import deleteCookie from "../../helpers/deleteCookie";
 
 const userSlice = createSlice({
   name: "user",
   initialState: {
-    user: {},
+    data: {
+      user: {},
+    },
     loading: false,
     error: null,
     isAuthenticated: false,
   },
-  reducers: {},
-  extraReducers: (builder) => {
-    builder
-      .addCase(fetchUserDetails.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(fetchUserDetails.fulfilled, (state, action) => {
-        state.loading = false;
-        state.user = action.payload;
-        state.isAuthenticated = !!action.payload;
-      })
-      .addCase(fetchUserDetails.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      });
+  reducers: {
+    onLogin: (state, action) => {
+      state.loading = true;
+    },
+    onLoginSuccess: (state, action) => {
+      state.loading = false;
+      state.data.user = action.payload;
+      state.isAuthenticated = !!action.payload;
+    },
+    onLoginFailure: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    onLogout: (state) => {
+      state.data.user = {};
+      state.isAuthenticated = false;
+      deleteCookie("token");
+      deleteCookie("user");
+    },
+    onReload: (state, action) => {
+      state.loading = true;
+    },
+    onReloadSuccess: (state, action) => {
+      state.loading = false;
+      state.data.user = action.payload;
+      state.isAuthenticated = !!action.payload;
+    },
+    onReloadFailure: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
   },
 });
+
+export const {
+  onLogin,
+  onLoginSuccess,
+  onLoginFailure,
+  onLogout,
+  onReload,
+  onReloadSuccess,
+  onReloadFailure,
+} = userSlice.actions;
 
 export default userSlice.reducer;

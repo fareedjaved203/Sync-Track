@@ -1,6 +1,12 @@
 import { SiSaltproject } from "react-icons/si";
 import { useState } from "react";
-import { Carousel, Alert, Space } from "antd";
+import { Carousel, Alert, Space, message } from "antd";
+import { useDispatch } from "react-redux";
+import {
+  onLogin,
+  onLoginSuccess,
+  onLoginFailure,
+} from "../../redux/slices/userSlice";
 import {
   FundTwoTone,
   PieChartTwoTone,
@@ -12,6 +18,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { registerUserApi } from "../../api/user/userApi";
 import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
+import setCookie from "../../helpers/setCookie";
 
 const schema = yup.object().shape({
   name: yup
@@ -27,8 +34,10 @@ const schema = yup.object().shape({
 
 const Signup = () => {
   const [emailAlreadyPresent, setEmailAlreadyPresent] = useState(false);
+  const [messageApi, contextHolder] = message.useMessage();
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
@@ -36,18 +45,27 @@ const Signup = () => {
   } = useForm({ resolver: yupResolver(schema) });
 
   const onSubmit = async (data) => {
+    dispatch(onLogin());
     const registerSuccess = await registerUserApi(data);
     if (registerSuccess) {
       setEmailAlreadyPresent(false);
-      navigate("/");
-      location.reload();
+      setCookie("token", registerSuccess.data?.token, 1);
+      setCookie("user", JSON.stringify(registerSuccess.data?.user), 1);
+      dispatch(onLoginSuccess(registerSuccess.data.user));
+      messageApi.success("User Registered Successfully");
+      setTimeout(() => {
+        navigate("/");
+      }, 1000);
     } else {
+      dispatch(onLoginFailure("Something went wrong"));
       setEmailAlreadyPresent(true);
+      messageApi.error("Registration failed");
     }
   };
 
   return (
     <>
+      {contextHolder}
       <section className="text-gray-600 body-font">
         <div className="container px-5 py-10 mx-auto flex flex-wrap items-start">
           <div className="left-class mx-auto w-full lg:w-3/5 md:w-1/2 md:pr-16 lg:pr-0 pr-0">

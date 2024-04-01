@@ -1,19 +1,19 @@
-import { useState } from "react";
-import { Route, Routes, Navigate } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
+
+import { useDispatch } from "react-redux";
+import {
+  onReload,
+  onReloadSuccess,
+  onReloadFailure,
+} from "../redux/slices/userSlice";
 
 import Login from "../pages/userProfile/Login";
 import Signup from "../pages/userProfile/Signup";
 import Profile from "../pages/userProfile/Profile";
-import Structure from "../components/layout/Structure";
 import Whiteboard from "../pages/whiteboard/Whiteboard";
 import Contact from "../pages/Contact";
-import Spinner from "../components/layout/Spinner";
 
-import { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { fetchUserDetails } from "../redux/slices/userSlice";
 import Error from "../pages/Error";
-import Testimonials from "../components/userProfile/Testimonials";
 import ResetPassword from "../pages/userProfile/ResetPassword";
 import Chat from "../pages/Chat";
 import AdminDashboard from "../pages/AdminDashboard";
@@ -24,69 +24,58 @@ import Home from "../components/video/home/Home";
 import VideoRoom from "../components/video/room/Room";
 import CertificatePage from "../pages/CertificatePage";
 import Request from "../pages/Request";
+import { useEffect } from "react";
+import getCookie from "../helpers/getCookie";
 
 const ComponentRoutes = () => {
   const dispatch = useDispatch();
 
-  const [isLoading, setIsLoading] = useState(true);
-
   useEffect(() => {
-    dispatch(fetchUserDetails()).then(() => setIsLoading(false));
+    const reloadUser = async () => {
+      dispatch(onReload());
+
+      try {
+        const userCookie = getCookie("user");
+        const userData = userCookie ? JSON.parse(userCookie) : null;
+
+        if (userData) {
+          dispatch(onReloadSuccess(userData));
+        }
+      } catch (error) {
+        dispatch(onReloadFailure(error.message));
+      }
+    };
+    reloadUser();
   }, [dispatch]);
-
-  const { isAuthenticated } = useSelector((state) => state.user);
-
   return (
     <>
-      {isLoading && <Spinner />}
-      {!isLoading && (
-        <Routes>
-          <Route
-            path="/"
-            element={
-              isAuthenticated ? (
-                <WelcomeScreen />
-              ) : (
-                <Navigate to="/signin" replace={true} />
-              )
-            }
-          />
-          <Route
-            path="/signin"
-            element={
-              isAuthenticated ? <Navigate to="/" replace={true} /> : <Login />
-            }
-          />
-          <Route
-            path="/signup"
-            element={
-              isAuthenticated ? <Navigate to="/" replace={true} /> : <Signup />
-            }
-          />
-          <Route path="/profile/:user" element={<Profile />} />
-          <Route path="/chat" element={<Chat />} />
-          <Route path="/whiteboard" element={<Whiteboard />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/password/reset/:token" element={<ResetPassword />} />
-          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+      <Routes>
+        <Route path="/" element={<WelcomeScreen />} />
+        <Route path="/signin" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/profile/:user" element={<Profile />} />
+        <Route path="/chat" element={<Chat />} />
+        <Route path="/whiteboard" element={<Whiteboard />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/password/reset/:token" element={<ResetPassword />} />
+        <Route path="/admin/dashboard" element={<AdminDashboard />} />
 
-          <Route path="/channel/:id" element={<Channel />} />
+        <Route path="/channel/:id" element={<Channel />} />
 
-          <Route path="/notifications" element={<Notifications />} />
+        <Route path="/notifications" element={<Notifications />} />
 
-          <Route path="/video" element={<Home />} />
-          <Route path="/video/:roomId" element={<VideoRoom />} />
+        <Route path="/video" element={<Home />} />
+        <Route path="/video/:roomId" element={<VideoRoom />} />
 
-          <Route
-            path="/certificate/:channelId/:userId"
-            element={<CertificatePage />}
-          />
+        <Route
+          path="/certificate/:channelId/:userId"
+          element={<CertificatePage />}
+        />
 
-          <Route path="/request/:id" element={<Request />} />
+        <Route path="/request/:id" element={<Request />} />
 
-          <Route path="*" element={<Error />} />
-        </Routes>
-      )}
+        <Route path="*" element={<Error />} />
+      </Routes>
     </>
   );
 };

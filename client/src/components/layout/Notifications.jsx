@@ -8,7 +8,7 @@ import { useParams } from "react-router-dom";
 const Notifications = ({ channel }) => {
   const { id } = useParams();
   const [open, setOpen] = useState(false);
-  const { user } = useSelector((state) => state.user);
+  const user = useSelector((state) => state.user);
   const [notifications, setNotifications] = useState([]);
   const showDrawer = () => {
     setOpen(true);
@@ -19,8 +19,8 @@ const Notifications = ({ channel }) => {
 
   useEffect(() => {
     const showNotifications = async () => {
-      console.log(user.data.user.email);
-      const data = await getNotificationApi(user.data.user.email);
+      console.log(user?.data?.user?.email);
+      const data = await getNotificationApi(user?.data?.user?.email);
       console.log(data);
       const reversedData = [...data?.data?.data].reverse();
       setNotifications(reversedData);

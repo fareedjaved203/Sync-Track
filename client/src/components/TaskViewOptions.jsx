@@ -13,7 +13,7 @@ import { postNotificationApi } from "../api/notifications/notificationsApi";
 const { TabPane } = Tabs;
 
 const TaskViewOptions = ({ channel }) => {
-  const { user } = useSelector((state) => state.user);
+  const user = useSelector((state) => state.user);
   const [change, setChange] = useState(false);
   const [tasks, setTasks] = useState([]);
 

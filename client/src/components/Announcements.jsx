@@ -10,7 +10,7 @@ import {
 import { useSelector } from "react-redux";
 
 const Announcements = ({ channel }) => {
-  const { user } = useSelector((state) => state.user);
+  const user = useSelector((state) => state.user);
   const [announcement, setAnnouncement] = useState("");
   const [announce, setAnnounce] = useState([]);
   const [update, isUpdate] = useState(false);

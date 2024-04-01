@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { message } from "antd";
 
 const StandUps = ({ channel }) => {
-  const { user } = useSelector((state) => state.user);
+  const user = useSelector((state) => state.user);
   const [msg, setMsg] = useState("");
   const [update, isUpdated] = useState(false);
   const [standup, setStandUps] = useState([]);

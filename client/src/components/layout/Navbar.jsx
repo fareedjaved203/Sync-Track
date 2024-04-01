@@ -2,21 +2,23 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { SiSaltproject } from "react-icons/si";
 import { getAllUsersApi, logoutUserApi } from "../../api/user/userApi";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useCookies } from "react-cookie";
 import Notifications from "./Notifications";
 import { IoChatbubbleEllipses } from "react-icons/io5";
+import { onLogout } from "../../redux/slices/userSlice";
 
 let searchItems = [];
 
 const Navbar = ({ showDrawer, channel }) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredItems, setFilteredItems] = useState(searchItems);
   const [showDropdown, setShowDropdown] = useState(false);
-  const [cookies, setCookie, removeCookie] = useCookies(["token"]);
 
-  const { user } = useSelector((state) => state.user);
+  const user = useSelector((state) => state.user);
+  console.log(user);
 
   useEffect(() => {
     getAllUsersApi().then((data) => {
@@ -52,8 +54,7 @@ const Navbar = ({ showDrawer, channel }) => {
 
   const handleLogout = async () => {
     await logoutUserApi();
-    removeCookie("token");
-    location.reload();
+    dispatch(onLogout());
   };
 
   return (

@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 const BackButton = () => {
   const navigate = useNavigate();
 
-  const { user } = useSelector((state) => state.user);
+  const user = useSelector((state) => state.user);
 
   const handleBack = () => {
     if (user?.data?.user?.role === "admin") {

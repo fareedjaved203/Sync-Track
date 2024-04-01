@@ -13,7 +13,7 @@ const AddUser = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const { user } = useSelector((state) => state.user);
+  const user = useSelector((state) => state.user);
 
   const { Option } = Select;
 

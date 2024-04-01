@@ -5,7 +5,7 @@ import { getTeamApi, removeTeamMemberApi } from "../api/team/teamApi";
 import { useSelector } from "react-redux";
 
 const Team = ({ channel }) => {
-  const { user } = useSelector((state) => state.user);
+  const user = useSelector((state) => state.user);
   const [messageApi, contextHolder] = message.useMessage();
   const [change, isChange] = useState(false);
   const [team, setTeam] = useState([]);

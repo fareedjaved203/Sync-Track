@@ -40,7 +40,7 @@ const Structure = ({ children, showDrawer }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredItems, setFilteredItems] = useState(searchItems);
   const [showDropdown, setShowDropdown] = useState(false);
-  const { user } = useSelector((state) => state.user);
+  const user = useSelector((state) => state.user);
 
   useEffect(() => {
     const getChannels = async () => {
@@ -138,7 +138,7 @@ const Structure = ({ children, showDrawer }) => {
       <ProjectOutlined />,
       channels.flatMap((channel, index) => {
         return channel.users
-          .filter((val) => val.user == user.data?.user?._id)
+          .filter((val) => val.user == user?.data?.user?._id)
           .map(() => {
             return getItem(
               channel.channel,

@@ -6,7 +6,7 @@ import Team from "./Team";
 import Progress from "./Progress";
 
 const ProjectOverview = ({ channel }) => {
-  const { user } = useSelector((state) => state.user);
+  const user = useSelector((state) => state.user);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
 

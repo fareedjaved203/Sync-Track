@@ -13,7 +13,7 @@ import AddUser from "../../components/AddUser";
 
 const Profile = () => {
   const params = useParams();
-  const { user } = useSelector((state) => state.user);
+  const user = useSelector((state) => state.user);
 
   const [showMore, setShowMore] = useState(false);
   const [name, setName] = useState("N/A");

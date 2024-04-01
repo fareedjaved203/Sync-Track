@@ -10,7 +10,7 @@ const UpdateTaskModal = ({ channel, change, setChange, task }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const { user } = useSelector((state) => state.user);
+  const user = useSelector((state) => state.user);
   const [users, setUsers] = useState([]);
   const [projectManager, setProjectManager] = useState(false);
 

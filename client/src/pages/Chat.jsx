@@ -21,7 +21,7 @@ const connectionOptions = {
 const socket = io(server, connectionOptions);
 
 const Chat = () => {
-  const { user } = useSelector((state) => state.user);
+  const user = useSelector((state) => state.user);
 
   const [api, contextHolder] = notification.useNotification();
 

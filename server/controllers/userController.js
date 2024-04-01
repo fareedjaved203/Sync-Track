@@ -26,7 +26,10 @@ const registerUser = async (req, res, next) => {
     const { name, email, password } = req.body;
     const emailAlreadyPresent = await User.findOne({ email });
     if (emailAlreadyPresent) {
-      return next(new ErrorHandler("Email Already Exists", 409));
+      res.status(409).json({
+        success: false,
+        message: "Email Already Exists",
+      });
     }
     const user = await User.create({
       name,
@@ -49,19 +52,27 @@ const loginUser = async (req, res, next) => {
   try {
     const { email, password } = req.body;
     if (!email || !password) {
-      return next(new ErrorHandler("Please Enter Email and Password"));
+      res.status(400).json({
+        success: false,
+        message: "Please enter both email and password",
+      });
     }
     const user = await User.findOne({ email }).select("+password");
 
     if (!user) {
-      return next(new ErrorHandler("Invalid Email or Password", 401));
+      res.status(401).json({
+        success: false,
+        message: "Invalid email or password",
+      });
     }
 
     const isPasswordMatched = await user.comparePassword(password);
 
     if (!isPasswordMatched) {
-      console.log("wrong pass");
-      return next(new ErrorHandler("Invalid Email or Password", 401));
+      res.status(401).json({
+        success: false,
+        message: "Invalid email or password",
+      });
     }
 
     sendToken(user, 200, res);
