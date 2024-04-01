@@ -18,7 +18,6 @@ const Navbar = ({ showDrawer, channel }) => {
   const [showDropdown, setShowDropdown] = useState(false);
 
   const user = useSelector((state) => state.user);
-  console.log(user);
 
   useEffect(() => {
     getAllUsersApi().then((data) => {
@@ -134,7 +133,7 @@ const Navbar = ({ showDrawer, channel }) => {
             style={{ top: "2.5rem" }}
           >
             <div className="px-4 py-3">
-              <span className="block text-sm text-gray-900 dark:text-white">
+              <span className="username block text-sm text-gray-900 dark:text-white">
                 {user && user?.data?.user?.name}
               </span>
               <span className="block text-sm  text-gray-500 truncate dark:text-gray-400">
@@ -145,7 +144,7 @@ const Navbar = ({ showDrawer, channel }) => {
               <li>
                 <Link
                   to={`/profile/${user?.data?.user?.email}`}
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                  className="dropdown block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
                 >
                   Profile
                 </Link>
@@ -154,7 +153,7 @@ const Navbar = ({ showDrawer, channel }) => {
               <li>
                 <Link
                   to="/contact"
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                  className="dropdown block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
                 >
                   Contact
                 </Link>
@@ -163,7 +162,7 @@ const Navbar = ({ showDrawer, channel }) => {
                 <Link
                   to="/signin"
                   onClick={handleLogout}
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-red-300 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                  className="dropdown block px-4 py-2 text-sm text-gray-700 hover:bg-red-300 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
                 >
                   Logout
                 </Link>

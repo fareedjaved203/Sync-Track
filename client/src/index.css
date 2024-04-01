@@ -24,3 +24,22 @@
 ::-webkit-scrollbar {
   display: none;
 }
+
+.signup{
+  color: white !important;
+}
+
+.signup-div{
+  background-color: blue !important;
+  color: white !important;
+  border-radius: 3px !important;
+  margin-top: 5px;
+}
+
+.dropdown, .username{
+  color: black !important;
+}
+
+.dropdown:hover{
+  color: white !important;
+}

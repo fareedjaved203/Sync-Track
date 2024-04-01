@@ -6,9 +6,11 @@ import ReminderModal from "./channel/ReminderModal";
 const TaskCard = ({ channel, change, setChange, removeTask, tasks, user }) => {
   return (
     <section className="text-gray-600 body-font">
+    {channel?.creator == user?.data?.user?._id && (<>
       <div className="w-full flex justify-content-end">
         <AddTaskModal change={change} setChange={setChange} channel={channel} />
       </div>
+    </>)}
       <div>
         <div className="flex flex-wrap -m-4">
           {tasks &&

@@ -32,7 +32,12 @@ const postChannel = async (req, res) => {
 const myChannels = async (req, res) => {
   try {
     const channels = await Channel.find({
-      users: { $elemMatch: { user: req.user.id } },
+      users: { 
+        $elemMatch: { 
+          user: req.user.id, 
+          status: { $ne: "disapproved" } 
+        } 
+      },
     });
     if (channels) {
       res.status(200).json({ message: `Channels fetched`, channels });

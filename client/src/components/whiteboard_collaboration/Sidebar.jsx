@@ -18,10 +18,9 @@ const Sidebar = ({ users, user, socket }) => {
         className="btn btn-dark btn-sm"
         onClick={openSideBar}
         style={{
-          position: "relative",
+          position: "absolute",
           top: "15%",
           left: "2%",
-          marginTop: "10px",
         }}
       >
         Active Users

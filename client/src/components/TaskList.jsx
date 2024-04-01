@@ -6,9 +6,11 @@ import AddTaskModal from "./channel/AddTaskModal";
 const TaskList = ({ channel, change, setChange, removeTask, tasks, user }) => {
   return (
     <section className="text-gray-600 body-font">
+    {channel?.creator == user?.data?.user?._id && (<>
       <div className="w-full flex justify-content-end">
         <AddTaskModal change={change} setChange={setChange} channel={channel} />
       </div>
+    </>)}
       <div className="flex flex-col items-center">
         {tasks &&
           tasks?.map((task) => (

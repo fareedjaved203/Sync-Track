@@ -3,11 +3,14 @@ import AddTimelineModal from "./channel/AddTimelineModal";
 import { useEffect, useState } from "react";
 import { deleteTimelineApi, getTimelineApi } from "../api/timeline/timelineApi";
 import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Timeline = ({ channel }) => {
   const { id } = useParams();
   const [timeline, setTimeline] = useState([]);
   const [update, isUpdated] = useState(false);
+  const user = useSelector((state) => state.user);
+
   useEffect(() => {
     const getTimeline = async () => {
       const data = await getTimelineApi(channel?._id);
@@ -38,13 +41,10 @@ const Timeline = ({ channel }) => {
       .toString()
       .padStart(2, "0")} / ${year}`;
 
-    console.log(formattedDate);
     return formattedDate;
   };
   const removeTimeline = async (id) => {
-    console.log(id);
-    const data = await deleteTimelineApi(id);
-    console.log(data);
+    await deleteTimelineApi(id);
     isUpdated(!update);
   };
   return (
@@ -53,11 +53,14 @@ const Timeline = ({ channel }) => {
         <h3 className="mb-6 ms-3 text-2xl font-bold text-neutral-700 dark:text-neutral-300">
           Project Timeline
         </h3>
+        {user?.data?.user?._id == channel?.creator && (<>
+
         <AddTimelineModal
           channel={channel}
           isUpdated={isUpdated}
           update={update}
         />
+        </>)}
       </div>
 
       <ol className="border-s-2 border-info-100">

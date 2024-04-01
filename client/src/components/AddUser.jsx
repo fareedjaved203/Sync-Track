@@ -49,7 +49,7 @@ const AddUser = () => {
         info();
         const formData = new FormData();
         formData.append("type", "information");
-        formData.append("description", `You have a new invitation`);
+        formData.append("description", `You have a new invitation, please check your email`);
         formData.append("sender", user.data.user.email);
         formData.append("receiver", values.email);
         const notification = await postNotificationApi(formData);

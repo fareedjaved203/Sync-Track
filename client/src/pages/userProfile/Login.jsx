@@ -186,11 +186,11 @@ const Login = () => {
             </form>
             <ForgotPasswordModal />
 
-            <div className="grow bg-gray-50 p-2 pb-2 text-center text-sm dark:bg-gray-700/50 md:px-12 bg:transparent w-[100%]">
+            <div className="signup-div grow bg-gray-50 p-2 pb-2 text-center text-sm dark:bg-gray-700/50 md:px-12 bg:transparent w-[100%]">
               Dont have an account? &nbsp;
               <Link
                 to="/signup"
-                className="font-medium text-indigo-600 hover:text-indigo-400 dark:text-indigo-400 dark:hover:text-indigo-300"
+                className="signup font-medium text-indigo-600 hover:text-indigo-400 dark:text-indigo-400 dark:hover:text-indigo-300"
               >
                 Sign up
               </Link>

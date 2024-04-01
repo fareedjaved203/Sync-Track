@@ -5,10 +5,12 @@ import {
   deleteMilestoneApi,
   getMilestoneApi,
 } from "../api/milestone/milestoneApi";
+import { useSelector } from "react-redux";
 
 const Milestone = ({ channel }) => {
   const [update, isUpdated] = useState(false);
   const [milestone, setMilestone] = useState([]);
+  const user = useSelector((state) => state.user);
 
   useEffect(() => {
     const getTimeline = async () => {
@@ -52,13 +54,19 @@ const Milestone = ({ channel }) => {
   return (
     <>
       <section className="text-gray-600 body-font overflow-hidden bg-gray-100">
-        <div className="flex justify-end w-full px-5 py-4">
+      <h3 className="ms-3 text-2xl font-bold text-neutral-700 dark:text-neutral-300">
+          Project Milestone
+        </h3>
+      {user.data.user._id == channel.creator && (<>
+
+        <div className="flex justify-end w-full px-5">
           <AddMilestoneModal
             channel={channel}
             isUpdated={isUpdated}
             update={update}
           />
         </div>
+      </>)}
         {milestone.map((item) => (
           <div key={item?._id} className="container px-5 py-4 mx-auto">
             <div className="-my-4 divide-y-2 divide-gray-200">
