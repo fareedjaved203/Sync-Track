@@ -11,8 +11,13 @@ const Team = ({ channel }) => {
   const [team, setTeam] = useState([]);
   const [projectManager, setProjectManager] = useState("");
   const [show, isShow] = useState(false);
-  const generatePdf = () => {
-    messageApi.success("Certificate generated Successfully");
+  const generatePdf = (type) => {
+    if (type == "conclude") {
+      messageApi.success("Certificate generated Successfully");
+    } else {
+      messageApi.success("User removed successfully");
+    }
+    isChange(!change);
   };
 
   useEffect(() => {
@@ -34,11 +39,6 @@ const Team = ({ channel }) => {
     }
   }, [projectManager]);
 
-  const removeMember = async (id) => {
-    const data = await removeTeamMemberApi(channel?._id, id);
-    isChange(!change);
-    console.log(data);
-  };
   return (
     <>
       {contextHolder}
@@ -49,9 +49,10 @@ const Team = ({ channel }) => {
               Our Team
             </h1>
             <p className="lg:w-2/3 mx-auto leading-relaxed text-base">
-              Whatever cardigan tote bag tumblr hexagon brooklyn asymmetrical
-              gentrify, subway tile poke farm-to-table. Franzen you probably
-              haven't heard of them.
+              Within our IT team, innovation and execution intertwine
+              effortlessly, crafting solutions that redefine possibilities. We
+              blend creativity and expertise to pave the way for technological
+              advancement and success.
             </p>
           </div>
           <div className="flex flex-wrap -m-2">

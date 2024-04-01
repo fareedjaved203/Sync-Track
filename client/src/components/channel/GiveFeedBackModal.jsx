@@ -52,9 +52,7 @@ const GiveFeedBackModal = ({
     }
     setConfirmLoading(false);
     setModalVisible(false);
-    if (type == "conclude") {
-      generatePdf();
-    }
+    generatePdf(type);
   };
 
   const pdf = () => {

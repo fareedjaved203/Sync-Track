@@ -28,6 +28,25 @@ const StandUps = ({ channel }) => {
     };
     getAllStandUps();
   }, [update, channel]);
+  const currentDate = new Date();
+
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  const month = monthNames[currentDate.getMonth()];
+  const day = currentDate.getDate();
+  const year = currentDate.getFullYear();
   return (
     <>
       {contextHolder}
@@ -38,7 +57,7 @@ const StandUps = ({ channel }) => {
             <div className="bg-white p-4 rounded-lg shadow-md" key={item?._id}>
               <h3 className="text-lg font-bold">{item?.user}</h3>
               <p className="text-gray-700 text-sm mb-2">
-                Posted on April 17, 2023
+                Posted on {month} {day}, {year}
               </p>
               <p className="text-gray-700">{item?.description}</p>
             </div>
