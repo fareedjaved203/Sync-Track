@@ -25,11 +25,15 @@ const AddTaskModal = ({ channel, change, setChange }) => {
     getAllUsersApi().then((data) => {
       const store = data?.data?.users;
       if (Array.isArray(store)) {
-        const filteredUsers = store.filter(
+        let filteredUsers = store.filter(
           (user) => user.email !== "admin@gmail.com"
         );
+        filteredUsers = filteredUsers.filter((user) => {
+          return channel?.users?.some((addedUser) => {
+            return addedUser?.user == user?._id;
+          });
+        });
         const searchItems = [...filteredUsers];
-        console.log(searchItems);
         setUsers(searchItems);
       }
     });

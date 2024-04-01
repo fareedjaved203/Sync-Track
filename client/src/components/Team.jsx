@@ -68,6 +68,22 @@ const Team = ({ channel }) => {
                       {user?.user?.email}
                     </h2>
                     <p className="text-gray-500">{user?.role}</p>
+                    {user?.status && user?.request !== "pending" && (
+                      <div className="flex items-center mt-2">
+                        <span className="text-sm text-gray-600 mr-1">
+                          Status:
+                        </span>
+                        <span
+                          className={`text-sm ${
+                            user?.status === "working"
+                              ? "text-green-500"
+                              : "text-red-500"
+                          }`}
+                        >
+                          {user?.status}
+                        </span>
+                      </div>
+                    )}
                     {show &&
                       user?.role !== "project manager" &&
                       user?.status == "working" &&
@@ -79,21 +95,28 @@ const Team = ({ channel }) => {
                             email={user?.user?.email}
                             generatePdf={generatePdf}
                           />
-                          <button
-                            className="bg-red-600 text-white py-2 px-2 rounded"
-                            onClick={() => removeMember(user?.user?._id)}
-                          >
-                            Remove
-                          </button>
+                          <GiveFeedBackModal
+                            userId={user?.user?._id}
+                            channelId={channel?._id}
+                            email={user?.user?.email}
+                            generatePdf={generatePdf}
+                            type="remove"
+                          />
                         </div>
                       )}
-                    {user.request == "pending" &&
-                      user.role != "project manager" && (
-                        <>
-                          <p className="text-gray-500 text-sm">
-                            {user?.request}
+                    {user?.request == "pending" &&
+                      user?.role != "project manager" && (
+                        <div className="mt-2">
+                          <p
+                            className={`text-sm ${
+                              user.request === "pending"
+                                ? "text-yellow-500"
+                                : "text-gray-500"
+                            }`}
+                          >
+                            Request: {user?.request}
                           </p>
-                        </>
+                        </div>
                       )}
                   </div>
                 </div>

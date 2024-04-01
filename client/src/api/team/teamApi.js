@@ -9,18 +9,21 @@ export const getTeamApi = async (id) => {
   }
 };
 
-export const removeTeamMemberApi = async (id, userId) => {
+export const concludeTeamMemberApi = async (id, userId, formData) => {
   try {
-    const data = await apiService.delete(`/team/${id}/${userId}`);
+    const data = await apiService.put(`/team/${id}/${userId}`, formData);
     return data;
   } catch (error) {
     console.log(error);
   }
 };
 
-export const concludeTeamMemberApi = async (id, userId, formData) => {
+export const removeTeamMemberApi = async (id, userId, formData) => {
   try {
-    const data = await apiService.put(`/team/${id}/${userId}`, formData);
+    const data = await apiService.put(
+      `/remove-from-team/${id}/${userId}`,
+      formData
+    );
     return data;
   } catch (error) {
     console.log(error);

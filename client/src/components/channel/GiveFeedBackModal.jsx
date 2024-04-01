@@ -1,17 +1,22 @@
 import { useState } from "react";
 import { Modal, Form, Input, Button, message } from "antd";
-import { Select } from "antd";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { useParams } from "react-router-dom";
-import { concludeTeamMemberApi } from "../../api/team/teamApi";
+import {
+  concludeTeamMemberApi,
+  removeTeamMemberApi,
+} from "../../api/team/teamApi";
 
-const GiveFeedBackModal = ({ generatePdf, userId, channelId, email }) => {
-  let { id } = useParams();
+const GiveFeedBackModal = ({
+  generatePdf,
+  userId,
+  channelId,
+  email,
+  type = "conclude",
+}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const { Option } = Select;
 
   const validationSchema = Yup.object().shape({
     feedback: Yup.string().required("Feedback is mandatory"),
@@ -34,15 +39,22 @@ const GiveFeedBackModal = ({ generatePdf, userId, channelId, email }) => {
       formData.append("feedback", values.feedback);
       formData.append("email", email);
       console.log(values.feedback);
-      const data = await concludeTeamMemberApi(channelId, userId, formData);
-      console.log(data);
+      if (type == "conclude") {
+        const data = await concludeTeamMemberApi(channelId, userId, formData);
+        console.log(data);
+      } else {
+        const data = await removeTeamMemberApi(channelId, userId, formData);
+        console.log(data);
+      }
     } catch (error) {
       console.log(error);
       messageApi.error(error);
     }
     setConfirmLoading(false);
     setModalVisible(false);
-    generatePdf();
+    if (type == "conclude") {
+      generatePdf();
+    }
   };
 
   const pdf = () => {
@@ -52,13 +64,24 @@ const GiveFeedBackModal = ({ generatePdf, userId, channelId, email }) => {
   return (
     <>
       {contextHolder}
-      <button
-        className="text-white py-1 px-2 rounded"
-        style={{ backgroundColor: "green" }}
-        onClick={pdf}
-      >
-        Conclude
-      </button>
+      {type == "conclude" ? (
+        <button
+          className="text-white py-1 px-2 rounded"
+          style={{ backgroundColor: "green" }}
+          onClick={pdf}
+        >
+          Conclude
+        </button>
+      ) : (
+        <button
+          className="text-white py-1 px-2 rounded"
+          style={{ backgroundColor: "red" }}
+          onClick={pdf}
+        >
+          Remove
+        </button>
+      )}
+
       <Modal
         title="Channel Invitation"
         visible={modalVisible}

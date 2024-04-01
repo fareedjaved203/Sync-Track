@@ -178,10 +178,28 @@ const addUser = async (req, res) => {
           channel.users = channel.users.filter(
             (u) => u.user.toString() !== user[0]._id.toString()
           );
-        } else {
+        } else if (userInChannel.status !== "disapproved") {
           return res
             .status(400)
             .json({ success: false, message: "User already added" });
+        } else if (userInChannel.status == "disapproved") {
+          const userIndex = channel.users.findIndex(
+            (u) => u.user.toString() === user[0]._id.toString()
+          );
+          if (userIndex !== -1) {
+            channel.users[userIndex].role = req.body.role;
+            channel.users[userIndex].request = "pending";
+            channel.users[userIndex].status = "working";
+            channel.users[userIndex].feedback = "";
+          } else {
+            channel.users.push({
+              user: user[0]?._id,
+              role: req.body.role,
+              request: "pending",
+              status: "working",
+              feedback: "",
+            });
+          }
         }
       } else {
         channel.users.push({
@@ -191,6 +209,7 @@ const addUser = async (req, res) => {
       }
 
       const updatedChannel = await channel.save();
+      console.log(updatedChannel);
 
       if (updatedChannel) {
         const invitationUrl = `${process.env.INVITATION_URL}/${channelId}`;
@@ -335,6 +354,46 @@ const concludeUser = async (req, res) => {
   }
 };
 
+const removeUserFromChannel = async (req, res) => {
+  try {
+    const channelId = req.params.channelId;
+    const userId = req.params.userId;
+    const feedback = req.body.feedback;
+    const user = await User.findById(userId);
+    if (user) {
+      const channel = await Channel.findById(channelId);
+      if (!channel) {
+        return res
+          .status(404)
+          .json({ success: false, message: "Channel not found" });
+      }
+
+      const userIndex = channel.users.findIndex(
+        (userObj) => userObj.user.toString() === userId
+      );
+      if (userIndex === -1) {
+        return res
+          .status(404)
+          .json({ success: false, message: "User not found in the channel" });
+      }
+
+      channel.users[userIndex].status = "disapproved";
+      channel.users[userIndex].feedback = feedback;
+
+      channel.markModified("users");
+
+      await channel.save();
+
+      res
+        .status(200)
+        .json({ success: true, message: "user removed successfully" });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: error.toString() });
+  }
+};
+
 module.exports = {
   updateChannel,
   deleteChannel,
@@ -347,4 +406,5 @@ module.exports = {
   deleteMember,
   concludeUser,
   specificUser,
+  removeUserFromChannel,
 };

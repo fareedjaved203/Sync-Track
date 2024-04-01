@@ -11,6 +11,7 @@ const {
   deleteMember,
   concludeUser,
   specificUser,
+  removeUserFromChannel,
 } = require("../controllers/channelController");
 
 const { isAuthenticatedUser, authorizeRoles } = require("../middlewares/auth");
@@ -33,6 +34,11 @@ router.get("/team/:id", isAuthenticatedUser, myTeam);
 router.delete("/team/:id/:userId", isAuthenticatedUser, deleteMember);
 
 router.put("/team/:channelId/:userId", isAuthenticatedUser, concludeUser);
+router.put(
+  "/remove-from-team/:channelId/:userId",
+  isAuthenticatedUser,
+  removeUserFromChannel
+);
 
 router.get("/team/:channelId/:userId", isAuthenticatedUser, specificUser);
 

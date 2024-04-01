@@ -17,6 +17,7 @@ const Request = () => {
     const myChannel = async () => {
       if (id) {
         const data = await myChannelApi(id);
+        console.log(data);
         setChannel(data?.data?.channels);
       }
     };
