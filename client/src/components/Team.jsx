@@ -69,22 +69,24 @@ const Team = ({ channel }) => {
                       {user?.user?.email}
                     </h2>
                     <p className="text-gray-500">{user?.role}</p>
-                    {user?.status && user?.request !== "pending" && (
-                      <div className="flex items-center mt-2">
-                        <span className="text-sm text-gray-600 mr-1">
-                          Status:
-                        </span>
-                        <span
-                          className={`text-sm ${
-                            user?.status === "working"
-                              ? "text-green-500"
-                              : "text-red-500"
-                          }`}
-                        >
-                          {user?.status}
-                        </span>
-                      </div>
-                    )}
+                    {user?.status &&
+                      user?.request !== "pending" &&
+                      user?.role !== "project manager" && (
+                        <div className="flex items-center mt-2">
+                          <span className="text-sm text-gray-600 mr-1">
+                            Status:
+                          </span>
+                          <span
+                            className={`text-sm ${
+                              user?.status === "working"
+                                ? "text-green-500"
+                                : "text-red-500"
+                            }`}
+                          >
+                            {user?.status}
+                          </span>
+                        </div>
+                      )}
                     {show &&
                       user?.role !== "project manager" &&
                       user?.status == "working" &&

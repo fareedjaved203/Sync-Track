@@ -22,14 +22,23 @@ const WelcomeScreen = () => {
 
   return (
     <MainLayout>
-      <div className="flex h-screen items-start justify-center mt-5">
-        <div className="text-center">
-          <div className="text-2xl font-semibold mb-4">
-            {day} {month}
+      <div className="h-screen">
+        <div className="flex items-start justify-center mt-5">
+          <div className="text-center">
+            <div className="text-2xl font-semibold mb-4">
+              {day} {month}
+            </div>
+            <div className="text-4xl font-bold">
+              {greeting()}, {userName}
+            </div>
           </div>
-          <div className="text-4xl font-bold">
-            {greeting()}, {userName}
-          </div>
+        </div>
+        <div className="mt-2 w-full flex justify-center items-center">
+          <img
+            src="https://api.edoxi.com/assets/studyhub/Project_Manager_%E2%80%93_A_Complete_Guide_for_2022.webp"
+            width={800}
+            height={800}
+          />
         </div>
       </div>
     </MainLayout>

@@ -54,49 +54,57 @@ const Milestone = ({ channel }) => {
   return (
     <>
       <section className="text-gray-600 body-font overflow-hidden bg-gray-100">
-      <h3 className="ms-3 text-2xl font-bold text-neutral-700 dark:text-neutral-300">
+        <h3 className="ms-3 text-2xl font-bold text-neutral-700 dark:text-neutral-300">
           Project Milestone
         </h3>
-      {user.data.user._id == channel.creator && (<>
-
-        <div className="flex justify-end w-full px-5">
-          <AddMilestoneModal
-            channel={channel}
-            isUpdated={isUpdated}
-            update={update}
-          />
-        </div>
-      </>)}
+        {user.data.user._id == channel.creator && (
+          <>
+            <div className="flex justify-end w-full px-5">
+              <AddMilestoneModal
+                channel={channel}
+                isUpdated={isUpdated}
+                update={update}
+              />
+            </div>
+          </>
+        )}
         {milestone.map((item) => (
           <div key={item?._id} className="container px-5 py-4 mx-auto">
-            <div className="-my-4 divide-y-2 divide-gray-200">
-              <div className="py-4 flex flex-wrap md:flex-nowrap">
-                <div className="md:w-64 md:mb-0 mb-4 flex-shrink-0 flex flex-col">
-                  <h2 className="text-xl font-medium text-gray-900 title-font mb-2">
+            <div className="bg-white rounded-lg shadow-md overflow-hidden flex w-full">
+              <div className="flex flex-col justify-between p-4 w-full">
+                <div>
+                  <h2 className="text-xl font-medium text-gray-900 mb-2">
                     {item?.title}
                   </h2>
-                  <span className="mt-1 text-sm text-gray-600">
+                  <span className="text-sm text-gray-600">
                     {item?.startDate}
                   </span>
+                  <p className="text-gray-700 leading-relaxed mb-4">
+                    {item?.description}
+                  </p>
                 </div>
-                <div className="md:flex-grow">
-                  <p className="leading-relaxed mb-4">{item?.description}</p>
-                  <div className="flex items-center justify-start">
-                    <UpdateMilestoneModal
-                      channel={item}
-                      update={update}
-                      isUpdated={isUpdated}
-                      id={channel?._id}
-                    />
-                    <button
-                      type="button"
-                      className="ml-3 px-3 py-1 text-sm font-medium text-white uppercase bg-red-500 rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-400 transition duration-300 ease-in-out"
-                      onClick={() => removeMilestone(item?._id)}
-                    >
-                      Remove
-                    </button>
-                  </div>
+                <div className="flex items-center justify-start">
+                  <UpdateMilestoneModal
+                    channel={item}
+                    update={update}
+                    isUpdated={isUpdated}
+                    id={channel?._id}
+                  />
+                  <button
+                    type="button"
+                    className="ml-3 px-3 py-1 text-sm font-medium text-white uppercase bg-red-500 rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-400 transition duration-300 ease-in-out"
+                    onClick={() => removeMilestone(item?._id)}
+                  >
+                    Remove
+                  </button>
                 </div>
+              </div>
+              <div className="w-full">
+                <img
+                  src="https://static.vecteezy.com/system/resources/previews/035/514/322/non_2x/project-management-concept-strategy-motivation-and-successful-leadership-analysis-and-development-of-online-marketing-modern-flat-cartoon-style-illustration-on-white-background-vector.jpg"
+                  alt="Milestone Image"
+                  className="w-full h-auto object-cover"
+                />
               </div>
             </div>
           </div>

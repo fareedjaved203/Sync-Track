@@ -14,7 +14,6 @@ import BackButton from "../../components/layout/BackButton";
 import { useParams } from "react-router-dom";
 
 const schema = yup.object().shape({
-  password: yup.string().required("Old Password is required"),
   newPassword: yup.string().required("New Password is required"),
   confirmPassword: yup
     .string()
@@ -91,23 +90,6 @@ const ResetPassword = () => {
               Reset Password
             </h2>
             <form onSubmit={handleSubmit(onSubmit)}>
-              {/* Old Password Field */}
-              <div className="relative mb-4">
-                <label className="leading-7 text-sm text-gray-600">
-                  Old Password
-                </label>
-                <input
-                  {...register("password")}
-                  type="password"
-                  className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
-                />
-                {errors.password && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.password.message}
-                  </p>
-                )}
-              </div>
-
               {/* New Password Field */}
               <div className="relative mb-4">
                 <label className="leading-7 text-sm text-gray-600">
