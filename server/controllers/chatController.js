@@ -34,7 +34,7 @@ const getUserWithChatHistory = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    throw new Error("Error fetching user and chat history: " + error.message);
+    // throw new Error("Error fetching user and chat history: " + error.message);
   }
 };
 

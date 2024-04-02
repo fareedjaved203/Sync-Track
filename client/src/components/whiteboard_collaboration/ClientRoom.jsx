@@ -30,7 +30,7 @@ const ClientRoom = ({ userNo, socket, setUsers, setUserNo }) => {
     <div className="container-fluid">
       <div className="row pb-2">
         <h1 className="display-5 pt-4 pb-3 text-center">
-          React Drawing App - users online:{userNo}
+          Sync Track - users online:{userNo}
         </h1>
       </div>
       <div className="row mt-5">

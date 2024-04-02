@@ -52,7 +52,7 @@ const loginUser = async (req, res, next) => {
   try {
     const { email, password } = req.body;
     if (!email || !password) {
-      res.status(400).json({
+      return res.status(400).json({
         success: false,
         message: "Please enter both email and password",
       });
@@ -60,7 +60,7 @@ const loginUser = async (req, res, next) => {
     const user = await User.findOne({ email }).select("+password");
 
     if (!user) {
-      res.status(401).json({
+      return res.status(401).json({
         success: false,
         message: "Invalid email or password",
       });
@@ -69,7 +69,7 @@ const loginUser = async (req, res, next) => {
     const isPasswordMatched = await user.comparePassword(password);
 
     if (!isPasswordMatched) {
-      res.status(401).json({
+      return res.status(401).json({
         success: false,
         message: "Invalid email or password",
       });
