@@ -77,14 +77,16 @@ const Team = ({ channel }) => {
                             Status:
                           </span>
                           <span
-                            className={`text-sm ${
-                              user?.status === "working"
-                                ? "text-green-500"
-                                : "text-red-500"
-                            }`}
-                          >
-                            {user?.status}
-                          </span>
+  className={`text-sm ${
+    user?.status === "working"
+      ? "text-blue-500 font-bold" 
+      : user?.status === "approved"
+      ? "font-bold text-green-500" 
+      : "text-red-500 font-bold" 
+  }`}
+>
+  {user?.status}
+</span>
                         </div>
                       )}
                     {show &&

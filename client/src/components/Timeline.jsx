@@ -50,7 +50,7 @@ const Timeline = ({ channel }) => {
   return (
     <>
       <div className="flex justify-content-between">
-        <h3 className="mb-6 ms-3 text-2xl font-bold text-neutral-700 dark:text-neutral-300">
+        <h3 className="mb-6 ms-3 text-2xl font-bold text-gray-600">
           Project Timeline
         </h3>
         {user?.data?.user?._id == channel?.creator && (
@@ -85,15 +85,15 @@ const Timeline = ({ channel }) => {
                       />
                     </svg>
                   </div>
-                  <div className="w-full ms-6 block rounded-lg bg-neutral-50 p-6 shadow-md shadow-black/5 dark:bg-neutral-700 dark:shadow-black/10">
+                  <div className="w-full ms-6 block rounded-lg bg-gray-800 p-6 shadow-lg">
                     <div className="mb-4 flex justify-between">
-                      <span className="text-lg font-bold text-primary transition duration-150 ease-in-out hover:text-info-600 focus:text-info-600 active:text-info-700">
+                      <span className="text-lg font-bold text-white">
                         {item?.title}
                       </span>
                       <div className="flex flex-col items-center h-full">
-                        <span className="text-sm text-green-700 transition duration-150 ease-in-out hover:text-info-600 focus:text-info-600 active:text-info-700">
+                        <span className="font-bold text-sm text-green-700 transition duration-150 ease-in-out hover:text-info-600 focus:text-info-600 active:text-info-700">
                           Start Date: {item?.startDate}
-                          <p className="text-sm text-red-700 transition duration-150 ease-in-out hover:text-info-600 focus:text-info-600 active:text-info-700">
+                          <p className=" font-bold text-sm text-red-700 transition duration-150 ease-in-out hover:text-info-600 focus:text-info-600 active:text-info-700">
                             End Date: {item?.startDate}
                           </p>
                         </span>
@@ -102,6 +102,8 @@ const Timeline = ({ channel }) => {
                     <p className="mb-6 text-neutral-700 dark:text-neutral-200">
                       {item?.description}
                     </p>
+                    {user?.data?.user?._id == channel?.creator && (<>
+
                     <div className="flex justify-between">
                       <div className="flex items-end">
                         <UpdateTimelineModal
@@ -127,6 +129,7 @@ const Timeline = ({ channel }) => {
                         />
                       </div>
                     </div>
+                    </>)}
                   </div>
                 </div>
               </li>

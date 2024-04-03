@@ -54,7 +54,7 @@ const Milestone = ({ channel }) => {
   return (
     <>
       <section className="text-gray-600 body-font overflow-hidden bg-gray-100">
-        <h3 className="ms-3 text-2xl font-bold text-neutral-700 dark:text-neutral-300">
+        <h3 className="ms-3 text-2xl font-bold text-gray-600">
           Project Milestone
         </h3>
         {user.data.user._id == channel.creator && (
@@ -83,6 +83,8 @@ const Milestone = ({ channel }) => {
                     {item?.description}
                   </p>
                 </div>
+                {user?.data?.user?._id == channel?.creator && (<>
+
                 <div className="flex items-center justify-start">
                   <UpdateMilestoneModal
                     channel={item}
@@ -98,6 +100,7 @@ const Milestone = ({ channel }) => {
                     Remove
                   </button>
                 </div>
+                </>)}
               </div>
               <div className="w-full">
                 <img

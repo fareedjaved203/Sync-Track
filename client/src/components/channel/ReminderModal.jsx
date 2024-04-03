@@ -8,7 +8,7 @@ const ReminderModal = ({ channel, task, user }) => {
   const [confirmLoading, setConfirmLoading] = useState(false);
 
   const info = () => {
-    messageApi.success("Task Added Successfully");
+    messageApi.success("Reminder Sent!");
   };
 
   const onFinish = async (values) => {
@@ -47,7 +47,7 @@ const ReminderModal = ({ channel, task, user }) => {
         Set Reminder
       </button>
       <Modal
-        title="Task"
+        title="Reminder"
         visible={modalVisible}
         onCancel={() => setModalVisible(false)}
         footer={null}
@@ -69,7 +69,7 @@ const ReminderModal = ({ channel, task, user }) => {
               htmlType="submit"
               style={{ backgroundColor: "#2E2E2E", color: "white" }}
             >
-              Create
+              Send
             </Button>
           </Form.Item>
         </Form>

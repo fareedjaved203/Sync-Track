@@ -59,12 +59,12 @@ const Announcements = ({ channel }) => {
       <div className="space-y-4">
         {announce.map((item) => (
           <div
-            className="flex items-center justify-between bg-gray-100 p-3 rounded-lg"
+            className="flex items-center justify-between bg-gray-600 p-3 rounded-lg"
             key={item?._id}
           >
             <div>
               <div
-                className="text-gray-600"
+                className="text-white"
                 dangerouslySetInnerHTML={{ __html: item?.description }}
               />
             </div>
