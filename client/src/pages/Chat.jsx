@@ -315,7 +315,20 @@ const Chat = () => {
                       src={displayUserInfo?.avatar?.url}
                       className="mr-2 rounded-full w-10 h-10"
                     />
-                    <h1 className="text-lg">{displayUserInfo?.name}</h1>
+                    <h1 className="text-lg pr-2">{displayUserInfo?.name}</h1>
+                    {onlineUsers.includes(displayUserInfo?.name) ? (
+                          <>
+                            <Tag color="green" icon={<CheckCircleOutlined />}>
+                              Online
+                            </Tag>
+                          </>
+                        ) : (
+                          <>
+                            <Tag color="red" icon={<CheckCircleOutlined />}>
+                              Offline
+                            </Tag>
+                          </>
+                        )}
                   </div>
                 )}
 
@@ -337,7 +350,7 @@ const Chat = () => {
                                 className="col-start-1 col-end-8 p-1 rounded-lg"
                               >
                                 <div className="flex flex-row items-center">
-                                  <div className="relative ml-3 text-sm bg-white py-2 px-4 shadow rounded-xl">
+                                  <div className="relative ml-3 text-sm bg-gray-800 text-white py-2 px-4 shadow-sm rounded-xl">
                                     <div>{message?.content}</div>
                                   </div>
                                 </div>
@@ -350,7 +363,7 @@ const Chat = () => {
                                 className="col-start-6 col-end-13 p-1 rounded-lg flex flex-col items-end sm:items-end"
                               >
                                 <div className="flex items-center justify-start flex-row-reverse">
-                                  <div className="relative mr-3 text-sm bg-gray-200 py-2 px-4 shadow rounded-xl">
+                                  <div className="relative mr-3 text-sm bg-gray-600 text-white py-2 px-4 shadow rounded-xl">
                                     <div>{message?.content}</div>
                                   </div>
                                 </div>
