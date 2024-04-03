@@ -87,39 +87,46 @@ const Timeline = ({ channel }) => {
                   </div>
                   <div className="w-full ms-6 block rounded-lg bg-neutral-50 p-6 shadow-md shadow-black/5 dark:bg-neutral-700 dark:shadow-black/10">
                     <div className="mb-4 flex justify-between">
-                      <span className="text-lg text-primary transition duration-150 ease-in-out hover:text-info-600 focus:text-info-600 active:text-info-700">
+                      <span className="text-lg font-bold text-primary transition duration-150 ease-in-out hover:text-info-600 focus:text-info-600 active:text-info-700">
                         {item?.title}
                       </span>
-                      <span className="text-sm text-green-700 transition duration-150 ease-in-out hover:text-info-600 focus:text-info-600 active:text-info-700">
-                        Start Date: {item?.startDate}
-                        <p className="text-sm text-red-700 transition duration-150 ease-in-out hover:text-info-600 focus:text-info-600 active:text-info-700">
-                          End Date: {item?.startDate}
-                        </p>
-                      </span>
-                      {/* Add the image below */}
-                      <img
-                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQlHLVbMzZvDwfU8xAyOxiOz5mJSOQKypV8Qmw12B7ZXw&s"
-                        alt="Image Description"
-                        className="w-32"
-                      />
+                      <div className="flex flex-col items-center h-full">
+                        <span className="text-sm text-green-700 transition duration-150 ease-in-out hover:text-info-600 focus:text-info-600 active:text-info-700">
+                          Start Date: {item?.startDate}
+                          <p className="text-sm text-red-700 transition duration-150 ease-in-out hover:text-info-600 focus:text-info-600 active:text-info-700">
+                            End Date: {item?.startDate}
+                          </p>
+                        </span>
+                      </div>
                     </div>
                     <p className="mb-6 text-neutral-700 dark:text-neutral-200">
                       {item?.description}
                     </p>
-                    <UpdateTimelineModal
-                      channel={item}
-                      update={update}
-                      isUpdated={isUpdated}
-                      id={channel?._id}
-                    />
-                    <button
-                      type="button"
-                      className="timeline-delete-btn inline-block rounded ml-3 p-3 py-1 text-xs font-medium uppercase leading-normal text-info transition duration-150 ease-in-out hover:border-info-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-info-600 focus:border-info-600 focus:text-info-600 focus:outline-none focus:ring-0 active:border-info-700 active:text-info-700 dark:hover:bg-neutral-100 dark:hover:bg-opacity-10"
-                      data-twe-ripple-init
-                      onClick={() => removeTimeline(item?._id)}
-                    >
-                      Remove
-                    </button>
+                    <div className="flex justify-between">
+                      <div className="flex items-end">
+                        <UpdateTimelineModal
+                          channel={item}
+                          update={update}
+                          isUpdated={isUpdated}
+                          id={channel?._id}
+                        />
+                        <button
+                          type="button"
+                          className="timeline-delete-btn inline-block rounded ml-3 p-3 py-1 text-xs font-medium uppercase leading-normal text-info transition duration-150 ease-in-out hover:border-info-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-info-600 focus:border-info-600 focus:text-info-600 focus:outline-none focus:ring-0 active:border-info-700 active:text-info-700 dark:hover:bg-neutral-100 dark:hover:bg-opacity-10"
+                          data-twe-ripple-init
+                          onClick={() => removeTimeline(item?._id)}
+                        >
+                          Remove
+                        </button>
+                      </div>
+                      <div>
+                        <img
+                          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQlHLVbMzZvDwfU8xAyOxiOz5mJSOQKypV8Qmw12B7ZXw&s"
+                          alt="Image Description"
+                          className="w-32"
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
               </li>

@@ -41,7 +41,7 @@ const UpdateProjectModal = ({ channel, setName, setDescription }) => {
         className="text-gray-700 hover:text-gray-900"
         onClick={() => setModalVisible(true)}
       >
-        <MdEditDocument className="w-6 h-6" />{" "}
+        <MdEditDocument className="w-8 h-8" style={{ color: "#E58B04" }} />{" "}
       </button>
       <Modal
         visible={modalVisible}
