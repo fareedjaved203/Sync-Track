@@ -1,14 +1,16 @@
 import React, { useState } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
+import { useDispatch, useSelector } from "react-redux";
 import MainLayout from "../layout/MainLayout";
 import { message } from "antd";
 import { FaRegCopy } from "react-icons/fa";
 import { FcProcess } from "react-icons/fc";
 
 const JoinCreateRoom = ({ uuid, setUser, setRoomJoined }) => {
+  const user = useSelector((state) => state.user);
   const [roomId, setRoomId] = useState(uuid());
-  const [name, setName] = useState("");
-  const [joinName, setJoinName] = useState("");
+  const [name, setName] = useState(user?.data?.user?.name);
+  const [joinName, setJoinName] = useState(user?.data?.user?.name);
   const [joinRoomId, setJoinRoomId] = useState("");
 
   const [messageApi, contextHolder] = message.useMessage();
