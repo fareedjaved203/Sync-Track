@@ -8,7 +8,7 @@ import { useParams } from "react-router-dom";
 import { addUserApi } from "../api/channel/channelApi";
 import { postNotificationApi } from "../api/notifications/notificationsApi";
 
-const AddUser = () => {
+const AddUser = ({ channelId = "", userEmail = "" }) => {
   let { id } = useParams();
   const [modalVisible, setModalVisible] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
@@ -43,13 +43,20 @@ const AddUser = () => {
       const formData = new FormData();
       formData.append("email", values.email);
       formData.append("role", values.role);
-      const data = await addUserApi(id, formData);
-      console.log(data);
+      let data;
+      if (channelId) {
+        data = await addUserApi(channelId, formData);
+      } else {
+        data = await addUserApi(id, formData);
+      }
       if (data?.data?.success) {
         info();
         const formData = new FormData();
         formData.append("type", "information");
-        formData.append("description", `You have a new invitation, please check your email`);
+        formData.append(
+          "description",
+          `You have a new invitation, please check your email`
+        );
         formData.append("sender", user.data.user.email);
         formData.append("receiver", values.email);
         const notification = await postNotificationApi(formData);
@@ -79,13 +86,14 @@ const AddUser = () => {
         onCancel={() => setModalVisible(false)}
         footer={null}
         confirmLoading={confirmLoading}
-        onOk={formik.handleSubmit} // Call formik's submit function on OK
+        onOk={formik.handleSubmit}
       >
         <Form onFinish={formik.handleSubmit}>
           <Form.Item
             label="Email"
             name="email"
             help={formik.touched.email && formik.errors.email}
+            initialValue={userEmail}
             validateStatus={
               formik.touched.email && formik.errors.email ? "error" : ""
             }

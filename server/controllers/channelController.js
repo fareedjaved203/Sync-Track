@@ -166,6 +166,7 @@ const addUser = async (req, res) => {
   try {
     const channelId = req.params.channelId;
     const email = req.body.email;
+    console.log(email);
     const user = await User.find({ email });
     if (user[0]) {
       console.log(user);
@@ -305,7 +306,6 @@ const concludeUser = async (req, res) => {
     const userId = req.params.userId;
     const feedback = req.body.feedback;
     const rating = req.body.rating;
-    console.log(rating);
     const user = await User.findById(userId);
     if (user) {
       const channel = await Channel.findById(channelId);

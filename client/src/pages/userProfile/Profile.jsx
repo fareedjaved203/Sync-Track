@@ -26,8 +26,12 @@ const Profile = () => {
   const [description, setDescription] = useState();
   const [role, setRole] = useState();
   const [imagePreview, setImagePreview] = useState("");
+  const [channelId, setChannelId] = useState("");
 
   useEffect(() => {
+    const id = localStorage.getItem("channelId");
+    console.log(id);
+    setChannelId(id);
     fetchUserDetails();
   }, [params.user]);
 
@@ -120,7 +124,7 @@ const Profile = () => {
                       </>
                     ) : (
                       <>
-                        <AddUser />
+                        <AddUser channelId={channelId} userEmail={email} />
                       </>
                     )}
                   </div>
