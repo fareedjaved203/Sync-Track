@@ -53,7 +53,7 @@ const Milestone = ({ channel }) => {
 
   return (
     <>
-      <section className="text-gray-600 body-font overflow-hidden bg-gray-100">
+      <section className="text-gray-600 body-font overflow-hidden">
         <h3 className="ms-3 text-2xl font-bold text-gray-600">
           Project Milestone
         </h3>
@@ -83,24 +83,25 @@ const Milestone = ({ channel }) => {
                     {item?.description}
                   </p>
                 </div>
-                {user?.data?.user?._id == channel?.creator && (<>
-
-                <div className="flex items-center justify-start">
-                  <UpdateMilestoneModal
-                    channel={item}
-                    update={update}
-                    isUpdated={isUpdated}
-                    id={channel?._id}
-                  />
-                  <button
-                    type="button"
-                    className="ml-3 px-3 py-1 text-sm font-medium text-white uppercase bg-red-500 rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-400 transition duration-300 ease-in-out"
-                    onClick={() => removeMilestone(item?._id)}
-                  >
-                    Remove
-                  </button>
-                </div>
-                </>)}
+                {user?.data?.user?._id == channel?.creator && (
+                  <>
+                    <div className="flex items-center justify-start">
+                      <UpdateMilestoneModal
+                        channel={item}
+                        update={update}
+                        isUpdated={isUpdated}
+                        id={channel?._id}
+                      />
+                      <button
+                        type="button"
+                        className="ml-3 px-3 py-1 text-sm font-medium text-white uppercase bg-red-500 rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-400 transition duration-300 ease-in-out"
+                        onClick={() => removeMilestone(item?._id)}
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  </>
+                )}
               </div>
               <div className="w-full">
                 <img
