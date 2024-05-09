@@ -25,6 +25,7 @@ const schema = yup.object().shape({
     .string()
     .min(2, "Name must be at least 2 characters long")
     .required(),
+  position: yup.string().required(),
   email: yup.string().email().required(),
   password: yup
     .string()
@@ -45,6 +46,7 @@ const Signup = () => {
   } = useForm({ resolver: yupResolver(schema) });
 
   const onSubmit = async (data) => {
+    console.log(data);
     dispatch(onLogin());
     const registerSuccess = await registerUserApi(data);
     if (registerSuccess) {
@@ -171,6 +173,30 @@ const Signup = () => {
                   </p>
                 )}
               </div>
+              <div className="relative mb-4">
+                <label
+                  htmlFor="position"
+                  className="leading-7 text-sm text-gray-600"
+                >
+                  Role
+                </label>
+                <select
+                  {...register("position")}
+                  id="position"
+                  className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                >
+                  <option value="">Select a role</option>
+                  <option value="project manager">Project Manager</option>
+                  <option value="tester">Tester</option>
+                  <option value="developer">Developer</option>
+                </select>
+                {errors.position && (
+                  <p className="text-sm" style={{ color: "red" }}>
+                    {errors.position.message}
+                  </p>
+                )}
+              </div>
+
               <button
                 type="submit"
                 className="inline-flex w-full items-center justify-center space-x-2 rounded-lg border border-indigo-700 bg-indigo-700 px-6 py-2 font-semibold leading-6 text-white hover:border-indigo-600 hover:bg-indigo-600 hover:text-white focus:ring focus:ring-indigo-400 focus:ring-opacity-50 active:border-indigo-700 active:bg-indigo-700 dark:focus:ring-indigo-400 dark:focus:ring-opacity-90"
@@ -184,7 +210,7 @@ const Signup = () => {
                 >
                   <path
                     fillRule="evenodd"
-                    d="M12.207 2.232a.75.75 0 00.025 1.06l4.146 3.958H6.375a5.375 5.375 0 00010.75H9.25a.75.75 0 000-1.5H6.375a3.875 3.875 0 010-7.75h10.003l-4.146 3.957a.75.75 0 01.036 1.085l5.5-5.25a.75.75 0 00-1.085l-5.5-5.25a.75.75 0 00-1.06.025z"
+                    d="M12.207 2.232a.75.75 0 00.025 1.06l4.146 3.958H6.375a5.375 5.375 0 000 10.75H9.25a.75.75 0 000-1.5H6.375a3.875 3.875 0 010-7.75h10.003l-4.146 3.957a.75.75 0 001.036 1.085l5.5-5.25a.75.75 0 000-1.085l-5.5-5.25a.75.75 0 00-1.06.025z"
                     clipRule="evenodd"
                   />
                 </svg>

@@ -19,6 +19,7 @@ const Channel = () => {
   const [items, setItems] = useState([]);
   useEffect(() => {
     const getChannel = async () => {
+      localStorage.setItem("channelId", id);
       const data = await myChannelApi(id);
       setChannel(data?.data?.channels);
     };

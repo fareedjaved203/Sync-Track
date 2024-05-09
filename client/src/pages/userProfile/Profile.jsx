@@ -18,6 +18,13 @@ const Profile = () => {
   const [showMore, setShowMore] = useState(false);
   const [name, setName] = useState("N/A");
   const [email, setEmail] = useState("N/A");
+  const [rank, setRank] = useState("N/A");
+  const [projects, setProjects] = useState(0);
+  const [rating, setRating] = useState("N/A");
+  const [degree, setDegree] = useState();
+  const [university, setUniversity] = useState();
+  const [description, setDescription] = useState();
+  const [role, setRole] = useState();
   const [imagePreview, setImagePreview] = useState("");
 
   useEffect(() => {
@@ -30,9 +37,19 @@ const Profile = () => {
 
   const fetchUserDetails = async () => {
     const data = await getUserDetailsApi(params.user);
+    console.log(data);
     if (data) {
       setName(data?.data?.user?.name);
       setEmail(data?.data?.user?.email);
+      setRole(data?.data?.user?.position);
+      setDegree(data?.data?.user?.degree);
+      setDescription(data?.data?.user?.description);
+      setUniversity(data?.data?.user?.university);
+      setProjects(data?.data?.user?.projects);
+      setRank(data?.data?.user?.rank);
+      if (data?.data?.user?.rating) {
+        setRating(data?.data?.user?.rating);
+      }
       setImagePreview(data?.data?.user?.avatar?.url);
     } else {
       info();
@@ -112,19 +129,19 @@ const Profile = () => {
                   <div className="flex justify-center py-4 lg:pt-4 pt-8">
                     <div className="mr-4 p-3 text-center">
                       <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
-                        4.5
+                        {rating}
                       </span>
                       <span className="text-sm text-blueGray-400">Ratings</span>
                     </div>
                     <div className="mr-4 p-3 text-center">
                       <span className="text-xl font-bold block tracking-wide text-blueGray-600">
-                        Amateur
+                        {rank}
                       </span>
                       <span className="text-sm text-blueGray-400">Rank</span>
                     </div>
                     <div className="lg:mr-4 p-3 text-center">
                       <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
-                        89
+                        {projects}
                       </span>
                       <span className="text-sm text-blueGray-400">
                         Projects
@@ -141,22 +158,32 @@ const Profile = () => {
                   <i className="fas fa-map-marker-alt mr-2 text-lg text-blueGray-400"></i>
                   {email}
                 </div>
-                <div className="mb-2 text-blueGray-600 mt-10">
+                <div className="text-sm leading-normal mt-0 mb-2 text-blueGray-400 font-bold uppercase">
                   <i className="fas fa-briefcase mr-2 text-lg text-blueGray-400"></i>
-                  Comsats University
+                  {role}
                 </div>
-                <div className="mb-2 text-blueGray-600">
-                  <i className="fas fa-university mr-2 text-lg text-blueGray-400"></i>
-                  Bachelor's in Computer Science
-                </div>
+
+                {university && (
+                  <div className="mb-2 text-blueGray-600 mt-10">
+                    <i className="fas fa-briefcase mr-2 text-lg text-blueGray-400"></i>
+                    {university}
+                  </div>
+                )}
+                {degree && (
+                  <div className="mb-2 text-blueGray-600">
+                    <i className="fas fa-university mr-2 text-lg text-blueGray-400"></i>
+                    {degree}
+                  </div>
+                )}
               </div>
               <div className="mt-10 py-10 border-t border-blueGray-200 text-center">
                 <div className="flex flex-wrap justify-center">
                   <div className="w-full lg:w-9/12 px-4">
-                    <p className="mb-4 text-lg leading-relaxed text-blueGray-700">
-                      I am a MERN Stack Developer with loads of Experience in
-                      this field
-                    </p>
+                    {description && (
+                      <p className="mb-4 text-lg leading-relaxed text-blueGray-700">
+                        {description}
+                      </p>
+                    )}
                     {!showMore && (
                       <p
                         className="font-normal text-white hover:bg-black-600 uppercase font-bold shadow-md text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1 ease-linear transition-all duration-150 cursor-pointer"

@@ -2,12 +2,9 @@ const Testimonials = () => {
   return (
     <>
       <div className="mx-auto text-center md:max-w-xl lg:max-w-3xl">
-        <h3 className="mb-6 text-3xl font-bold text-neutral-800 dark:text-neutral-200">
+        <h3 className="mb-6 text-3xl font-bold text-neutral-800 pb-6">
           Reviews
         </h3>
-        <p className="mb-6 pb-2 md:mb-12 md:pb-0">
-          Reviews by the Clients and the Project Managers for this User
-        </p>
       </div>
 
       <div className="grid gap-6 text-center md:grid-cols-3 lg:gap-12">

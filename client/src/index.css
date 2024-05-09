@@ -25,21 +25,22 @@
   display: none;
 }
 
-.signup{
+.signup {
   color: white !important;
 }
 
-.signup-div{
-  background-color: blue !important;
+.signup-div {
+  background-color: #805df5 !important;
   color: white !important;
   border-radius: 3px !important;
   margin-top: 5px;
 }
 
-.dropdown, .username{
+.dropdown,
+.username {
   color: black !important;
 }
 
-.dropdown:hover{
+.dropdown:hover {
   color: white !important;
 }

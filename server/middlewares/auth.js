@@ -23,12 +23,13 @@ const User = require("../models/userModel");
 const isAuthenticatedUser = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
-    const token = authHeader && authHeader.split(" ")[1];
+    const token = req.cookies.token || (authHeader && authHeader.split(" ")[1]);
     if (!token) {
       return next(new ErrorHandler("Token Not Found", 401));
     }
     jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
       if (err) {
+        console.log(err);
         return res.sendStatus(403);
       }
 

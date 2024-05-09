@@ -55,6 +55,7 @@ const ComponentRoutes = () => {
         <Route path="/signup" element={<Signup />} />
         <Route path="/profile/:user" element={<Profile />} />
         <Route path="/chat" element={<Chat />} />
+        <Route path="/chat/:id" element={<Chat />} />
         <Route path="/whiteboard" element={<Whiteboard />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/password/reset/:token" element={<ResetPassword />} />

@@ -32,11 +32,11 @@ const postChannel = async (req, res) => {
 const myChannels = async (req, res) => {
   try {
     const channels = await Channel.find({
-      users: { 
-        $elemMatch: { 
-          user: req.user.id, 
-          status: { $ne: "disapproved" } 
-        } 
+      users: {
+        $elemMatch: {
+          user: req.user.id,
+          status: { $ne: "disapproved" },
+        },
       },
     });
     if (channels) {
@@ -262,6 +262,8 @@ const userResponse = async (req, res) => {
     const userId = req.params.userId;
     const newRequestStatus = req.body.request;
 
+    const user = await User.findById(userId);
+
     let updatedChannel = await Channel.findOne({
       _id: channelId,
       "users.user": req.user.id,
@@ -278,6 +280,7 @@ const userResponse = async (req, res) => {
       if (userIndex !== -1) {
         updatedChannel.users[userIndex].request = newRequestStatus;
       }
+      user.projects++;
     }
 
     updatedChannel = await updatedChannel.save();
@@ -298,6 +301,7 @@ const concludeUser = async (req, res) => {
     const channelId = req.params.channelId;
     const userId = req.params.userId;
     const feedback = req.body.feedback;
+    const rating = req.body.rating;
     console.log(feedback);
     const user = await User.findById(userId);
     if (user) {
@@ -315,6 +319,13 @@ const concludeUser = async (req, res) => {
 
       channel.users[userIndex].status = "approved";
       channel.users[userIndex].feedback = feedback;
+      channel.users[userIndex].rating = rating;
+
+      user.rating = (user.rating + rating) / user.projects;
+
+      updateRank(user);
+
+      await user.save();
 
       channel.markModified("users");
 
@@ -358,6 +369,32 @@ const concludeUser = async (req, res) => {
     res.status(500).json({ error: error.toString() });
   }
 };
+
+function updateRank(user) {
+  const rankThresholds = [
+    { name: "Novice", minProjects: 0, maxRating: 2 },
+    { name: "Apprentice", minProjects: 5, maxRating: 4 },
+    { name: "Expert", minProjects: 10, maxRating: 4.5 },
+    { name: "Master", minProjects: 15, maxRating: 4.7 },
+    { name: "Legend", minProjects: 20, maxRating: 5 },
+  ];
+
+  const averageRating = user.rating / user.projects;
+
+  let rank = "Novice";
+  for (const threshold of rankThresholds) {
+    if (
+      user.projects >= threshold.minProjects &&
+      averageRating <= threshold.maxRating
+    ) {
+      rank = threshold.name;
+    } else {
+      break;
+    }
+  }
+
+  user.rank = rank;
+}
 
 const removeUserFromChannel = async (req, res) => {
   try {

@@ -42,6 +42,24 @@ const userSchema = new mongoose.Schema(
       enum: ["project manager", "developer", "tester"],
       default: "developer",
     },
+    description: String,
+    degree: String,
+    university: String,
+    channels: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Channel",
+      },
+    ],
+    rating: Number,
+    rank: {
+      type: String,
+      default: "Novice",
+    },
+    projects: {
+      type: Number,
+      default: 0,
+    },
     resetPasswordToken: String,
     resetPasswordExpire: Date,
   },

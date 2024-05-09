@@ -5,31 +5,31 @@ import { Button, Input, Space, Table, Tag } from "antd";
 const data = [
   {
     key: "1",
-    title: "John Brown",
-    company: "10 Pearls",
+    channel: "John Brown",
+    project: "10 Pearls",
     role: "Developer",
-    status: "Approved",
+    status: "working",
   },
   {
     key: "2",
-    title: "Joe Black",
-    company: "Cowlar",
+    channel: "Joe Black",
+    project: "Cowlar",
     role: "Tester",
-    status: "Approved",
+    status: "approved",
   },
   {
     key: "3",
-    title: "Jim Green",
-    company: "Arbisoft",
+    channel: "Jim Green",
+    project: "Arbisoft",
     role: "Designer",
-    status: "Approved",
+    status: "disapproved",
   },
   {
     key: "4",
-    title: "Jim Red",
-    company: "Devsinc",
+    channel: "Jim Red",
+    project: "Devsinc",
     role: "Developer",
-    status: "Disapproved",
+    status: "rejected",
   },
 ];
 const UserTable = () => {
@@ -149,18 +149,18 @@ const UserTable = () => {
   });
   const columns = [
     {
-      title: "Project Title",
-      dataIndex: "title",
-      key: "title",
+      title: "Channel",
+      dataIndex: "channel",
+      key: "channel",
       width: "30%",
-      ...getColumnSearchProps("title"),
+      ...getColumnSearchProps("channel"),
     },
     {
-      title: "Company",
-      dataIndex: "company",
-      key: "company",
+      title: "Project",
+      dataIndex: "project",
+      key: "project",
       width: "20%",
-      ...getColumnSearchProps("company"),
+      ...getColumnSearchProps("project"),
     },
     {
       title: "Role",
@@ -174,7 +174,21 @@ const UserTable = () => {
       dataIndex: "status",
       key: "status",
       render: (text, record) => {
-        return <Tag color={text === "Approved" ? "green" : "red"}>{text}</Tag>;
+        let color;
+        switch (text) {
+          case "approved":
+            color = "green";
+            break;
+          case "disapproved":
+            color = "red";
+            break;
+          case "working":
+            color = "blue";
+            break;
+          default:
+            color = "gray";
+        }
+        return <Tag color={color}>{text}</Tag>;
       },
     },
   ];

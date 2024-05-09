@@ -17,6 +17,9 @@ const UpdateProfileModal = ({ user }) => {
   const [avatar, setAvatar] = useState(null);
   const [name, setName] = useState(user?.name);
   const [email, setEmail] = useState(user?.email);
+  const [description, setDescription] = useState(user?.description);
+  const [degree, setDegree] = useState(user?.degree);
+  const [university, setUniversity] = useState(user?.university);
 
   const showModal = () => {
     setOpen(true);
@@ -40,6 +43,10 @@ const UpdateProfileModal = ({ user }) => {
     formData.append("name", name);
     formData.append("email", email);
     formData.append("avatar", avatar);
+    formData.append("description", description);
+    formData.append("degree", degree);
+    formData.append("university", university);
+    console.log(university);
     updateProfileApi(formData)
       .then(() => {
         setOpen(false);
@@ -155,6 +162,7 @@ const UpdateProfileModal = ({ user }) => {
                 </div>
               )}
             </div>
+
             <div>
               <label htmlFor="email">Email</label>
               <Field
@@ -167,6 +175,56 @@ const UpdateProfileModal = ({ user }) => {
               />
               {!validator.isEmail(email) && (
                 <div style={{ color: "red" }}>Provide Valid Email</div>
+              )}
+            </div>
+
+            <div>
+              <label htmlFor="description">Description</label>
+              <Field
+                as="textarea"
+                id="description"
+                name="description"
+                value={description}
+                className="w-full border border-gray-300 rounded py-2 px-3"
+                onChange={(e) => setDescription(e.target.value)}
+              />
+              {description?.length < 10 && (
+                <div style={{ color: "red" }}>
+                  Description must be minimum 10 characters
+                </div>
+              )}
+            </div>
+            <div>
+              <label htmlFor="university">University</label>
+              <Field
+                type="text"
+                id="university"
+                name="university"
+                value={university}
+                className="w-full border border-gray-300 rounded py-2 px-3"
+                onChange={(e) => setUniversity(e.target.value)}
+              />
+              {university?.length < 4 && (
+                <div style={{ color: "red" }}>
+                  University must be minimum 4 characters
+                </div>
+              )}
+            </div>
+
+            <div>
+              <label htmlFor="degree">Degree</label>
+              <Field
+                type="text"
+                id="degree"
+                name="degree"
+                value={degree}
+                className="w-full border border-gray-300 rounded py-2 px-3"
+                onChange={(e) => setDegree(e.target.value)}
+              />
+              {degree?.length < 2 && (
+                <div style={{ color: "red" }}>
+                  Degree must be minimum 2 characters
+                </div>
               )}
             </div>
           </Form>

@@ -36,17 +36,17 @@ const Navbar = ({ showDrawer, channel }) => {
     setSearchQuery(item.email);
     setFilteredItems([item]);
     setShowDropdown(false);
-    console.log(item);
     navigate(`/profile/${item.email}`);
   };
 
   const handleSearch = (e) => {
     const query = e.target.value;
     setSearchQuery(query);
-    const filtered = searchItems.filter((item) =>
-      item.email.toLowerCase().includes(query.toLowerCase())
+    const filtered = searchItems.filter(
+      (item) =>
+        item.email.toLowerCase().includes(query.toLowerCase()) ||
+        item.position.toLowerCase().includes(query.toLowerCase())
     );
-    console.log(filtered);
     setFilteredItems(filtered);
     setShowDropdown(!!query);
   };
@@ -186,7 +186,7 @@ const Navbar = ({ showDrawer, channel }) => {
                   onChange={handleSearch}
                 />
                 {showDropdown && (
-                  <div className="absolute w-full top-10 left-0 bg-white border border-gray-300 rounded-lg shadow-lg mt-2 z-50">
+                  <div className="absolute w-[200%] top-10 left-0 bg-white border border-gray-300 rounded-lg shadow-lg mt-2 z-50">
                     <ul className="py-1 w-100">
                       {Array.isArray(filteredItems) &&
                         filteredItems.map((user) => (

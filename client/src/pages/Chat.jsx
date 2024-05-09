@@ -38,7 +38,6 @@ const Chat = () => {
   );
 
   const openNotification = (placement, message, sender) => {
-    console.log(sender);
     api.info({
       description: (
         <div className="flex items-center rounded-md ">
@@ -68,13 +67,13 @@ const Chat = () => {
   useEffect(() => {
     socket.emit("online-users", user?.data?.user?.name);
     setOnlineStatus(!onlineStatus);
+    setSender(user?.data?.user?._id);
   }, []);
 
   useEffect(() => {
     socket.on("online-users-updated", (users) => {
       const uniqueUsernames = new Set(users.map((user) => user.username));
       const usernamesArray = Array.from(uniqueUsernames);
-      console.log(`online users: ${usernamesArray}`);
       setOnlineUsers(usernamesArray);
     });
   }, [onlineStatus]);
@@ -317,18 +316,18 @@ const Chat = () => {
                     />
                     <h1 className="text-lg pr-2">{displayUserInfo?.name}</h1>
                     {onlineUsers.includes(displayUserInfo?.name) ? (
-                          <>
-                            <Tag color="green" icon={<CheckCircleOutlined />}>
-                              Online
-                            </Tag>
-                          </>
-                        ) : (
-                          <>
-                            <Tag color="red" icon={<CheckCircleOutlined />}>
-                              Offline
-                            </Tag>
-                          </>
-                        )}
+                      <>
+                        <Tag color="green" icon={<CheckCircleOutlined />}>
+                          Online
+                        </Tag>
+                      </>
+                    ) : (
+                      <>
+                        <Tag color="red" icon={<CheckCircleOutlined />}>
+                          Offline
+                        </Tag>
+                      </>
+                    )}
                   </div>
                 )}
 

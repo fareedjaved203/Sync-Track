@@ -23,7 +23,7 @@ const registerUser = async (req, res, next) => {
       crop: "scale",
     });
 
-    const { name, email, password } = req.body;
+    const { name, email, password, position } = req.body;
     const emailAlreadyPresent = await User.findOne({ email });
     if (emailAlreadyPresent) {
       res.status(409).json({
@@ -35,6 +35,7 @@ const registerUser = async (req, res, next) => {
       name,
       email,
       password,
+      position,
       avatar: {
         public_id: myCloud.public_id,
         url: myCloud.secure_url,
@@ -101,7 +102,7 @@ const logout = async (req, res, next) => {
 //for oneself
 const getUserDetails = async (req, res, next) => {
   try {
-    const user = await User.findById(req.user.id);
+    const user = await User.findById(req.user.id).populate("channels");
     res.status(200).json({
       success: true,
       user,
@@ -282,6 +283,9 @@ const updateProfile = async (req, res, next) => {
     const newUserData = {
       name: req.body.name,
       email: req.body.email,
+      degree: req.body.degree,
+      university: req.body.university,
+      description: req.body.description,
     };
 
     const user = await User.findById(req.user.id);
