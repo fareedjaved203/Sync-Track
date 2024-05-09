@@ -42,7 +42,6 @@ const GiveFeedBackModal = ({
       formData.append("feedback", values.feedback);
       formData.append("email", email);
       formData.append("rating", values.rating);
-      console.log(values.feedback);
       if (type == "conclude") {
         const data = await concludeTeamMemberApi(channelId, userId, formData);
         console.log(data);

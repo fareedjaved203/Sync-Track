@@ -72,7 +72,7 @@ const ProjectOverview = ({ channel }) => {
         </div>
       </div>
 
-      <Progress />
+      {/* <Progress /> */}
       <Team channel={channel} />
     </div>
   );
