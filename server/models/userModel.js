@@ -51,7 +51,10 @@ const userSchema = new mongoose.Schema(
         ref: "Channel",
       },
     ],
-    rating: Number,
+    rating: {
+      type: Number,
+      default: 0,
+    },
     rank: {
       type: String,
       default: "Novice",

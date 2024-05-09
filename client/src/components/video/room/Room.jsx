@@ -5,8 +5,8 @@ import MainLayout from "../../layout/MainLayout";
 const VideoRoom = () => {
   const { roomId } = useParams();
   const myMeeting = async (element) => {
-    const appID = 14530494;
-    const serverSecret = "88e9582b86f6622819aed2d18bb1a54e";
+    const appID = 1540553196;
+    const serverSecret = "6978fba5642ecd844f24565464326a72";
     const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(
       appID,
       serverSecret,

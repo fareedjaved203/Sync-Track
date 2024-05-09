@@ -280,7 +280,10 @@ const userResponse = async (req, res) => {
       if (userIndex !== -1) {
         updatedChannel.users[userIndex].request = newRequestStatus;
       }
+      user.channels.push(channelId);
       user.projects++;
+
+      await user.save();
     }
 
     updatedChannel = await updatedChannel.save();
@@ -302,7 +305,7 @@ const concludeUser = async (req, res) => {
     const userId = req.params.userId;
     const feedback = req.body.feedback;
     const rating = req.body.rating;
-    console.log(feedback);
+    console.log(rating);
     const user = await User.findById(userId);
     if (user) {
       const channel = await Channel.findById(channelId);
@@ -321,7 +324,7 @@ const concludeUser = async (req, res) => {
       channel.users[userIndex].feedback = feedback;
       channel.users[userIndex].rating = rating;
 
-      user.rating = (user.rating + rating) / user.projects;
+      user.rating = (Number(user.rating) + Number(rating)) / user.projects;
 
       updateRank(user);
 

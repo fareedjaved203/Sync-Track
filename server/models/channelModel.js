@@ -43,7 +43,10 @@ const channelSchema = new mongoose.Schema(
           type: String,
           default: "pending",
         },
-        rating: String,
+        rating: {
+          type: Number,
+          default: 0,
+        },
         feedback: String,
       },
     ],
