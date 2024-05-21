@@ -72,7 +72,7 @@ const AddUser = ({ channelId = "", userEmail = "" }) => {
           chatAlert.append("type", "information");
           chatAlert.append(
             "description",
-            `${user.data.user.email} wants to talk about a project! Check you Inbox`
+            `${user.data.user.email} wants to talk about a project! Check you Inbox `
           );
           chatAlert.append("sender", user.data.user.email);
           chatAlert.append("receiver", values.email);

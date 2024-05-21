@@ -51,6 +51,15 @@ const Notifications = ({ channel }) => {
                 <div>
                   <h3 className="text-lg font-semibold">{item?.type}</h3>
                   <p className="text-gray-600">{item?.description}</p>
+                  <p className="text-gray-600">
+                    <p className="text-gray-800 text-xs my-2">
+                      {new Date(item?.createdAt).toLocaleTimeString(undefined, {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: true,
+                      })}
+                    </p>
+                  </p>
                 </div>
                 {/* <span className="text-gray-400">Yesterday</span> */}
               </div>

@@ -351,6 +351,17 @@ const Chat = () => {
                                 <div className="flex flex-row items-center">
                                   <div className="relative ml-3 text-sm bg-gray-800 text-white py-2 px-4 shadow-sm rounded-xl">
                                     <div>{message?.content}</div>
+                                    {message.createdAt && (
+                                      <p className="text-white text-xs my-2">
+                                        {new Date(
+                                          message?.createdAt
+                                        ).toLocaleTimeString(undefined, {
+                                          hour: "2-digit",
+                                          minute: "2-digit",
+                                          hour12: true,
+                                        })}
+                                      </p>
+                                    )}
                                   </div>
                                 </div>
                               </div>
@@ -364,6 +375,17 @@ const Chat = () => {
                                 <div className="flex items-center justify-start flex-row-reverse">
                                   <div className="relative mr-3 text-sm bg-gray-600 text-white py-2 px-4 shadow rounded-xl">
                                     <div>{message?.content}</div>
+                                    {message.createdAt && (
+                                      <p className="text-white text-xs my-2">
+                                        {new Date(
+                                          message?.createdAt
+                                        ).toLocaleTimeString(undefined, {
+                                          hour: "2-digit",
+                                          minute: "2-digit",
+                                          hour12: true,
+                                        })}
+                                      </p>
+                                    )}
                                   </div>
                                 </div>
                               </div>
