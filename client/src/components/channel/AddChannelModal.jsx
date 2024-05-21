@@ -3,6 +3,13 @@ import { Modal, Form, Input, Button, message, DatePicker } from "antd";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { createChannelApi } from "../../api/channel/channelApi";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
+import CheckoutForm from "./CheckoutForm";
+
+const stripePromise = loadStripe(
+  "pk_test_51PIqNl2MgcnDTdrwhZMornSg1DPdvOV3gOTDMDJXL1irIPvs4SnNxJwK2UICQTDoNrcsH92R8Sgak4tKb0nOs08U00AZrjp0n4"
+);
 
 const AddChannelModal = ({ change, setChange }) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -41,6 +48,10 @@ const AddChannelModal = ({ change, setChange }) => {
   const handleOk = async (values) => {
     setConfirmLoading(true);
     try {
+      const payment = localStorage.getItem("payment");
+      if (!payment) {
+        return messageApi.error("Please complete the payment");
+      }
       const channelData = new FormData();
       for (const key in values) {
         channelData.append(key, values[key]);
@@ -155,6 +166,9 @@ const AddChannelModal = ({ change, setChange }) => {
               }}
             />
           </Form.Item>
+          <Elements stripe={stripePromise}>
+            <CheckoutForm />
+          </Elements>
           <Form.Item>
             <Button
               type="primary"

@@ -17,6 +17,7 @@ const GiveFeedBackModal = ({
   const [modalVisible, setModalVisible] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
   const [confirmLoading, setConfirmLoading] = useState(false);
+  const [loading, isLoading] = useState(false);
 
   const validationSchema = Yup.object().shape({
     feedback: Yup.string().required("Feedback is mandatory"),
@@ -36,6 +37,7 @@ const GiveFeedBackModal = ({
 
   const handleOk = async (values) => {
     setConfirmLoading(true);
+    isLoading(true);
     try {
       console.log(values.rating);
       const formData = new FormData();
@@ -54,6 +56,7 @@ const GiveFeedBackModal = ({
       messageApi.error(error);
     }
     setConfirmLoading(false);
+    isLoading(false);
     setModalVisible(false);
     generatePdf(type);
   };
@@ -120,8 +123,9 @@ const GiveFeedBackModal = ({
               type="primary"
               htmlType="submit"
               style={{ backgroundColor: "#2E2E2E", color: "white" }}
+              loading={loading}
             >
-              Send
+              {loading ? "Sending..." : "Submit"}
             </Button>
           </Form.Item>
         </Form>

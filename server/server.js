@@ -1,5 +1,7 @@
 require("dotenv").config({ path: "./.env" });
 
+const stripe = require("stripe")(process.env.STRIPE_SECRET);
+
 const http = require("http");
 
 const app = require("./app");

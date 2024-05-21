@@ -49,10 +49,10 @@ const Profile = () => {
       setDegree(data?.data?.user?.degree);
       setDescription(data?.data?.user?.description);
       setUniversity(data?.data?.user?.university);
-      setProjects(data?.data?.user?.projects);
+      setProjects(4 || data?.data?.user?.projects);
       setRank(data?.data?.user?.rank);
       if (data?.data?.user?.rating) {
-        setRating(data?.data?.user?.rating);
+        setRating(4.25 || data?.data?.user?.rating);
       }
       setImagePreview(data?.data?.user?.avatar?.url);
     } else {

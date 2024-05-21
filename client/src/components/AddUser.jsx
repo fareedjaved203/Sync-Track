@@ -13,6 +13,7 @@ const AddUser = ({ channelId = "", userEmail = "" }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
   const [confirmLoading, setConfirmLoading] = useState(false);
+  const [loading, isLoading] = useState(false);
   const user = useSelector((state) => state.user);
 
   const { Option } = Select;
@@ -39,6 +40,7 @@ const AddUser = ({ channelId = "", userEmail = "" }) => {
 
   const handleOk = async (values) => {
     setConfirmLoading(true);
+    isLoading(true);
     try {
       const formData = new FormData();
       formData.append("email", values.email);
@@ -68,6 +70,7 @@ const AddUser = ({ channelId = "", userEmail = "" }) => {
       messageApi.error(error?.response?.data?.message);
     }
     setConfirmLoading(false);
+    isLoading(false);
     setModalVisible(false);
   };
 
@@ -123,8 +126,9 @@ const AddUser = ({ channelId = "", userEmail = "" }) => {
               type="primary"
               htmlType="submit"
               style={{ backgroundColor: "#2E2E2E", color: "white" }}
+              loading={loading}
             >
-              Send
+              {loading ? "Sending..." : "Send"}
             </Button>
           </Form.Item>
         </Form>

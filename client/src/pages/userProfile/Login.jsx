@@ -83,7 +83,7 @@ const Login = () => {
                 </span>
                 <span>Sync Track</span>
               </h1>
-              <h3 className="text-lg font-semibold text-gray-600 dark:text-gray-300">
+              <h3 className="text-lg font-semibold text-gray-600">
                 Create Your Project
               </h3>
               <Carousel autoplay className="bg-white-500 mt-10">
