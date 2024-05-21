@@ -324,7 +324,8 @@ const concludeUser = async (req, res) => {
       channel.users[userIndex].feedback = feedback;
       channel.users[userIndex].rating = rating;
 
-      user.rating = (Number(user.rating) + Number(rating)) / user.projects;
+      user.rating =
+        (user.rating * user.projects + Number(rating)) / user.projects + 1;
 
       updateRank(user);
 

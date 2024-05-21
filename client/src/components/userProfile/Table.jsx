@@ -203,6 +203,18 @@ const UserTable = () => {
       },
     },
   ];
-  return <Table columns={columns} dataSource={data} />;
+  return (
+    <>
+      {data.length > 0 ? (
+        <Table columns={columns} dataSource={data} />
+      ) : (
+        <div class="flex justify-center items-center w-full h-full">
+          <div class="text-lg font-bold text-gray-700 p-4 rounded-lg">
+            No Previous Record Available
+          </div>
+        </div>
+      )}
+    </>
+  );
 };
 export default UserTable;

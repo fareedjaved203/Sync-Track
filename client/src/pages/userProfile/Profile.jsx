@@ -33,6 +33,7 @@ const Profile = () => {
     console.log(id);
     setChannelId(id);
     fetchUserDetails();
+    setShowMore(false);
   }, [params.user]);
 
   const info = () => {
