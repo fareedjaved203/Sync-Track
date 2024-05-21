@@ -102,12 +102,19 @@ const logout = async (req, res, next) => {
 //for oneself
 const getUserDetails = async (req, res, next) => {
   try {
-    const user = await User.findById(req.user.id).populate("channels");
+    const user = await User.findById(req.user.id).populate({
+      path: "channels",
+      populate: {
+        path: "users.user",
+        model: "User",
+      },
+    });
     res.status(200).json({
       success: true,
       user,
     });
   } catch (error) {
+    console.log(error);
     return next(new ErrorHandler(error.message, 404));
   }
 };
@@ -128,7 +135,13 @@ const getAllUsers = async (req, res, next) => {
 //get a single user
 const getSingleUser = async (req, res, next) => {
   try {
-    const user = await User.findOne({ email: req.params.id });
+    const user = await User.findOne({ email: req.params.id }).populate({
+      path: "channels",
+      populate: {
+        path: "users.user",
+        model: "User",
+      },
+    });
     if (!user) {
       return next(
         new ErrorHandler(`User Doesn't Exist with Email: ${req.params.id}`, 404)

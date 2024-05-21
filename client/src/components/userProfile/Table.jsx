@@ -1,48 +1,52 @@
 import { SearchOutlined } from "@ant-design/icons";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import Highlighter from "react-highlight-words";
 import { Button, Input, Space, Table, Tag } from "antd";
-const data = [
-  {
-    key: "1",
-    channel: "TMUC",
-    project: "E-commerce",
-    role: "Tester",
-    status: "working",
-  },
-  {
-    key: "2",
-    channel: "Expo Channel",
-    project: "Expo Project",
-    role: "Developer",
-    status: "approved",
-  },
-  {
-    key: "3",
-    channel: "Three Ways",
-    project: "AirShift Project",
-    role: "Developer",
-    status: "approved",
-  },
-  {
-    key: "4",
-    channel: "TKR",
-    project: "Property App",
-    role: "Team Lead",
-    status: "disapproved",
-  },
-  {
-    key: "5",
-    channel: "NEECA",
-    project: "Power Project",
-    role: "Developer",
-    status: "approved",
-  },
-];
+import { useParams } from "react-router-dom";
+import { getUserDetailsApi } from "../../api/user/userApi";
+
 const UserTable = () => {
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
+
+  const params = useParams();
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const getRatings = async () => {
+      const ratings = await getUserDetailsApi(params?.user);
+
+      const filteredData = ratings.data.user.channels.map((channel) => {
+        return {
+          id: channel._id,
+          channel: channel.channel,
+          project: channel.name,
+          users: channel.users.filter((user) => {
+            console.log(user);
+            return user.user.email == params?.user;
+          }),
+        };
+      });
+
+      console.log(filteredData);
+
+      const tableData = filteredData.map((data) => {
+        return {
+          id: data.id,
+          channel: data.channel,
+          project: data.project,
+          role: data.users[0]?.role,
+          status: data.users[0]?.status,
+        };
+      });
+
+      console.log(tableData);
+      setData(tableData);
+    };
+    getRatings();
+  }, []);
+
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
     setSearchText(selectedKeys[0]);

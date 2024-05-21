@@ -19,14 +19,13 @@ const Notifications = ({ channel }) => {
 
   useEffect(() => {
     const showNotifications = async () => {
-      console.log(user?.data?.user?.email);
       const data = await getNotificationApi(user?.data?.user?.email);
-      console.log(data);
       const reversedData = [...data?.data?.data].reverse();
       setNotifications(reversedData);
     };
     showNotifications();
   }, [channel, id]);
+
   return (
     <>
       <span onClick={showDrawer}>
