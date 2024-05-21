@@ -7,12 +7,15 @@ import * as Yup from "yup";
 import { useParams } from "react-router-dom";
 import { addUserApi } from "../api/channel/channelApi";
 import { postNotificationApi } from "../api/notifications/notificationsApi";
+import { saveChatApi } from "../api/chat/chatApi";
+import { getUserDetailsApi } from "../api/user/userApi";
 
 const AddUser = ({ channelId = "", userEmail = "" }) => {
   let { id } = useParams();
   const [modalVisible, setModalVisible] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
   const [confirmLoading, setConfirmLoading] = useState(false);
+  // const [note, setNote] = useState("");
   const [loading, isLoading] = useState(false);
   const user = useSelector((state) => state.user);
 
@@ -30,6 +33,7 @@ const AddUser = ({ channelId = "", userEmail = "" }) => {
     initialValues: {
       email: "",
       role: "",
+      note: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -57,12 +61,34 @@ const AddUser = ({ channelId = "", userEmail = "" }) => {
         formData.append("type", "information");
         formData.append(
           "description",
-          `You have a new invitation, please check your email`
+          `You have a new project invitation, please check your email`
         );
         formData.append("sender", user.data.user.email);
         formData.append("receiver", values.email);
         const notification = await postNotificationApi(formData);
-        console.log(notification);
+
+        if (values.note) {
+          const chatAlert = new FormData();
+          chatAlert.append("type", "information");
+          chatAlert.append(
+            "description",
+            `${user.data.user.email} wants to talk about a project! Check you Inbox`
+          );
+          chatAlert.append("sender", user.data.user.email);
+          chatAlert.append("receiver", values.email);
+          const chatNotification = await postNotificationApi(chatAlert);
+
+          const saveChat = new FormData();
+          saveChat.append("message", values.note);
+          const receiver = await getUserDetailsApi(values.email);
+
+          const chatResponse = await saveChatApi(
+            saveChat,
+            user.data.user._id,
+            receiver.data.user._id
+          );
+          isLoading(false);
+        }
       } else {
         messageApi.error(data?.response?.data?.message);
       }
@@ -120,6 +146,20 @@ const AddUser = ({ channelId = "", userEmail = "" }) => {
               <Option value="developer">Developer</Option>
               <Option value="team_lead">Team Lead</Option>
             </Select>
+          </Form.Item>
+          <Form.Item
+            label="Note"
+            name="note"
+            help={formik.touched.note && formik.errors.note}
+            validateStatus={
+              formik.touched.note && formik.errors.note ? "error" : ""
+            }
+          >
+            <Input
+              type="text"
+              {...formik.getFieldProps("note")}
+              placeholder="Hey, I want to discuss our project!"
+            />
           </Form.Item>
           <Form.Item>
             <Button

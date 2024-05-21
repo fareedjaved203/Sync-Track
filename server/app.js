@@ -47,6 +47,7 @@ const announcement = require("./routes/announcementRoute");
 const task = require("./routes/taskRoute");
 const notification = require("./routes/notificationsRoute");
 const payment = require("./routes/paymentRoute");
+const chat = require("./routes/chatRoute");
 
 app.use("/api/v1", user);
 app.use("/api/v1", channel);
@@ -57,6 +58,7 @@ app.use("/api/v1", announcement);
 app.use("/api/v1", task);
 app.use("/api/v1", notification);
 app.use("/api/v1", payment);
+app.use("/api/v1", chat);
 
 //middleware for error
 app.use(errorMiddleware);

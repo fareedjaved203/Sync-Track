@@ -18,6 +18,22 @@ const saveMessage = async (message, senderId, receiverId) => {
   }
 };
 
+const saveMessageWithRoute = async (req, res) => {
+  try {
+    console.log(req.body);
+    const newMessage = new Chat({
+      sender: new mongoose.Types.ObjectId(req.params.senderId),
+      receiver: new mongoose.Types.ObjectId(req.params.receiverId),
+      content: req.body.message,
+      timestamp: new Date(),
+    });
+
+    await newMessage.save();
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const getUserWithChatHistory = async (req, res) => {
   try {
     const { senderId, receiverId } = req.params;
@@ -38,4 +54,4 @@ const getUserWithChatHistory = async (req, res) => {
   }
 };
 
-module.exports = { getUserWithChatHistory, saveMessage };
+module.exports = { getUserWithChatHistory, saveMessage, saveMessageWithRoute };
