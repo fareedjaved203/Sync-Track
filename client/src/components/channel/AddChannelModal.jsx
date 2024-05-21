@@ -59,6 +59,7 @@ const AddChannelModal = ({ change, setChange }) => {
       const data = await createChannelApi(channelData);
       console.log(data);
       if (data) {
+        localStorage.removeItem("payment");
         info();
       } else {
         error();

@@ -206,7 +206,7 @@ const UserTable = () => {
   return (
     <>
       {data.length > 0 ? (
-        <Table columns={columns} dataSource={data} />
+        <Table columns={columns} dataSource={data.reverse()} />
       ) : (
         <div class="flex justify-center items-center w-full h-full">
           <div class="text-lg font-bold text-gray-700 p-4 rounded-lg">
